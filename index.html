@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VisitControl - Sistema de Controle de Visitas</title>
+    <title>VisitControl - Gestão de Visitas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚪</text></svg>">
     <style>
         :root {
             --primary: #2563eb;
             --primary-dark: #1e40af;
-            --secondary: #64748b;
-            --light: #f8fafc;
-            --dark: #1e293b;
+            --secondary: #f8fafc;
+            --accent: #f59e0b;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius: 12px;
         }
         
         * {
@@ -25,682 +30,1290 @@
         }
         
         body {
-            background-color: #f1f5f9;
-            color: #334155;
-            line-height: 1.6;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+            color: var(--text);
+            min-height: 100vh;
         }
         
-        .container {
-            max-width: 1200px;
+        .app-container {
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        @media (max-width: 900px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100vh;
+                z-index: 1000;
+                width: 250px;
+            }
+            
+            .sidebar.active {
+                display: block;
+            }
+            
+            .mobile-menu-btn {
+                display: block !important;
+            }
+            
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+            }
+            
+            .overlay.active {
+                display: block;
+            }
         }
         
         /* Header */
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        nav {
+        .header {
+            background: white;
+            border-radius: var(--radius);
+            padding: 15px 25px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
         }
         
         .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px 0;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+        
+        .nav-item {
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-light);
+            border-left: 4px solid transparent;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: #f1f5f9;
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+        
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+        
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .visits-icon {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+        
+        .pending-icon {
+            background: #fef3c7;
+            color: var(--warning);
+        }
+        
+        .completed-icon {
+            background: #d1fae5;
+            color: var(--success);
+        }
+        
+        .stat-info h3 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .stat-info p {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        /* Visits Section */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        
+        .btn-outline:hover {
+            background: #f8fafc;
+        }
+        
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
             display: flex;
             align-items: center;
             gap: 10px;
         }
         
-        .nav-links {
-            display: flex;
-            gap: 2rem;
+        .filter-select {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: white;
         }
         
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        /* Table */
+        .table-container {
+            overflow-x: auto;
         }
         
-        .nav-links a:hover {
-            opacity: 0.8;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
         
-        /* Login Modal */
-        .modal {
-            display: none;
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        tbody tr {
+            transition: all 0.3s;
+        }
+        
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+        
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status-scheduled {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+        
+        .status-in-progress {
+            background: #fef3c7;
+            color: var(--warning);
+        }
+        
+        .status-completed {
+            background: #d1fae5;
+            color: var(--success);
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            transition: color 0.3s;
+        }
+        
+        .action-btn:hover {
+            color: var(--primary-dark);
+        }
+        
+        .action-btn.delete {
+            color: var(--danger);
+        }
+        
+        .action-btn.delete:hover {
+            color: #b91c1c;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+            font-size: 14px;
+            margin-top: 40px;
+        }
+        
+        /* Modal */
+        .modal-backdrop {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
             align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
         }
         
-        .modal-content {
+        .modal-backdrop.active {
+            display: flex;
+        }
+        
+        .modal {
             background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
         }
         
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--secondary);
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .modal-body {
+            padding: 20px;
         }
         
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 20px;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 8px;
             font-weight: 500;
         }
         
-        .form-group input {
+        .form-control {
             width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
         }
         
-        .form-group input:focus {
+        .form-control:focus {
             outline: none;
             border-color: var(--primary);
         }
         
-        .btn {
-            display: inline-block;
-            background-color: var(--primary);
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            background: white;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
             transition: all 0.3s;
-            border: 2px solid var(--primary);
-            cursor: pointer;
-            text-align: center;
+            z-index: 1001;
         }
         
-        .btn:hover {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-dark);
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
         }
         
-        .btn-block {
-            display: block;
-            width: 100%;
+        .toast.success {
+            border-left: 4px solid var(--success);
         }
         
-        .btn-outline {
-            background-color: transparent;
-            color: var(--primary);
+        .toast.error {
+            border-left: 4px solid var(--danger);
         }
         
-        .btn-outline:hover {
-            background-color: var(--primary);
-            color: white;
+        .toast i {
+            font-size: 20px;
         }
-
-        /* Dashboard (área logada) */
-        .dashboard {
-            display: none;
-            padding: 2rem 0;
+        
+        .toast.success i {
+            color: var(--success);
         }
-
-        .dashboard-header {
-            display: flex;
-            justify-content: between;
-            align-items: center;
-            margin-bottom: 2rem;
+        
+        .toast.error i {
+            color: var(--danger);
         }
-
-        .stats-grid {
+        
+        /* Visit Details */
+        .visit-details {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        
+        .detail-group {
+            margin-bottom: 15px;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-size: 16px;
+        }
+        
+        /* Empty State */
+        .empty-state {
             text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        /* Hero Section */
-        .hero {
-            padding: 5rem 0;
-            text-align: center;
-            background: linear-gradient(rgba(37, 99, 235, 0.9), rgba(30, 64, 175, 0.9)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
+            padding: 40px 20px;
+            color: var(--text-light);
         }
         
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+        .empty-state i {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: var(--border);
         }
         
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-        }
-        
-        /* Features */
-        .features {
-            padding: 5rem 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-            font-size: 2.2rem;
-            color: var(--dark);
-        }
-        
-        .section-subtitle {
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto 4rem;
-            color: var(--secondary);
-            font-size: 1.1rem;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .feature-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: transform 0.3s;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .feature-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            background: #dbeafe;
-            width: 70px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            margin: 0 auto 1.5rem;
-        }
-        
-        .feature-card h3 {
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-        
-        /* How it works */
-        .how-it-works {
-            padding: 5rem 0;
-            background-color: var(--light);
-        }
-        
-        .steps {
-            display: flex;
-            justify-content: space-between;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .step {
-            text-align: center;
-            flex: 1;
-            padding: 0 20px;
-            position: relative;
-        }
-        
-        .step:not(:last-child):after {
-            content: "";
-            position: absolute;
-            top: 40px;
-            right: -50px;
-            width: 100px;
-            height: 2px;
-            background-color: var(--primary);
-        }
-        
-        .step-number {
-            background-color: var(--primary);
-            color: white;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin: 0 auto 1.5rem;
-        }
-        
-        /* CTA */
-        .cta {
-            padding: 5rem 0;
-            text-align: center;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-        }
-        
-        .cta h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .cta p {
-            max-width: 700px;
-            margin: 0 auto 2rem;
-            font-size: 1.2rem;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--dark);
-            color: white;
-            padding: 3rem 0 2rem;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-section h3 {
-            margin-bottom: 1.5rem;
-            font-size: 1.3rem;
-        }
-        
-        .footer-section p, .footer-section a {
-            color: #cbd5e1;
-            margin-bottom: 0.8rem;
-            display: block;
-            text-decoration: none;
-        }
-        
-        .footer-section a:hover {
-            color: white;
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .social-links a {
-            background: rgba(255, 255, 255, 0.1);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.3s;
-        }
-        
-        .social-links a:hover {
+        /* Badge */
+        .badge {
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
             background: var(--primary);
+            color: white;
+            margin-left: 5px;
         }
         
-        .copyright {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
+        /* Page Content */
+        .page-content {
+            display: none;
         }
         
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .steps {
-                flex-direction: column;
-                gap: 2rem;
-            }
-            
-            .step:not(:last-child):after {
-                display: none;
-            }
+        .page-content.active {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <!-- Modal de Login -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Acessar Sistema</h2>
-                <button class="close-modal">&times;</button>
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="nav-item active" data-page="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
             </div>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" required placeholder="seu@email.com">
-                </div>
-                <div class="form-group">
-                    <label for="password">Senha</label>
-                    <input type="password" id="password" required placeholder="Sua senha">
-                </div>
-                <button type="submit" class="btn btn-block">Entrar</button>
-            </form>
-            <p style="text-align: center; margin-top: 1rem;">
-                <a href="#" style="color: var(--primary);">Esqueci minha senha</a>
-            </p>
-        </div>
-    </div>
-
-    <header>
-        <div class="container">
-            <nav>
+            <div class="nav-item" data-page="visits">
+                <i class="fas fa-list"></i>
+                <span>Visitas</span>
+            </div>
+            <div class="nav-item" data-page="scheduling">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Agendamentos</span>
+            </div>
+            <div class="nav-item" data-page="visitors">
+                <i class="fas fa-users"></i>
+                <span>Visitantes</span>
+                <span class="badge">5</span>
+            </div>
+            <div class="nav-item" data-page="companies">
+                <i class="fas fa-building"></i>
+                <span>Empresas</span>
+            </div>
+            <div class="nav-item" data-page="settings">
+                <i class="fas fa-cog"></i>
+                <span>Configurações</span>
+            </div>
+            <div class="nav-item" data-page="help">
+                <i class="fas fa-question-circle"></i>
+                <span>Ajuda</span>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
                 <div class="logo">
-                    <i class="fas fa-door-open"></i>
-                    <span>VisitControl</span>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="logo-icon">
+                        <i class="fas fa-door-open"></i>
+                    </div>
+                    <div class="logo-text">VisitControl</div>
                 </div>
-                <div class="nav-links">
-                    <a href="#features"><i class="fas fa-star"></i> Funcionalidades</a>
-                    <a href="#how-it-works"><i class="fas fa-cogs"></i> Como Funciona</a>
-                    <a href="#pricing"><i class="fas fa-tag"></i> Preços</a>
-                    <a href="#" id="loginBtn" class="btn-outline"><i class="fas fa-sign-in-alt"></i> Acessar</a>
+                <div class="user-menu">
+                    <div class="notifications">
+                        <i class="far fa-bell" style="font-size: 20px; color: var(--text-light); cursor: pointer;" id="notificationsBtn"></i>
+                    </div>
+                    <div class="user-avatar" id="userMenuBtn">AD</div>
                 </div>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Área Pública (não logada) -->
-    <div id="publicArea">
-        <section class="hero">
-            <div class="container">
-                <h1>Controle de Visitantes de Forma Inteligente</h1>
-                <p>Gerencie o fluxo de visitantes em sua empresa com eficiência e segurança. Tenha total controle sobre as entradas e saídas de pessoas em suas dependências.</p>
-                <div>
-                    <a href="#" id="demoBtn" class="btn">Solicitar Demonstração</a>
-                    <a href="#features" class="btn btn-outline">Saiba Mais</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="features" id="features">
-            <div class="container">
-                <h2 class="section-title">Funcionalidades</h2>
-                <p class="section-subtitle">Descubra como o VisitControl pode transformar a gestão de visitantes na sua empresa</p>
-                
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-user-check"></i>
+            </header>
+            
+            <!-- Dashboard Page -->
+            <div class="page-content active" id="dashboard-page">
+                <!-- Dashboard Stats -->
+                <div class="dashboard">
+                    <div class="card stat-card" id="todayVisitsCard">
+                        <div class="stat-icon visits-icon">
+                            <i class="fas fa-users"></i>
                         </div>
-                        <h3>Cadastro de Visitantes</h3>
-                        <p>Registro completo de informações dos visitantes com documentos e fotos para total identificação.</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-calendar-alt"></i>
+                        <div class="stat-info">
+                            <h3 id="todayVisitsCount">0</h3>
+                            <p>Visitas Hoje</p>
                         </div>
-                        <h3>Agendamento Prévio</h3>
-                        <p>Permita que visitas sejam agendadas com antecedência, otimizando o tempo de recepção.</p>
                     </div>
                     
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-chart-bar"></i>
+                    <div class="card stat-card" id="pendingVisitsCard">
+                        <div class="stat-icon pending-icon">
+                            <i class="fas fa-clock"></i>
                         </div>
-                        <h3>Relatórios Detalhados</h3>
-                        <p>Gere relatórios completos sobre o fluxo de visitantes por período, setor ou funcionário.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="how-it-works" id="how-it-works">
-            <div class="container">
-                <h2 class="section-title">Como Funciona</h2>
-                <p class="section-subtitle">Implemente o sistema de controle de visitas em 3 passos simples</p>
-                
-                <div class="steps">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <h3>Cadastro</h3>
-                        <p>Cadastre sua empresa e funcionários autorizados a receber visitantes</p>
+                        <div class="stat-info">
+                            <h3 id="pendingVisitsCount">0</h3>
+                            <p>Pendentes</p>
+                        </div>
                     </div>
                     
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <h3>Personalize</h3>
-                        <p>Configure os fluxos de visita de acordo com as necessidades da sua empresa</p>
+                    <div class="card stat-card" id="completedVisitsCard">
+                        <div class="stat-icon completed-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="completedVisitsCount">0</h3>
+                            <p>Concluídas</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="statusFilter">Status:</label>
+                        <select id="statusFilter" class="filter-select">
+                            <option value="all">Todos</option>
+                            <option value="scheduled">Agendadas</option>
+                            <option value="in-progress">Em Andamento</option>
+                            <option value="completed">Concluídas</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateFilter">Data:</label>
+                        <input type="date" id="dateFilter" class="filter-select">
+                    </div>
+                    <div class="filter-group">
+                        <label for="searchFilter">Buscar:</label>
+                        <input type="text" id="searchFilter" class="filter-select" placeholder="Nome ou empresa...">
+                    </div>
+                    <button class="btn btn-outline" id="clearFiltersBtn">
+                        <i class="fas fa-times"></i>
+                        Limpar Filtros
+                    </button>
+                </div>
+                
+                <!-- Visits Section -->
+                <div class="card">
+                    <div class="section-header">
+                        <h2 class="section-title">Visitas Recentes</h2>
+                        <button class="btn btn-primary" id="newVisitBtn">
+                            <i class="fas fa-plus"></i>
+                            Nova Visita
+                        </button>
                     </div>
                     
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <h3>Controle</h3>
-                        <p>Monitore em tempo real todas as entradas e saídas de visitantes</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Visitante</th>
+                                    <th>Empresa</th>
+                                    <th>Data/Hora</th>
+                                    <th>Destino</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="visitsTableBody">
+                                <!-- As visitas serão carregadas aqui via JavaScript -->
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="cta" id="demo">
-            <div class="container">
-                <h2>Pronto para melhorar seu controle de visitas?</h2>
-                <p>Junte-se a centenas de empresas que já utilizam o VisitControl para otimizar sua segurança</p>
-                <a href="#" id="ctaLoginBtn" class="btn btn-outline">Acessar Sistema</a>
-            </div>
-        </section>
-    </div>
-
-    <!-- Área Logada (Dashboard) -->
-    <div id="dashboard" class="dashboard">
-        <div class="container">
-            <div class="dashboard-header">
-                <h1>Dashboard - VisitControl</h1>
-                <button id="logoutBtn" class="btn btn-outline">Sair</button>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number">42</div>
-                    <div class="stat-label">Visitantes Hoje</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">18</div>
-                    <div class="stat-label">Visitantes Ativos</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">127</div>
-                    <div class="stat-label">Total Esta Semana</div>
-                </div>
-            </div>
-
-            <div class="feature-card">
-                <h2>Bem-vindo ao Sistema VisitControl</h2>
-                <p>Use o menu acima para gerenciar visitantes, visualizar relatórios e configurar o sistema.</p>
-                <p>Esta é uma demonstração do sistema. Em uma implementação real, aqui estariam as funcionalidades completas.</p>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>VisitControl</h3>
-                    <p>Sistema de controle de visitas para empresas de todos os tamanhos.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Links Rápidos</h3>
-                    <a href="#features">Funcionalidades</a>
-                    <a href="#how-it-works">Como Funciona</a>
-                    <a href="#pricing">Preços</a>
-                    <a href="#contact">Contato</a>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Contato</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> Av. Principal, 123, São Paulo</p>
-                    <p><i class="fas fa-phone"></i> (11) 3456-7890</p>
-                    <p><i class="fas fa-envelope"></i> contato@visitcontrol.com</p>
                 </div>
             </div>
             
-            <div class="copyright">
-                <p>&copy; 2023 VisitControl - Todos os direitos reservados</p>
-                <p>https://visitcontrol.netlify.app</p>
+            <!-- Other Pages (initially hidden) -->
+            <div class="page-content" id="visits-page">
+                <div class="card">
+                    <h2 class="section-title">Todas as Visitas</h2>
+                    <p>Esta página mostra todas as visitas registradas no sistema.</p>
+                    <!-- Conteúdo da página de visitas -->
+                </div>
+            </div>
+            
+            <div class="page-content" id="scheduling-page">
+                <div class="card">
+                    <h2 class="section-title">Agendamentos</h2>
+                    <p>Esta página gerencia os agendamentos futuros de visitas.</p>
+                    <!-- Conteúdo da página de agendamentos -->
+                </div>
+            </div>
+            
+            <div class="page-content" id="visitors-page">
+                <div class="card">
+                    <h2 class="section-title">Visitantes</h2>
+                    <p>Esta página gerencia o cadastro de visitantes.</p>
+                    <!-- Conteúdo da página de visitantes -->
+                </div>
+            </div>
+            
+            <div class="page-content" id="companies-page">
+                <div class="card">
+                    <h2 class="section-title">Empresas</h2>
+                    <p>Esta página gerencia o cadastro de empresas.</p>
+                    <!-- Conteúdo da página de empresas -->
+                </div>
+            </div>
+            
+            <div class="page-content" id="settings-page">
+                <div class="card">
+                    <h2 class="section-title">Configurações</h2>
+                    <p>Esta página contém as configurações do sistema.</p>
+                    <!-- Conteúdo da página de configurações -->
+                </div>
+            </div>
+            
+            <div class="page-content" id="help-page">
+                <div class="card">
+                    <h2 class="section-title">Ajuda</h2>
+                    <p>Esta página contém informações de ajuda e suporte.</p>
+                    <!-- Conteúdo da página de ajuda -->
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>VisitControl - Sistema de Gestão de Visitas &copy; 2023. Todos os direitos reservados.</p>
+    </footer>
+    
+    <!-- Modals -->
+    <div class="modal-backdrop" id="visitModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Registrar Nova Visita</h3>
+                <button class="action-btn" id="closeModalBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="visitForm">
+                    <input type="hidden" id="visitId">
+                    <div class="form-group">
+                        <label for="visitorName">Nome do Visitante</label>
+                        <input type="text" id="visitorName" class="form-control" placeholder="Digite o nome completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="company">Empresa</label>
+                        <input type="text" id="company" class="form-control" placeholder="Nome da empresa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="document">Documento</label>
+                        <input type="text" id="document" class="form-control" placeholder="CPF ou RG">
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">Destino</label>
+                        <select id="destination" class="form-control" required>
+                            <option value="">Selecione um departamento</option>
+                            <option value="rh">Recursos Humanos</option>
+                            <option value="ti">Tecnologia da Informação</option>
+                            <option value="financeiro">Financeiro</option>
+                            <option value="comercial">Comercial</option>
+                            <option value="diretoria">Diretoria</option>
+                            <option value="operacional">Operacional</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Data e Hora</label>
+                        <input type="datetime-local" id="date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Observações</label>
+                        <textarea id="notes" class="form-control" rows="3" placeholder="Informações adicionais..."></textarea>
+                    </div>
+                </form>
+                
+                <!-- Visit Details (hidden by default) -->
+                <div id="visitDetails" style="display: none;">
+                    <div class="visit-details">
+                        <div class="detail-group">
+                            <div class="detail-label">Visitante</div>
+                            <div class="detail-value" id="detailName">-</div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Empresa</div>
+                            <div class="detail-value" id="detailCompany">-</div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Documento</div>
+                            <div class="detail-value" id="detailDocument">-</div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Destino</div>
+                            <div class="detail-value" id="detailDestination">-</div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Data e Hora</div>
+                            <div class="detail-value" id="detailDate">-</div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Status</div>
+                            <div class="detail-value"><span class="status status-scheduled">-</span></div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Observações</div>
+                            <div class="detail-value" id="detailNotes">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelBtn">Cancelar</button>
+                <button class="btn btn-primary" id="saveBtn" style="display: none;">Salvar Visita</button>
+                <button class="btn btn-primary" id="updateBtn" style="display: none;">Atualizar Visita</button>
             </div>
         </div>
-    </footer>
+    </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-backdrop" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirmar Exclusão</h3>
+                <button class="action-btn close-delete-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir a visita de <span id="deleteVisitName">-</span>?</p>
+                <p>Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline close-delete-modal">Cancelar</button>
+                <button class="btn btn-primary" id="confirmDeleteBtn">Excluir</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Operação realizada com sucesso!</span>
+    </div>
 
     <script>
-        // Elementos do DOM
-        const loginModal = document.getElementById('loginModal');
-        const loginBtn = document.getElementById('loginBtn');
-        const ctaLoginBtn = document.getElementById('ctaLoginBtn');
-        const closeModal = document.querySelector('.close-modal');
-        const loginForm = document.getElementById('loginForm');
-        const publicArea = document.getElementById('publicArea');
-        const dashboard = document.getElementById('dashboard');
-        const logoutBtn = document.getElementById('logoutBtn');
-
-        // Abrir modal de login
-        function openLoginModal() {
-            loginModal.style.display = 'flex';
-        }
-
-        // Fechar modal de login
-        function closeLoginModal() {
-            loginModal.style.display = 'none';
-        }
-
-        // Fazer login (simulado)
-        function login(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            // Simulação de login - em um sistema real, isso seria uma chamada API
-            if (email && password) {
-                // Esconder área pública e mostrar dashboard
-                publicArea.style.display = 'none';
-                dashboard.style.display = 'block';
-                closeLoginModal();
+        // Dados de exemplo (inicialmente vazios)
+        let visits = [];
+        
+        // Elementos DOM
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const visitModal = document.getElementById('visitModal');
+        const deleteModal = document.getElementById('deleteModal');
+        const toast = document.getElementById('toast');
+        const visitsTableBody = document.getElementById('visitsTableBody');
+        
+        // Contadores
+        const todayVisitsCount = document.getElementById('todayVisitsCount');
+        const pendingVisitsCount = document.getElementById('pendingVisitsCount');
+        const completedVisitsCount = document.getElementById('completedVisitsCount');
+        
+        // Estado da aplicação
+        let currentVisitId = null;
+        let isViewMode = false;
+        let currentPage = 'dashboard';
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCounters();
+            applyFilters();
+            document.getElementById('date').min = new Date().toISOString().slice(0, 16);
+        });
+        
+        // Alternar menu mobile
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+        });
+        
+        // Fechar menu ao clicar no overlay
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+        
+        // Navegação do menu lateral
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const page = item.getAttribute('data-page');
+                navigateToPage(page);
                 
-                // Adicionar à URL (opcional)
-                window.location.hash = '#dashboard';
-            } else {
-                alert('Por favor, preencha todos os campos.');
+                if (window.innerWidth <= 900) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+        
+        // Abrir modal para nova visita
+        document.getElementById('newVisitBtn').addEventListener('click', () => {
+            openVisitModal('new');
+        });
+        
+        // Fechar modal
+        document.getElementById('closeModalBtn').addEventListener('click', closeVisitModal);
+        document.getElementById('cancelBtn').addEventListener('click', closeVisitModal);
+        
+        // Fechar modal de exclusão
+        document.querySelectorAll('.close-delete-modal').forEach(btn => {
+            btn.addEventListener('click', closeDeleteModal);
+        });
+        
+        // Confirmar exclusão
+        document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+            // Em uma aplicação real, faríamos uma requisição para o backend
+            const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
+            if (visitIndex !== -1) {
+                visits.splice(visitIndex, 1);
+                showToast('Visita excluída com sucesso!', 'success');
+                updateCounters();
+                renderVisitsTable();
             }
-        }
-
-        // Fazer logout
-        function logout() {
-            publicArea.style.display = 'block';
-            dashboard.style.display = 'none';
-            window.location.hash = '';
-        }
-
-        // Verificar se já está logado (apenas para demonstração)
-        function checkLogin() {
-            // Em um sistema real, isso verificaria tokens de autenticação
-            const isLoggedIn = localStorage.getItem('isLoggedIn');
-            if (isLoggedIn) {
-                publicArea.style.display = 'none';
-                dashboard.style.display = 'block';
-            }
-        }
-
-        // Event Listeners
-        loginBtn.addEventListener('click', openLoginModal);
-        ctaLoginBtn.addEventListener('click', openLoginModal);
-        closeModal.addEventListener('click', closeLoginModal);
-        loginForm.addEventListener('submit', login);
-        logoutBtn.addEventListener('click', logout);
-
-        // Fechar modal clicando fora dele
-        window.addEventListener('click', (event) => {
-            if (event.target === loginModal) {
-                closeLoginModal();
+            closeDeleteModal();
+        });
+        
+        // Salvar nova visita
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            // Validar formulário
+            if (!validateForm()) return;
+            
+            // Criar nova visita
+            const newVisit = {
+                id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 1 : 1,
+                name: document.getElementById('visitorName').value,
+                company: document.getElementById('company').value,
+                document: document.getElementById('document').value,
+                destination: document.getElementById('destination').value,
+                date: document.getElementById('date').value,
+                status: "scheduled",
+                notes: document.getElementById('notes').value
+            };
+            
+            // Adicionar à lista
+            visits.push(newVisit);
+            
+            // Feedback e fechar modal
+            showToast('Visita registrada com sucesso!', 'success');
+            closeVisitModal();
+            
+            // Atualizar interface
+            updateCounters();
+            renderVisitsTable();
+        });
+        
+        // Atualizar visita
+        document.getElementById('updateBtn').addEventListener('click', () => {
+            // Validar formulário
+            if (!validateForm()) return;
+            
+            // Encontrar e atualizar visita
+            const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
+            if (visitIndex !== -1) {
+                visits[visitIndex].name = document.getElementById('visitorName').value;
+                visits[visitIndex].company = document.getElementById('company').value;
+                visits[visitIndex].document = document.getElementById('document').value;
+                visits[visitIndex].destination = document.getElementById('destination').value;
+                visits[visitIndex].date = document.getElementById('date').value;
+                visits[visitIndex].notes = document.getElementById('notes').value;
+                
+                showToast('Visita atualizada com sucesso!', 'success');
+                closeVisitModal();
+                renderVisitsTable();
             }
         });
-
-        // Verificar login ao carregar a página
-        document.addEventListener('DOMContentLoaded', checkLogin);
-
-        // Verificar se a URL contém #login
-        if (window.location.hash === '#login') {
-            openLoginModal();
+        
+        // Filtros
+        document.getElementById('statusFilter').addEventListener('change', applyFilters);
+        document.getElementById('dateFilter').addEventListener('change', applyFilters);
+        document.getElementById('searchFilter').addEventListener('input', applyFilters);
+        
+        // Limpar filtros
+        document.getElementById('clearFiltersBtn').addEventListener('click', () => {
+            document.getElementById('statusFilter').value = 'all';
+            document.getElementById('dateFilter').value = '';
+            document.getElementById('searchFilter').value = '';
+            applyFilters();
+        });
+        
+        // Cartões de estatísticas
+        document.getElementById('todayVisitsCard').addEventListener('click', () => {
+            document.getElementById('statusFilter').value = 'all';
+            document.getElementById('dateFilter').value = new Date().toISOString().split('T')[0];
+            applyFilters();
+            showToast('Filtro aplicado: Visitas de hoje');
+        });
+        
+        document.getElementById('pendingVisitsCard').addEventListener('click', () => {
+            document.getElementById('statusFilter').value = 'scheduled';
+            applyFilters();
+            showToast('Filtro aplicado: Visitas pendentes');
+        });
+        
+        document.getElementById('completedVisitsCard').addEventListener('click', () => {
+            document.getElementById('statusFilter').value = 'completed';
+            applyFilters();
+            showToast('Filtro aplicado: Visitas concluídas');
+        });
+        
+        // Funções auxiliares
+        function navigateToPage(page) {
+            // Atualizar menu
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+            
+            // Esconder todas as páginas
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            
+            // Mostrar página selecionada
+            document.getElementById(`${page}-page`).classList.add('active');
+            
+            // Atualizar estado atual
+            currentPage = page;
+            
+            showToast(`Navegando para ${document.querySelector(`.nav-item[data-page="${page}"]`).querySelector('span').textContent}`);
+        }
+        
+        function openVisitModal(mode, id = null) {
+            const modalTitle = document.getElementById('modalTitle');
+            const visitForm = document.getElementById('visitForm');
+            const visitDetails = document.getElementById('visitDetails');
+            const saveBtn = document.getElementById('saveBtn');
+            const updateBtn = document.getElementById('updateBtn');
+            
+            // Resetar formulário
+            visitForm.reset();
+            currentVisitId = id;
+            
+            if (mode === 'new') {
+                modalTitle.textContent = 'Registrar Nova Visita';
+                visitForm.style.display = 'block';
+                visitDetails.style.display = 'none';
+                saveBtn.style.display = 'block';
+                updateBtn.style.display = 'none';
+                isViewMode = false;
+            } else if (mode === 'view' && id) {
+                const visit = visits.find(v => v.id === parseInt(id));
+                if (visit) {
+                    modalTitle.textContent = 'Detalhes da Visita';
+                    visitForm.style.display = 'none';
+                    visitDetails.style.display = 'block';
+                    saveBtn.style.display = 'none';
+                    updateBtn.style.display = 'none';
+                    
+                    // Preencher detalhes
+                    document.getElementById('detailName').textContent = visit.name;
+                    document.getElementById('detailCompany').textContent = visit.company;
+                    document.getElementById('detailDocument').textContent = visit.document;
+                    document.getElementById('detailDestination').textContent = getDestinationName(visit.destination);
+                    document.getElementById('detailDate').textContent = formatDateTime(visit.date);
+                    document.getElementById('detailNotes').textContent = visit.notes;
+                    
+                    // Atualizar status
+                    const statusElement = document.querySelector('#visitDetails .status');
+                    statusElement.className = 'status';
+                    if (visit.status === 'scheduled') {
+                        statusElement.classList.add('status-scheduled');
+                        statusElement.textContent = 'Agendada';
+                    } else if (visit.status === 'in-progress') {
+                        statusElement.classList.add('status-in-progress');
+                        statusElement.textContent = 'Em Andamento';
+                    } else {
+                        statusElement.classList.add('status-completed');
+                        statusElement.textContent = 'Concluída';
+                    }
+                    
+                    isViewMode = true;
+                }
+            } else if (mode === 'edit' && id) {
+                const visit = visits.find(v => v.id === parseInt(id));
+                if (visit) {
+                    modalTitle.textContent = 'Editar Visita';
+                    visitForm.style.display = 'block';
+                    visitDetails.style.display = 'none';
+                    saveBtn.style.display = 'none';
+                    updateBtn.style.display = 'block';
+                    
+                    // Preencher formulário
+                    document.getElementById('visitId').value = visit.id;
+                    document.getElementById('visitorName').value = visit.name;
+                    document.getElementById('company').value = visit.company;
+                    document.getElementById('document').value = visit.document;
+                    document.getElementById('destination').value = visit.destination;
+                    document.getElementById('date').value = visit.date;
+                    document.getElementById('notes').value = visit.notes;
+                    
+                    isViewMode = false;
+                }
+            }
+            
+            visitModal.classList.add('active');
+        }
+        
+        function closeVisitModal() {
+            visitModal.classList.remove('active');
+        }
+        
+        function openDeleteModal(id) {
+            const visit = visits.find(v => v.id === parseInt(id));
+            if (visit) {
+                document.getElementById('deleteVisitName').textContent = visit.name;
+                currentVisitId = id;
+                deleteModal.classList.add('active');
+            }
+        }
+        
+        function closeDeleteModal() {
+            deleteModal.classList.remove('active');
+        }
+        
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            toast.className = 'toast';
+            toast.classList.add(type);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        function validateForm() {
+            const name = document.getElementById('visitorName').value;
+            const company = document.getElementById('company').value;
+            const destination = document.getElementById('destination').value;
+            const date = document.getElementById('date').value;
+            
+            if (!name || !company || !destination || !date) {
+                showToast('Preencha todos os campos obrigatórios!', 'error');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function applyFilters() {
+            renderVisitsTable();
+        }
+        
+        function renderVisitsTable() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
+            
+            // Limpar tabela
+            visitsTableBody.innerHTML = '';
+            
+            // Filtrar visitas
+            const filteredVisits = visits.filter(visit => {
+                const statusMatch = statusFilter === 'all' || 
+                                 (statusFilter === 'scheduled' && visit.status === 'scheduled') ||
+                                 (statusFilter === 'in-progress' && visit.status === 'in-progress') ||
+                                 (statusFilter === 'completed' && visit.status === 'completed');
+                
+                const dateMatch = !dateFilter || visit.date.includes(dateFilter);
+                const searchMatch = !searchFilter || 
+                                  visit.name.toLowerCase().includes(searchFilter) || 
+                                  visit.company.toLowerCase().includes(searchFilter);
+                
+                return statusMatch && dateMatch && searchMatch;
+            });
+            
+            // Renderizar visitas
+            if (filteredVisits.length === 0) {
+                visitsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
+                            <i class="fas fa-inbox" style="font-size: 40px; margin-bottom: 10px; display: block;"></i>
+                            <p>Nenhuma visita encontrada</p>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                filteredVisits.forEach(visit => {
+                    const row = document.createElement('tr');
+                    
+                    // Determinar classe de status
+                    let statusClass = 'status-scheduled';
+                    let statusText = 'Agendada';
+                    
+                    if (visit.status === 'in-progress') {
+                        statusClass = 'status-in-progress';
+                        statusText = 'Em Andamento';
+                    } else if (visit.status === 'completed') {
+                        statusClass = 'status-completed';
+                        statusText = 'Concluída';
+                    }
+                    
+                    row.innerHTML = `
+                        <td>${visit.name}</td>
+                        <td>${visit.company}</td>
+                        <td>${formatDateTime(visit.date)}</td>
+                        <td>${getDestinationName(visit.destination)}</td>
+                        <td><span class="status ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <button class="action-btn view-btn" data-id="${visit.id}"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn edit-btn" data-id="${visit.id}"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete delete-btn" data-id="${visit.id}"><i class="fas fa-trash"></i></button>
+                        </td>
+                    `;
+                    
+                    // Adicionar event listeners
+                    row.querySelector('.view-btn').addEventListener('click', () => {
+                        openVisitModal('view', visit.id);
+                    });
+                    
+                    row.querySelector('.edit-btn').addEventListener('click', () => {
+                        openVisitModal('edit', visit.id);
+                    });
+                    
+                    row.querySelector('.delete-btn').addEventListener('click', () => {
+                        openDeleteModal(visit.id);
+                    });
+                    
+                    visitsTableBody.appendChild(row);
+                });
+            }
+        }
+        
+        function updateCounters() {
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Contar visitas de hoje
+            const todayVisits = visits.filter(visit => visit.date.includes(today)).length;
+            
+            // Contar visitas pendentes
+            const pendingVisits = visits.filter(visit => visit.status === 'scheduled').length;
+            
+            // Contar visitas concluídas
+            const completedVisits = visits.filter(visit => visit.status === 'completed').length;
+            
+            // Atualizar contadores
+            todayVisitsCount.textContent = todayVisits;
+            pendingVisitsCount.textContent = pendingVisits;
+            completedVisitsCount.textContent = completedVisits;
+        }
+        
+        function getDestinationName(destination) {
+            const destinations = {
+                'rh': 'Recursos Humanos',
+                'ti': 'Tecnologia da Informação',
+                'financeiro': 'Financeiro',
+                'comercial': 'Comercial',
+                'diretoria': 'Diretoria',
+                'operacional': 'Operacional'
+            };
+            
+            return destinations[destination] || destination;
+        }
+        
+        function formatDateTime(dateTimeString) {
+            const date = new Date(dateTimeString);
+            return `${date.toLocaleDateString('pt-BR')} ${date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
         }
     </script>
 </body>
