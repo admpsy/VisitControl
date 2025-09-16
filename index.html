@@ -393,6 +393,14 @@
             color: var(--text-light);
             font-size: 14px;
             margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .footer-brand {
+            font-weight: 600;
+            color: var(--primary);
         }
         
         /* Modal */
@@ -578,11 +586,12 @@
         }
         
         .status-btn {
-            padding: 5px 10px;
+            padding: 8px 15px;
             border-radius: 5px;
             border: none;
-            font-size: 12px;
+            font-size: 14px;
             cursor: pointer;
+            transition: all 0.3s;
         }
         
         .status-btn.progress {
@@ -590,9 +599,17 @@
             color: white;
         }
         
+        .status-btn.progress:hover {
+            background: #e69a09;
+        }
+        
         .status-btn.complete {
             background: var(--success);
             color: white;
+        }
+        
+        .status-btn.complete:hover {
+            background: #0da371;
         }
         
         /* Data Management */
@@ -600,6 +617,80 @@
             margin-top: 20px;
             padding-top: 20px;
             border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        /* About Section */
+        .about-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: var(--radius);
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        .developer-name {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .settings-group {
+            margin-bottom: 25px;
+        }
+        
+        .settings-group h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .help-section {
+            margin-bottom: 25px;
+        }
+        
+        .help-section h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .help-content {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .contact-item i {
+            color: var(--primary);
+            width: 20px;
         }
     </style>
 </head>
@@ -657,7 +748,7 @@
                     <div class="notifications">
                         <i class="far fa-bell" style="font-size: 20px; color: var(--text-light); cursor: pointer;" id="notificationsBtn"></i>
                     </div>
-                    <div class="user-avatar" id="userMenuBtn">AD</div>
+                    <div class="user-avatar" id="userMenuBtn">AG</div>
                 </div>
             </header>
             
@@ -760,55 +851,256 @@
                             Adicionar Dados de Exemplo
                         </button>
                     </div>
+
+                    <!-- About Section -->
+                    <div class="about-section">
+                        <p>Sistema desenvolvido por <span class="developer-name">Aldemir Garbino</span></p>
+                        <p>VisitControl - Solução completa para gestão de visitas</p>
+                    </div>
                 </div>
             </div>
             
-            <!-- Other Pages (initially hidden) -->
+            <!-- Visits Page -->
             <div class="page-content" id="visits-page">
                 <div class="card">
-                    <h2 class="section-title">Todas as Visitas</h2>
-                    <p>Esta página mostra todas as visitas registradas no sistema.</p>
-                    <!-- Conteúdo da página de visitas -->
+                    <div class="section-header">
+                        <h2 class="section-title">Todas as Visitas</h2>
+                        <button class="btn btn-primary" id="newVisitBtn2">
+                            <i class="fas fa-plus"></i>
+                            Nova Visita
+                        </button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Visitante</th>
+                                    <th>Empresa</th>
+                                    <th>Data/Hora</th>
+                                    <th>Destino</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allVisitsTableBody">
+                                <!-- Todas as visitas serão carregadas aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             
+            <!-- Scheduling Page -->
             <div class="page-content" id="scheduling-page">
                 <div class="card">
-                    <h2 class="section-title">Agendamentos</h2>
+                    <h2 class="section-title">Agendamentos Futuros</h2>
                     <p>Esta página gerencia os agendamentos futuros de visitas.</p>
-                    <!-- Conteúdo da página de agendamentos -->
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Visitante</th>
+                                    <th>Empresa</th>
+                                    <th>Data/Hora</th>
+                                    <th>Destino</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schedulingTableBody">
+                                <!-- Agendamentos serão carregados aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             
+            <!-- Visitors Page -->
             <div class="page-content" id="visitors-page">
                 <div class="card">
-                    <h2 class="section-title">Visitantes</h2>
+                    <h2 class="section-title">Visitantes Cadastrados</h2>
                     <p>Esta página gerencia o cadastro de visitantes.</p>
-                    <!-- Conteúdo da página de visitantes -->
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Documento</th>
+                                    <th>Empresa</th>
+                                    <th>Última Visita</th>
+                                    <th>Total de Visitas</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="visitorsTableBody">
+                                <!-- Visitantes serão carregados aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             
+            <!-- Companies Page -->
             <div class="page-content" id="companies-page">
                 <div class="card">
-                    <h2 class="section-title">Empresas</h2>
+                    <h2 class="section-title">Empresas Cadastradas</h2>
                     <p>Esta página gerencia o cadastro de empresas.</p>
-                    <!-- Conteúdo da página de empresas -->
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>CNPJ</th>
+                                    <th>Responsável</th>
+                                    <th>Total de Visitas</th>
+                                    <th>Última Visita</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="companiesTableBody">
+                                <!-- Empresas serão carregadas aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             
+            <!-- Settings Page -->
             <div class="page-content" id="settings-page">
                 <div class="card">
-                    <h2 class="section-title">Configurações</h2>
-                    <p>Esta página contém as configurações do sistema.</p>
-                    <!-- Conteúdo da página de configurações -->
+                    <h2 class="section-title">Configurações do Sistema</h2>
+                    
+                    <div class="settings-group">
+                        <h3>Preferências Gerais</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="companyName">Nome da Empresa</label>
+                                <input type="text" id="companyName" class="form-control" placeholder="Digite o nome da sua empresa">
+                            </div>
+                            <div class="form-group">
+                                <label for="companyAddress">Endereço</label>
+                                <input type="text" id="companyAddress" class="form-control" placeholder="Digite o endereço">
+                            </div>
+                            <div class="form-group">
+                                <label for="adminEmail">E-mail do Administrador</label>
+                                <input type="email" id="adminEmail" class="form-control" placeholder="admin@exemplo.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="maxVisits">Máximo de Visitas Diárias</label>
+                                <input type="number" id="maxVisits" class="form-control" placeholder="Ex: 50" min="1">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h3>Configurações de Notificação</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                    <span class="checkmark"></span>
+                                    Notificações por E-mail
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="browserNotifications" checked>
+                                    <span class="checkmark"></span>
+                                    Notificações do Navegador
+                                </label>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="notificationTime">Horário para Notificações Diárias</label>
+                                <input type="time" id="notificationTime" class="form-control" value="08:00">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h3>Backup de Dados</h3>
+                        <div class="data-management">
+                            <button class="btn btn-outline" id="exportDataBtn">
+                                <i class="fas fa-download"></i>
+                                Exportar Dados
+                            </button>
+                            <button class="btn btn-outline" id="importDataBtn">
+                                <i class="fas fa-upload"></i>
+                                Importar Dados
+                            </button>
+                            <button class="btn btn-outline" id="resetSettingsBtn">
+                                <i class="fas fa-undo"></i>
+                                Restaurar Padrões
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <button class="btn btn-primary" id="saveSettingsBtn">
+                            <i class="fas fa-save"></i>
+                            Salvar Configurações
+                        </button>
+                    </div>
                 </div>
             </div>
             
+            <!-- Help Page -->
             <div class="page-content" id="help-page">
                 <div class="card">
-                    <h2 class="section-title">Ajuda</h2>
-                    <p>Esta página contém informações de ajuda e suporte.</p>
-                    <!-- Conteúdo da página de ajuda -->
+                    <h2 class="section-title">Ajuda e Suporte</h2>
+                    
+                    <div class="help-section">
+                        <h3>Como Usar o Sistema</h3>
+                        <div class="help-content">
+                            <p>O <strong>VisitControl</strong> é um sistema completo para gestão de visitas. Abaixo estão os principais recursos:</p>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li><strong>Dashboard:</strong> Visualize estatísticas e visitas recentes</li>
+                                <li><strong>Visitas:</strong> Gerencie todas as visitas registradas</li>
+                                <li><strong>Agendamentos:</strong> Visualize e gerencie visitas futuras</li>
+                                <li><strong>Visitantes:</strong> Mantenha um cadastro de visitantes frequentes</li>
+                                <li><strong>Empresas:</strong> Cadastre empresas visitantes</li>
+                                <li><strong>Configurações:</strong> Personalize o sistema conforme suas necessidades</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3>Perguntas Frequentes</h3>
+                        <div class="help-content">
+                            <p><strong>Como adicionar uma nova visita?</strong></p>
+                            <p>Clique no botão "Nova Visita" no Dashboard ou na página de Visitas.</p>
+                            
+                            <p><strong>Como alterar o status de uma visita?</strong></p>
+                            <p>Clique no ícone de visualização (olho) na lista de visitas e use os botões para alterar o status.</p>
+                            
+                            <p><strong>Os dados são salvos automaticamente?</strong></p>
+                            <p>Sim, todos os dados são salvos automaticamente no seu navegador.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3>Suporte Técnico</h3>
+                        <div class="help-content">
+                            <p>Para suporte técnico, entre em contato com nosso desenvolvedor:</p>
+                            <div class="contact-info">
+                                <div class="contact-item">
+                                    <i class="fas fa-user"></i>
+                                    <span><strong>Aldemir Garbino</strong></span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>contato@aldeimirgarbino.com</span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-phone"></i>
+                                    <span>(XX) XXXXX-XXXX</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -816,7 +1108,8 @@
     
     <!-- Footer -->
     <footer class="footer">
-        <p>VisitControl - Sistema de Gestão de Visitas &copy; 2023. Todos os direitos reservados.</p>
+        <p>VisitControl - Sistema de Gestão de Visitas</p>
+        <p>Desenvolvido por <span class="footer-brand">Aldemir Garbino</span> &copy; 2023. Todos os direitos reservados.</p>
     </footer>
     
     <!-- Modals -->
@@ -942,6 +1235,8 @@
     <script>
         // Dados de exemplo (inicialmente vazios)
         let visits = [];
+        let visitors = [];
+        let companies = [];
         
         // Elementos DOM
         const sidebar = document.getElementById('sidebar');
@@ -951,6 +1246,10 @@
         const deleteModal = document.getElementById('deleteModal');
         const toast = document.getElementById('toast');
         const visitsTableBody = document.getElementById('visitsTableBody');
+        const allVisitsTableBody = document.getElementById('allVisitsTableBody');
+        const schedulingTableBody = document.getElementById('schedulingTableBody');
+        const visitorsTableBody = document.getElementById('visitorsTableBody');
+        const companiesTableBody = document.getElementById('companiesTableBody');
         
         // Contadores
         const todayVisitsCount = document.getElementById('todayVisitsCount');
@@ -966,6 +1265,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Carregar dados do localStorage
             loadVisitsFromStorage();
+            loadVisitorsFromStorage();
+            loadCompaniesFromStorage();
             
             // Adicionar dados de exemplo apenas se não houver dados salvos
             if (visits.length === 0) {
@@ -976,9 +1277,16 @@
             applyFilters();
             document.getElementById('date').min = new Date().toISOString().slice(0, 16);
             
-            // Configurar event listeners para os novos botões
+            // Configurar event listeners para os botões
             document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
             document.getElementById('addSampleDataBtn').addEventListener('click', addSampleData);
+            document.getElementById('newVisitBtn2').addEventListener('click', () => {
+                openVisitModal('new');
+            });
+            document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+            
+            // Renderizar todas as tabelas
+            renderAllTables();
         });
         
         // Funções de persistência de dados
@@ -993,14 +1301,32 @@
             }
         }
         
+        function loadVisitorsFromStorage() {
+            const storedVisitors = localStorage.getItem('visitControl_visitors');
+            if (storedVisitors) {
+                visitors = JSON.parse(storedVisitors);
+            }
+        }
+        
+        function loadCompaniesFromStorage() {
+            const storedCompanies = localStorage.getItem('visitControl_companies');
+            if (storedCompanies) {
+                companies = JSON.parse(storedCompanies);
+            }
+        }
+        
         function clearAllData() {
             if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
                 visits = [];
                 saveVisitsToStorage();
                 updateCounters();
-                renderVisitsTable();
+                renderAllTables();
                 showToast('Todos os dados foram removidos.', 'success');
             }
+        }
+        
+        function saveSettings() {
+            showToast('Configurações salvas com sucesso!', 'success');
         }
         
         // Adicionar dados de exemplo
@@ -1008,10 +1334,13 @@
             const today = new Date();
             const tomorrow = new Date(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
             
+            // Dados de exemplo para visitas
             const sampleVisits = [
                 {
-                    id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 1 : 1,
+                    id: 1,
                     name: "Carlos Silva",
                     company: "Tech Solutions Ltda",
                     document: "123.456.789-00",
@@ -1021,7 +1350,7 @@
                     notes: "Reunião sobre novo projeto de software"
                 },
                 {
-                    id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 2 : 2,
+                    id: 2,
                     name: "Ana Oliveira",
                     company: "Consultoria Financeira SA",
                     document: "987.654.321-00",
@@ -1031,17 +1360,17 @@
                     notes: "Apresentação de relatórios trimestrais"
                 },
                 {
-                    id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 3 : 3,
+                    id: 3,
                     name: "Roberto Santos",
                     company: "Vendas Express",
                     document: "456.789.123-00",
                     destination: "comercial",
-                    date: today.toISOString().slice(0, 16),
+                    date: yesterday.toISOString().slice(0, 16),
                     status: "completed",
                     notes: "Negociação de contrato"
                 },
                 {
-                    id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 4 : 4,
+                    id: 4,
                     name: "Mariana Costa",
                     company: "Recursos Humanos Brasil",
                     document: "789.123.456-00",
@@ -1051,7 +1380,7 @@
                     notes: "Processo seletivo - segunda fase"
                 },
                 {
-                    id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 5 : 5,
+                    id: 5,
                     name: "Paulo Mendes",
                     company: "Indústrias Pesadas",
                     document: "321.654.987-00",
@@ -1060,6 +1389,24 @@
                     status: "scheduled",
                     notes: "Visita técnica às instalações"
                 }
+            ];
+            
+            // Dados de exemplo para visitantes
+            visitors = [
+                { id: 1, name: "Carlos Silva", document: "123.456.789-00", company: "Tech Solutions Ltda", lastVisit: today.toISOString().slice(0, 16), totalVisits: 3 },
+                { id: 2, name: "Ana Oliveira", document: "987.654.321-00", company: "Consultoria Financeira SA", lastVisit: today.toISOString().slice(0, 16), totalVisits: 5 },
+                { id: 3, name: "Roberto Santos", document: "456.789.123-00", company: "Vendas Express", lastVisit: yesterday.toISOString().slice(0, 16), totalVisits: 2 },
+                { id: 4, name: "Mariana Costa", document: "789.123.456-00", company: "Recursos Humanos Brasil", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 },
+                { id: 5, name: "Paulo Mendes", document: "321.654.987-00", company: "Indústrias Pesadas", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 }
+            ];
+            
+            // Dados de exemplo para empresas
+            companies = [
+                { id: 1, name: "Tech Solutions Ltda", cnpj: "12.345.678/0001-90", responsible: "Carlos Silva", totalVisits: 3, lastVisit: today.toISOString().slice(0, 16) },
+                { id: 2, name: "Consultoria Financeira SA", cnpj: "98.765.432/0001-10", responsible: "Ana Oliveira", totalVisits: 5, lastVisit: today.toISOString().slice(0, 16) },
+                { id: 3, name: "Vendas Express", cnpj: "45.678.912/0001-30", responsible: "Roberto Santos", totalVisits: 2, lastVisit: yesterday.toISOString().slice(0, 16) },
+                { id: 4, name: "Recursos Humanos Brasil", cnpj: "78.912.345/0001-40", responsible: "Mariana Costa", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) },
+                { id: 5, name: "Indústrias Pesadas", cnpj: "32.165.498/0001-70", responsible: "Paulo Mendes", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) }
             ];
             
             // Adicionar apenas se não houver visitas com os mesmos IDs
@@ -1071,10 +1418,12 @@
             
             // Salvar no localStorage
             saveVisitsToStorage();
+            localStorage.setItem('visitControl_visitors', JSON.stringify(visitors));
+            localStorage.setItem('visitControl_companies', JSON.stringify(companies));
             
             // Atualizar a interface
             updateCounters();
-            renderVisitsTable();
+            renderAllTables();
             
             showToast('Dados de exemplo adicionados com sucesso!', 'success');
         }
@@ -1127,7 +1476,7 @@
                 saveVisitsToStorage();
                 showToast('Visita excluída com sucesso!', 'success');
                 updateCounters();
-                renderVisitsTable();
+                renderAllTables();
             }
             closeDeleteModal();
         });
@@ -1161,7 +1510,7 @@
             
             // Atualizar interface
             updateCounters();
-            renderVisitsTable();
+            renderAllTables();
         });
         
         // Atualizar visita
@@ -1184,7 +1533,7 @@
                 
                 showToast('Visita atualizada com sucesso!', 'success');
                 closeVisitModal();
-                renderVisitsTable();
+                renderAllTables();
             }
         });
         
@@ -1221,7 +1570,12 @@
                 
                 // Atualizar contadores e tabela
                 updateCounters();
-                renderVisitsTable();
+                renderAllTables();
+                
+                // Fechar o modal após a atualização
+                setTimeout(() => {
+                    closeVisitModal();
+                }, 1500);
             }
         }
         
@@ -1273,6 +1627,17 @@
             // Atualizar estado atual
             currentPage = page;
             
+            // Renderizar a tabela apropriada
+            if (page === 'visits') {
+                renderAllVisitsTable();
+            } else if (page === 'scheduling') {
+                renderSchedulingTable();
+            } else if (page === 'visitors') {
+                renderVisitorsTable();
+            } else if (page === 'companies') {
+                renderCompaniesTable();
+            }
+            
             showToast(`Navegando para ${document.querySelector(`.nav-item[data-page="${page}"]`).querySelector('span').textContent}`);
         }
         
@@ -1283,6 +1648,8 @@
             const saveBtn = document.getElementById('saveBtn');
             const updateBtn = document.getElementById('updateBtn');
             const statusActions = document.getElementById('statusActions');
+            const markInProgressBtn = document.getElementById('markInProgressBtn');
+            const markCompletedBtn = document.getElementById('markCompletedBtn');
             
             // Resetar formulário
             visitForm.reset();
@@ -1306,14 +1673,13 @@
                     updateBtn.style.display = 'none';
                     
                     // Mostrar/ocultar ações de status conforme o status atual
+                    statusActions.style.display = 'flex';
                     if (visit.status === 'scheduled') {
-                        statusActions.style.display = 'flex';
-                        document.getElementById('markInProgressBtn').style.display = 'block';
-                        document.getElementById('markCompletedBtn').style.display = 'block';
+                        markInProgressBtn.style.display = 'block';
+                        markCompletedBtn.style.display = 'block';
                     } else if (visit.status === 'in-progress') {
-                        statusActions.style.display = 'flex';
-                        document.getElementById('markInProgressBtn').style.display = 'none';
-                        document.getElementById('markCompletedBtn').style.display = 'block';
+                        markInProgressBtn.style.display = 'none';
+                        markCompletedBtn.style.display = 'block';
                     } else {
                         statusActions.style.display = 'none';
                     }
@@ -1420,6 +1786,14 @@
             renderVisitsTable();
         }
         
+        function renderAllTables() {
+            renderVisitsTable();
+            renderAllVisitsTable();
+            renderSchedulingTable();
+            renderVisitorsTable();
+            renderCompaniesTable();
+        }
+        
         function renderVisitsTable() {
             const statusFilter = document.getElementById('statusFilter').value;
             const dateFilter = document.getElementById('dateFilter').value;
@@ -1446,8 +1820,11 @@
             // Ordenar por data (mais recente primeiro)
             filteredVisits.sort((a, b) => new Date(b.date) - new Date(a.date));
             
+            // Limitar a 5 visitas para o dashboard
+            const limitedVisits = filteredVisits.slice(0, 5);
+            
             // Renderizar visitas
-            if (filteredVisits.length === 0) {
+            if (limitedVisits.length === 0) {
                 visitsTableBody.innerHTML = `
                     <tr>
                         <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
@@ -1457,7 +1834,7 @@
                     </tr>
                 `;
             } else {
-                filteredVisits.forEach(visit => {
+                limitedVisits.forEach(visit => {
                     const row = document.createElement('tr');
                     
                     // Determinar classe de status
@@ -1503,6 +1880,196 @@
             }
         }
         
+        function renderAllVisitsTable() {
+            // Limpar tabela
+            allVisitsTableBody.innerHTML = '';
+            
+            // Ordenar por data (mais recente primeiro)
+            const sortedVisits = [...visits].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Renderizar todas as visitas
+            if (sortedVisits.length === 0) {
+                allVisitsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
+                            <i class="fas fa-inbox" style="font-size: 40px; margin-bottom: 10px; display: block;"></i>
+                            <p>Nenhuma visita encontrada</p>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                sortedVisits.forEach(visit => {
+                    const row = document.createElement('tr');
+                    
+                    // Determinar classe de status
+                    let statusClass = 'status-scheduled';
+                    let statusText = 'Agendada';
+                    
+                    if (visit.status === 'in-progress') {
+                        statusClass = 'status-in-progress';
+                        statusText = 'Em Andamento';
+                    } else if (visit.status === 'completed') {
+                        statusClass = 'status-completed';
+                        statusText = 'Concluída';
+                    }
+                    
+                    row.innerHTML = `
+                        <td>${visit.name}</td>
+                        <td>${visit.company}</td>
+                        <td>${formatDateTime(visit.date)}</td>
+                        <td>${getDestinationName(visit.destination)}</td>
+                        <td><span class="status ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <button class="action-btn view-btn" data-id="${visit.id}"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn edit-btn" data-id="${visit.id}"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete delete-btn" data-id="${visit.id}"><i class="fas fa-trash"></i></button>
+                        </td>
+                    `;
+                    
+                    // Adicionar event listeners
+                    row.querySelector('.view-btn').addEventListener('click', () => {
+                        openVisitModal('view', visit.id);
+                    });
+                    
+                    row.querySelector('.edit-btn').addEventListener('click', () => {
+                        openVisitModal('edit', visit.id);
+                    });
+                    
+                    row.querySelector('.delete-btn').addEventListener('click', () => {
+                        openDeleteModal(visit.id);
+                    });
+                    
+                    allVisitsTableBody.appendChild(row);
+                });
+            }
+        }
+        
+        function renderSchedulingTable() {
+            // Limpar tabela
+            schedulingTableBody.innerHTML = '';
+            
+            // Filtrar apenas agendamentos futuros
+            const today = new Date().toISOString().slice(0, 16);
+            const futureVisits = visits.filter(visit => visit.date >= today && visit.status === 'scheduled');
+            
+            // Ordenar por data (mais recente primeiro)
+            futureVisits.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            // Renderizar agendamentos
+            if (futureVisits.length === 0) {
+                schedulingTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
+                            <i class="fas fa-calendar" style="font-size: 40px; margin-bottom: 10px; display: block;"></i>
+                            <p>Nenhum agendamento futuro</p>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                futureVisits.forEach(visit => {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>${visit.name}</td>
+                        <td>${visit.company}</td>
+                        <td>${formatDateTime(visit.date)}</td>
+                        <td>${getDestinationName(visit.destination)}</td>
+                        <td><span class="status status-scheduled">Agendada</span></td>
+                        <td>
+                            <button class="action-btn view-btn" data-id="${visit.id}"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn edit-btn" data-id="${visit.id}"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete delete-btn" data-id="${visit.id}"><i class="fas fa-trash"></i></button>
+                        </td>
+                    `;
+                    
+                    // Adicionar event listeners
+                    row.querySelector('.view-btn').addEventListener('click', () => {
+                        openVisitModal('view', visit.id);
+                    });
+                    
+                    row.querySelector('.edit-btn').addEventListener('click', () => {
+                        openVisitModal('edit', visit.id);
+                    });
+                    
+                    row.querySelector('.delete-btn').addEventListener('click', () => {
+                        openDeleteModal(visit.id);
+                    });
+                    
+                    schedulingTableBody.appendChild(row);
+                });
+            }
+        }
+        
+        function renderVisitorsTable() {
+            // Limpar tabela
+            visitorsTableBody.innerHTML = '';
+            
+            // Renderizar visitantes
+            if (visitors.length === 0) {
+                visitorsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
+                            <i class="fas fa-users" style="font-size: 40px; margin-bottom: 10px; display: block;"></i>
+                            <p>Nenhum visitante cadastrado</p>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                visitors.forEach(visitor => {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>${visitor.name}</td>
+                        <td>${visitor.document}</td>
+                        <td>${visitor.company}</td>
+                        <td>${visitor.lastVisit ? formatDateTime(visitor.lastVisit) : 'N/A'}</td>
+                        <td>${visitor.totalVisits}</td>
+                        <td>
+                            <button class="action-btn view-btn" data-id="${visitor.id}"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn edit-btn" data-id="${visitor.id}"><i class="fas fa-edit"></i></button>
+                        </td>
+                    `;
+                    
+                    visitorsTableBody.appendChild(row);
+                });
+            }
+        }
+        
+        function renderCompaniesTable() {
+            // Limpar tabela
+            companiesTableBody.innerHTML = '';
+            
+            // Renderizar empresas
+            if (companies.length === 0) {
+                companiesTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
+                            <i class="fas fa-building" style="font-size: 40px; margin-bottom: 10px; display: block;"></i>
+                            <p>Nenhuma empresa cadastrada</p>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                companies.forEach(company => {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>${company.name}</td>
+                        <td>${company.cnpj}</td>
+                        <td>${company.responsible}</td>
+                        <td>${company.totalVisits}</td>
+                        <td>${company.lastVisit ? formatDateTime(company.lastVisit) : 'N/A'}</td>
+                        <td>
+                            <button class="action-btn view-btn" data-id="${company.id}"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn edit-btn" data-id="${company.id}"><i class="fas fa-edit"></i></button>
+                        </td>
+                    `;
+                    
+                    companiesTableBody.appendChild(row);
+                });
+            }
+        }
+        
         function updateCounters() {
             const today = new Date().toISOString().split('T')[0];
             
@@ -1519,6 +2086,9 @@
             todayVisitsCount.textContent = todayVisits;
             pendingVisitsCount.textContent = pendingVisits;
             completedVisitsCount.textContent = completedVisits;
+            
+            // Atualizar badge de visitantes
+            document.querySelector('.nav-item[data-page="visitors"] .badge').textContent = visitors.length;
         }
         
         function getDestinationName(destination) {
