@@ -80,6 +80,136 @@
             opacity: 0.8;
         }
         
+        /* Login Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--secondary);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid var(--primary);
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Dashboard (área logada) */
+        .dashboard {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
         /* Hero Section */
         .hero {
             padding: 5rem 0;
@@ -99,34 +229,6 @@
             font-size: 1.2rem;
             max-width: 700px;
             margin: 0 auto 2rem;
-        }
-        
-        .btn {
-            display: inline-block;
-            background-color: white;
-            color: var(--primary);
-            padding: 0.8rem 1.5rem;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: 2px solid white;
-            margin: 0 10px;
-        }
-        
-        .btn:hover {
-            background-color: transparent;
-            color: white;
-        }
-        
-        .btn-outline {
-            background-color: transparent;
-            color: white;
-        }
-        
-        .btn-outline:hover {
-            background-color: white;
-            color: var(--primary);
         }
         
         /* Features */
@@ -330,6 +432,30 @@
     </style>
 </head>
 <body>
+    <!-- Modal de Login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Acessar Sistema</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" required placeholder="seu@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" required placeholder="Sua senha">
+                </div>
+                <button type="submit" class="btn btn-block">Entrar</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">
+                <a href="#" style="color: var(--primary);">Esqueci minha senha</a>
+            </p>
+        </div>
+    </div>
+
     <header>
         <div class="container">
             <nav>
@@ -341,90 +467,124 @@
                     <a href="#features"><i class="fas fa-star"></i> Funcionalidades</a>
                     <a href="#how-it-works"><i class="fas fa-cogs"></i> Como Funciona</a>
                     <a href="#pricing"><i class="fas fa-tag"></i> Preços</a>
-                    <a href="#login" class="btn-outline"><i class="fas fa-sign-in-alt"></i> Acessar</a>
+                    <a href="#" id="loginBtn" class="btn-outline"><i class="fas fa-sign-in-alt"></i> Acessar</a>
                 </div>
             </nav>
         </div>
     </header>
 
-    <section class="hero">
-        <div class="container">
-            <h1>Controle de Visitantes de Forma Inteligente</h1>
-            <p>Gerencie o fluxo de visitantes em sua empresa com eficiência e segurança. Tenha total controle sobre as entradas e saídas de pessoas em suas dependências.</p>
-            <div>
-                <a href="#demo" class="btn">Solicitar Demonstração</a>
-                <a href="#learn-more" class="btn btn-outline">Saiba Mais</a>
-            </div>
-        </div>
-    </section>
-
-    <section class="features" id="features">
-        <div class="container">
-            <h2 class="section-title">Funcionalidades</h2>
-            <p class="section-subtitle">Descubra como o VisitControl pode transformar a gestão de visitantes na sua empresa</p>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-user-check"></i>
-                    </div>
-                    <h3>Cadastro de Visitantes</h3>
-                    <p>Registro completo de informações dos visitantes com documentos e fotos para total identificação.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <h3>Agendamento Prévio</h3>
-                    <p>Permita que visitas sejam agendadas com antecedência, otimizando o tempo de recepção.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
-                    <h3>Relatórios Detalhados</h3>
-                    <p>Gere relatórios completos sobre o fluxo de visitantes por período, setor ou funcionário.</p>
+    <!-- Área Pública (não logada) -->
+    <div id="publicArea">
+        <section class="hero">
+            <div class="container">
+                <h1>Controle de Visitantes de Forma Inteligente</h1>
+                <p>Gerencie o fluxo de visitantes em sua empresa com eficiência e segurança. Tenha total controle sobre as entradas e saídas de pessoas em suas dependências.</p>
+                <div>
+                    <a href="#" id="demoBtn" class="btn">Solicitar Demonstração</a>
+                    <a href="#features" class="btn btn-outline">Saiba Mais</a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="how-it-works" id="how-it-works">
-        <div class="container">
-            <h2 class="section-title">Como Funciona</h2>
-            <p class="section-subtitle">Implemente o sistema de controle de visitas em 3 passos simples</p>
-            
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Cadastro</h3>
-                    <p>Cadastre sua empresa e funcionários autorizados a receber visitantes</p>
-                </div>
+        <section class="features" id="features">
+            <div class="container">
+                <h2 class="section-title">Funcionalidades</h2>
+                <p class="section-subtitle">Descubra como o VisitControl pode transformar a gestão de visitantes na sua empresa</p>
                 
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>Personalize</h3>
-                    <p>Configure os fluxos de visita de acordo com as necessidades da sua empresa</p>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Controle</h3>
-                    <p>Monitore em tempo real todas as entradas e saídas de visitantes</p>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h3>Cadastro de Visitantes</h3>
+                        <p>Registro completo de informações dos visitantes com documentos e fotos para total identificação.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>Agendamento Prévio</h3>
+                        <p>Permita que visitas sejam agendadas com antecedência, otimizando o tempo de recepção.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3>Relatórios Detalhados</h3>
+                        <p>Gere relatórios completos sobre o fluxo de visitantes por período, setor ou funcionário.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="cta" id="demo">
+        <section class="how-it-works" id="how-it-works">
+            <div class="container">
+                <h2 class="section-title">Como Funciona</h2>
+                <p class="section-subtitle">Implemente o sistema de controle de visitas em 3 passos simples</p>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Cadastro</h3>
+                        <p>Cadastre sua empresa e funcionários autorizados a receber visitantes</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Personalize</h3>
+                        <p>Configure os fluxos de visita de acordo com as necessidades da sua empresa</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Controle</h3>
+                        <p>Monitore em tempo real todas as entradas e saídas de visitantes</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta" id="demo">
+            <div class="container">
+                <h2>Pronto para melhorar seu controle de visitas?</h2>
+                <p>Junte-se a centenas de empresas que já utilizam o VisitControl para otimizar sua segurança</p>
+                <a href="#" id="ctaLoginBtn" class="btn btn-outline">Acessar Sistema</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Área Logada (Dashboard) -->
+    <div id="dashboard" class="dashboard">
         <div class="container">
-            <h2>Pronto para melhorar seu controle de visitas?</h2>
-            <p>Junte-se a centenas de empresas que já utilizam o VisitControl para otimizar sua segurança</p>
-            <a href="#contact" class="btn btn-outline">Solicitar Demonstração</a>
+            <div class="dashboard-header">
+                <h1>Dashboard - VisitControl</h1>
+                <button id="logoutBtn" class="btn btn-outline">Sair</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">42</div>
+                    <div class="stat-label">Visitantes Hoje</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">18</div>
+                    <div class="stat-label">Visitantes Ativos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">127</div>
+                    <div class="stat-label">Total Esta Semana</div>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h2>Bem-vindo ao Sistema VisitControl</h2>
+                <p>Use o menu acima para gerenciar visitantes, visualizar relatórios e configurar o sistema.</p>
+                <p>Esta é uma demonstração do sistema. Em uma implementação real, aqui estariam as funcionalidades completas.</p>
+            </div>
         </div>
-    </section>
+    </div>
 
     <footer>
         <div class="container">
@@ -462,5 +622,86 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Elementos do DOM
+        const loginModal = document.getElementById('loginModal');
+        const loginBtn = document.getElementById('loginBtn');
+        const ctaLoginBtn = document.getElementById('ctaLoginBtn');
+        const closeModal = document.querySelector('.close-modal');
+        const loginForm = document.getElementById('loginForm');
+        const publicArea = document.getElementById('publicArea');
+        const dashboard = document.getElementById('dashboard');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // Abrir modal de login
+        function openLoginModal() {
+            loginModal.style.display = 'flex';
+        }
+
+        // Fechar modal de login
+        function closeLoginModal() {
+            loginModal.style.display = 'none';
+        }
+
+        // Fazer login (simulado)
+        function login(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Simulação de login - em um sistema real, isso seria uma chamada API
+            if (email && password) {
+                // Esconder área pública e mostrar dashboard
+                publicArea.style.display = 'none';
+                dashboard.style.display = 'block';
+                closeLoginModal();
+                
+                // Adicionar à URL (opcional)
+                window.location.hash = '#dashboard';
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        }
+
+        // Fazer logout
+        function logout() {
+            publicArea.style.display = 'block';
+            dashboard.style.display = 'none';
+            window.location.hash = '';
+        }
+
+        // Verificar se já está logado (apenas para demonstração)
+        function checkLogin() {
+            // Em um sistema real, isso verificaria tokens de autenticação
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (isLoggedIn) {
+                publicArea.style.display = 'none';
+                dashboard.style.display = 'block';
+            }
+        }
+
+        // Event Listeners
+        loginBtn.addEventListener('click', openLoginModal);
+        ctaLoginBtn.addEventListener('click', openLoginModal);
+        closeModal.addEventListener('click', closeLoginModal);
+        loginForm.addEventListener('submit', login);
+        logoutBtn.addEventListener('click', logout);
+
+        // Fechar modal clicando fora dele
+        window.addEventListener('click', (event) => {
+            if (event.target === loginModal) {
+                closeLoginModal();
+            }
+        });
+
+        // Verificar login ao carregar a página
+        document.addEventListener('DOMContentLoaded', checkLogin);
+
+        // Verificar se a URL contém #login
+        if (window.location.hash === '#login') {
+            openLoginModal();
+        }
+    </script>
 </body>
 </html>
