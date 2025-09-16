@@ -594,6 +594,13 @@
             background: var(--success);
             color: white;
         }
+        
+        /* Data Management */
+        .data-management {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
     </style>
 </head>
 <body>
@@ -740,6 +747,18 @@
                                 <!-- As visitas serão carregadas aqui via JavaScript -->
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Data Management -->
+                    <div class="data-management">
+                        <button class="btn btn-outline" id="clearDataBtn">
+                            <i class="fas fa-trash"></i>
+                            Limpar Todos os Dados
+                        </button>
+                        <button class="btn btn-outline" id="addSampleDataBtn">
+                            <i class="fas fa-plus-circle"></i>
+                            Adicionar Dados de Exemplo
+                        </button>
                     </div>
                 </div>
             </div>
@@ -905,7 +924,7 @@
             </div>
             <div class="modal-body">
                 <p>Tem certeza que deseja excluir a visita de <span id="deleteVisitName">-</span>?</p>
-                <p>Esta ação não pode essere desfeita.</p>
+                <p>Esta ação não pode ser desfeita.</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline close-delete-modal">Cancelar</button>
@@ -945,13 +964,44 @@
         
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            // Adicionar dados de exemplo
-            addSampleData();
+            // Carregar dados do localStorage
+            loadVisitsFromStorage();
+            
+            // Adicionar dados de exemplo apenas se não houver dados salvos
+            if (visits.length === 0) {
+                addSampleData();
+            }
             
             updateCounters();
             applyFilters();
             document.getElementById('date').min = new Date().toISOString().slice(0, 16);
+            
+            // Configurar event listeners para os novos botões
+            document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
+            document.getElementById('addSampleDataBtn').addEventListener('click', addSampleData);
         });
+        
+        // Funções de persistência de dados
+        function saveVisitsToStorage() {
+            localStorage.setItem('visitControl_visits', JSON.stringify(visits));
+        }
+        
+        function loadVisitsFromStorage() {
+            const storedVisits = localStorage.getItem('visitControl_visits');
+            if (storedVisits) {
+                visits = JSON.parse(storedVisits);
+            }
+        }
+        
+        function clearAllData() {
+            if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
+                visits = [];
+                saveVisitsToStorage();
+                updateCounters();
+                renderVisitsTable();
+                showToast('Todos os dados foram removidos.', 'success');
+            }
+        }
         
         // Adicionar dados de exemplo
         function addSampleData() {
@@ -961,7 +1011,7 @@
             
             const sampleVisits = [
                 {
-                    id: 1,
+                    id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 1 : 1,
                     name: "Carlos Silva",
                     company: "Tech Solutions Ltda",
                     document: "123.456.789-00",
@@ -971,7 +1021,7 @@
                     notes: "Reunião sobre novo projeto de software"
                 },
                 {
-                    id: 2,
+                    id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 2 : 2,
                     name: "Ana Oliveira",
                     company: "Consultoria Financeira SA",
                     document: "987.654.321-00",
@@ -981,7 +1031,7 @@
                     notes: "Apresentação de relatórios trimestrais"
                 },
                 {
-                    id: 3,
+                    id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 3 : 3,
                     name: "Roberto Santos",
                     company: "Vendas Express",
                     document: "456.789.123-00",
@@ -991,7 +1041,7 @@
                     notes: "Negociação de contrato"
                 },
                 {
-                    id: 4,
+                    id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 4 : 4,
                     name: "Mariana Costa",
                     company: "Recursos Humanos Brasil",
                     document: "789.123.456-00",
@@ -1001,7 +1051,7 @@
                     notes: "Processo seletivo - segunda fase"
                 },
                 {
-                    id: 5,
+                    id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 5 : 5,
                     name: "Paulo Mendes",
                     company: "Indústrias Pesadas",
                     document: "321.654.987-00",
@@ -1012,10 +1062,21 @@
                 }
             ];
             
-            // Adicionar apenas se não houver visitas
-            if (visits.length === 0) {
-                visits = sampleVisits;
-            }
+            // Adicionar apenas se não houver visitas com os mesmos IDs
+            sampleVisits.forEach(sample => {
+                if (!visits.some(v => v.id === sample.id)) {
+                    visits.push(sample);
+                }
+            });
+            
+            // Salvar no localStorage
+            saveVisitsToStorage();
+            
+            // Atualizar a interface
+            updateCounters();
+            renderVisitsTable();
+            
+            showToast('Dados de exemplo adicionados com sucesso!', 'success');
         }
         
         // Alternar menu mobile
@@ -1059,10 +1120,11 @@
         
         // Confirmar exclusão
         document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
-            // Em uma aplicação real, faríamos uma requisição para o backend
             const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
             if (visitIndex !== -1) {
                 visits.splice(visitIndex, 1);
+                // Salvar no localStorage após exclusão
+                saveVisitsToStorage();
                 showToast('Visita excluída com sucesso!', 'success');
                 updateCounters();
                 renderVisitsTable();
@@ -1090,6 +1152,9 @@
             // Adicionar à lista
             visits.push(newVisit);
             
+            // Salvar no localStorage
+            saveVisitsToStorage();
+            
             // Feedback e fechar modal
             showToast('Visita registrada com sucesso!', 'success');
             closeVisitModal();
@@ -1114,6 +1179,9 @@
                 visits[visitIndex].date = document.getElementById('date').value;
                 visits[visitIndex].notes = document.getElementById('notes').value;
                 
+                // Salvar no localStorage após atualização
+                saveVisitsToStorage();
+                
                 showToast('Visita atualizada com sucesso!', 'success');
                 closeVisitModal();
                 renderVisitsTable();
@@ -1133,6 +1201,9 @@
             const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
             if (visitIndex !== -1) {
                 visits[visitIndex].status = status;
+                
+                // Salvar no localStorage após alteração de status
+                saveVisitsToStorage();
                 
                 // Atualizar detalhes no modal
                 const statusElement = document.getElementById('detailStatus');
@@ -1237,9 +1308,12 @@
                     // Mostrar/ocultar ações de status conforme o status atual
                     if (visit.status === 'scheduled') {
                         statusActions.style.display = 'flex';
+                        document.getElementById('markInProgressBtn').style.display = 'block';
+                        document.getElementById('markCompletedBtn').style.display = 'block';
                     } else if (visit.status === 'in-progress') {
                         statusActions.style.display = 'flex';
                         document.getElementById('markInProgressBtn').style.display = 'none';
+                        document.getElementById('markCompletedBtn').style.display = 'block';
                     } else {
                         statusActions.style.display = 'none';
                     }
