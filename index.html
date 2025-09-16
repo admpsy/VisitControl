@@ -569,6 +569,31 @@
         .page-content.active {
             display: block;
         }
+        
+        /* Status Actions */
+        .status-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .status-btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .status-btn.progress {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .status-btn.complete {
+            background: var(--success);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -846,12 +871,18 @@
                         </div>
                         <div class="detail-group">
                             <div class="detail-label">Status</div>
-                            <div class="detail-value"><span class="status status-scheduled">-</span></div>
+                            <div class="detail-value"><span class="status status-scheduled" id="detailStatus">-</span></div>
                         </div>
                         <div class="detail-group">
                             <div class="detail-label">Observações</div>
                             <div class="detail-value" id="detailNotes">-</div>
                         </div>
+                    </div>
+                    
+                    <!-- Status Actions -->
+                    <div class="status-actions" id="statusActions">
+                        <button class="status-btn progress" id="markInProgressBtn">Marcar como Em Andamento</button>
+                        <button class="status-btn complete" id="markCompletedBtn">Marcar como Concluída</button>
                     </div>
                 </div>
             </div>
@@ -874,7 +905,7 @@
             </div>
             <div class="modal-body">
                 <p>Tem certeza que deseja excluir a visita de <span id="deleteVisitName">-</span>?</p>
-                <p>Esta ação não pode ser desfeita.</p>
+                <p>Esta ação não pode essere desfeita.</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline close-delete-modal">Cancelar</button>
@@ -914,10 +945,78 @@
         
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
+            // Adicionar dados de exemplo
+            addSampleData();
+            
             updateCounters();
             applyFilters();
             document.getElementById('date').min = new Date().toISOString().slice(0, 16);
         });
+        
+        // Adicionar dados de exemplo
+        function addSampleData() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const sampleVisits = [
+                {
+                    id: 1,
+                    name: "Carlos Silva",
+                    company: "Tech Solutions Ltda",
+                    document: "123.456.789-00",
+                    destination: "ti",
+                    date: today.toISOString().slice(0, 16),
+                    status: "scheduled",
+                    notes: "Reunião sobre novo projeto de software"
+                },
+                {
+                    id: 2,
+                    name: "Ana Oliveira",
+                    company: "Consultoria Financeira SA",
+                    document: "987.654.321-00",
+                    destination: "financeiro",
+                    date: today.toISOString().slice(0, 16),
+                    status: "in-progress",
+                    notes: "Apresentação de relatórios trimestrais"
+                },
+                {
+                    id: 3,
+                    name: "Roberto Santos",
+                    company: "Vendas Express",
+                    document: "456.789.123-00",
+                    destination: "comercial",
+                    date: today.toISOString().slice(0, 16),
+                    status: "completed",
+                    notes: "Negociação de contrato"
+                },
+                {
+                    id: 4,
+                    name: "Mariana Costa",
+                    company: "Recursos Humanos Brasil",
+                    document: "789.123.456-00",
+                    destination: "rh",
+                    date: tomorrow.toISOString().slice(0, 16),
+                    status: "scheduled",
+                    notes: "Processo seletivo - segunda fase"
+                },
+                {
+                    id: 5,
+                    name: "Paulo Mendes",
+                    company: "Indústrias Pesadas",
+                    document: "321.654.987-00",
+                    destination: "operacional",
+                    date: tomorrow.toISOString().slice(0, 16),
+                    status: "scheduled",
+                    notes: "Visita técnica às instalações"
+                }
+            ];
+            
+            // Adicionar apenas se não houver visitas
+            if (visits.length === 0) {
+                visits = sampleVisits;
+            }
+        }
         
         // Alternar menu mobile
         mobileMenuBtn.addEventListener('click', () => {
@@ -1021,6 +1120,40 @@
             }
         });
         
+        // Alterar status da visita
+        document.getElementById('markInProgressBtn').addEventListener('click', () => {
+            updateVisitStatus('in-progress');
+        });
+        
+        document.getElementById('markCompletedBtn').addEventListener('click', () => {
+            updateVisitStatus('completed');
+        });
+        
+        function updateVisitStatus(status) {
+            const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
+            if (visitIndex !== -1) {
+                visits[visitIndex].status = status;
+                
+                // Atualizar detalhes no modal
+                const statusElement = document.getElementById('detailStatus');
+                statusElement.className = 'status';
+                
+                if (status === 'in-progress') {
+                    statusElement.classList.add('status-in-progress');
+                    statusElement.textContent = 'Em Andamento';
+                } else if (status === 'completed') {
+                    statusElement.classList.add('status-completed');
+                    statusElement.textContent = 'Concluída';
+                }
+                
+                showToast(`Status atualizado para ${status === 'in-progress' ? 'Em Andamento' : 'Concluída'}!`, 'success');
+                
+                // Atualizar contadores e tabela
+                updateCounters();
+                renderVisitsTable();
+            }
+        }
+        
         // Filtros
         document.getElementById('statusFilter').addEventListener('change', applyFilters);
         document.getElementById('dateFilter').addEventListener('change', applyFilters);
@@ -1078,6 +1211,7 @@
             const visitDetails = document.getElementById('visitDetails');
             const saveBtn = document.getElementById('saveBtn');
             const updateBtn = document.getElementById('updateBtn');
+            const statusActions = document.getElementById('statusActions');
             
             // Resetar formulário
             visitForm.reset();
@@ -1089,6 +1223,7 @@
                 visitDetails.style.display = 'none';
                 saveBtn.style.display = 'block';
                 updateBtn.style.display = 'none';
+                statusActions.style.display = 'none';
                 isViewMode = false;
             } else if (mode === 'view' && id) {
                 const visit = visits.find(v => v.id === parseInt(id));
@@ -1099,6 +1234,16 @@
                     saveBtn.style.display = 'none';
                     updateBtn.style.display = 'none';
                     
+                    // Mostrar/ocultar ações de status conforme o status atual
+                    if (visit.status === 'scheduled') {
+                        statusActions.style.display = 'flex';
+                    } else if (visit.status === 'in-progress') {
+                        statusActions.style.display = 'flex';
+                        document.getElementById('markInProgressBtn').style.display = 'none';
+                    } else {
+                        statusActions.style.display = 'none';
+                    }
+                    
                     // Preencher detalhes
                     document.getElementById('detailName').textContent = visit.name;
                     document.getElementById('detailCompany').textContent = visit.company;
@@ -1108,7 +1253,7 @@
                     document.getElementById('detailNotes').textContent = visit.notes;
                     
                     // Atualizar status
-                    const statusElement = document.querySelector('#visitDetails .status');
+                    const statusElement = document.getElementById('detailStatus');
                     statusElement.className = 'status';
                     if (visit.status === 'scheduled') {
                         statusElement.classList.add('status-scheduled');
@@ -1131,6 +1276,7 @@
                     visitDetails.style.display = 'none';
                     saveBtn.style.display = 'none';
                     updateBtn.style.display = 'block';
+                    statusActions.style.display = 'none';
                     
                     // Preencher formulário
                     document.getElementById('visitId').value = visit.id;
@@ -1222,6 +1368,9 @@
                 
                 return statusMatch && dateMatch && searchMatch;
             });
+            
+            // Ordenar por data (mais recente primeiro)
+            filteredVisits.sort((a, b) => new Date(b.date) - new Date(a.date));
             
             // Renderizar visitas
             if (filteredVisits.length === 0) {
