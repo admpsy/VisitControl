@@ -57,6 +57,7 @@
                 height: 100vh;
                 z-index: 1000;
                 width: 250px;
+                background: white;
             }
             
             .sidebar.active {
@@ -692,6 +693,68 @@
             color: var(--primary);
             width: 20px;
         }
+
+        /* Checkbox */
+        .checkbox-container {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 25px;
+            width: 25px;
+            background-color: #eee;
+            border-radius: 5px;
+        }
+
+        .checkbox-container:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
+
+        .checkbox-container input:checked ~ .checkmark {
+            background-color: var(--primary);
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .checkbox-container .checkmark:after {
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
     </style>
 </head>
 <body>
@@ -715,11 +778,12 @@
             <div class="nav-item" data-page="visitors">
                 <i class="fas fa-users"></i>
                 <span>Visitantes</span>
-                <span class="badge">5</span>
+                <span class="badge" id="visitorsBadge">0</span>
             </div>
             <div class="nav-item" data-page="companies">
                 <i class="fas fa-building"></i>
                 <span>Empresas</span>
+                <span class="badge" id="companiesBadge">0</span>
             </div>
             <div class="nav-item" data-page="settings">
                 <i class="fas fa-cog"></i>
@@ -920,8 +984,13 @@
             <!-- Visitors Page -->
             <div class="page-content" id="visitors-page">
                 <div class="card">
-                    <h2 class="section-title">Visitantes Cadastrados</h2>
-                    <p>Esta página gerencia o cadastro de visitantes.</p>
+                    <div class="section-header">
+                        <h2 class="section-title">Visitantes Cadastrados</h2>
+                        <button class="btn btn-primary" id="newVisitorBtn">
+                            <i class="fas fa-plus"></i>
+                            Novo Visitante
+                        </button>
+                    </div>
                     
                     <div class="table-container">
                         <table>
@@ -946,8 +1015,13 @@
             <!-- Companies Page -->
             <div class="page-content" id="companies-page">
                 <div class="card">
-                    <h2 class="section-title">Empresas Cadastradas</h2>
-                    <p>Esta página gerencia o cadastro de empresas.</p>
+                    <div class="section-header">
+                        <h2 class="section-title">Empresas Cadastradas</h2>
+                        <button class="btn btn-primary" id="newCompanyBtn">
+                            <i class="fas fa-plus"></i>
+                            Nova Empresa
+                        </button>
+                    </div>
                     
                     <div class="table-container">
                         <table>
@@ -1084,7 +1158,7 @@
                     <div class="help-section">
                         <h3>Suporte Técnico</h3>
                         <div class="help-content">
-                            <p>Para suporte técnico, entre em contato com nosso desenvolvedor:</p>
+                            <p>Para suporte técnico, entre em contato conosco:</p>
                             <div class="contact-info">
                                 <div class="contact-item">
                                     <i class="fas fa-user"></i>
@@ -1098,6 +1172,10 @@
                                     <i class="fas fa-phone"></i>
                                     <span>(22) 99290-2507</span>
                                 </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-globe"></i>
+                                    <span>www.visitcontrol.com</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1109,7 +1187,7 @@
     <!-- Footer -->
     <footer class="footer">
         <p>VisitControl - Sistema de Gestão de Visitas</p>
-        <p>Desenvolvido por <span class="footer-brand">Aldemir Garbino</span> &copy; 2023. Todos os direitos reservados.</p>
+        <p>Desenvolvido por <span class="footer-brand">Aldemir Garbino</span> &copy; 2025. Todos os direitos reservados.</p>
     </footer>
     
     <!-- Modals -->
@@ -1206,6 +1284,88 @@
         </div>
     </div>
     
+    <!-- Visitor Modal -->
+    <div class="modal-backdrop" id="visitorModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="visitorModalTitle">Novo Visitante</h3>
+                <button class="action-btn close-visitor-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="visitorForm">
+                    <input type="hidden" id="visitorId">
+                    <div class="form-group">
+                        <label for="visitorFullName">Nome Completo</label>
+                        <input type="text" id="visitorFullName" class="form-control" placeholder="Digite o nome completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="visitorDocument">Documento</label>
+                        <input type="text" id="visitorDocument" class="form-control" placeholder="CPF ou RG" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="visitorCompany">Empresa</label>
+                        <input type="text" id="visitorCompany" class="form-control" placeholder="Nome da empresa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="visitorPhone">Telefone</label>
+                        <input type="tel" id="visitorPhone" class="form-control" placeholder="(11) 99999-9999">
+                    </div>
+                    <div class="form-group">
+                        <label for="visitorEmail">E-mail</label>
+                        <input type="email" id="visitorEmail" class="form-control" placeholder="email@exemplo.com">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline close-visitor-modal">Cancelar</button>
+                <button class="btn btn-primary" id="saveVisitorBtn">Salvar Visitante</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Company Modal -->
+    <div class="modal-backdrop" id="companyModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="companyModalTitle">Nova Empresa</h3>
+                <button class="action-btn close-company-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="companyForm">
+                    <input type="hidden" id="companyId">
+                    <div class="form-group">
+                        <label for="companyNameInput">Nome da Empresa</label>
+                        <input type="text" id="companyNameInput" class="form-control" placeholder="Digite o nome da empresa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="companyCnpj">CNPJ</label>
+                        <input type="text" id="companyCnpj" class="form-control" placeholder="00.000.000/0000-00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="companyResponsible">Responsável</label>
+                        <input type="text" id="companyResponsible" class="form-control" placeholder="Nome do responsável">
+                    </div>
+                    <div class="form-group">
+                        <label for="companyPhone">Telefone</label>
+                        <input type="tel" id="companyPhone" class="form-control" placeholder="(11) 99999-9999">
+                    </div>
+                    <div class="form-group">
+                        <label for="companyEmail">E-mail</label>
+                        <input type="email" id="companyEmail" class="form-control" placeholder="empresa@exemplo.com">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline close-company-modal">Cancelar</button>
+                <button class="btn btn-primary" id="saveCompanyBtn">Salvar Empresa</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Delete Confirmation Modal -->
     <div class="modal-backdrop" id="deleteModal">
         <div class="modal">
@@ -1216,7 +1376,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Tem certeza que deseja excluir a visita de <span id="deleteVisitName">-</span>?</p>
+                <p>Tem certeza que deseja excluir <span id="deleteItemName">-</span>?</p>
                 <p>Esta ação não pode ser desfeita.</p>
             </div>
             <div class="modal-footer">
@@ -1237,12 +1397,15 @@
         let visits = [];
         let visitors = [];
         let companies = [];
+        let settings = {};
         
         // Elementos DOM
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const visitModal = document.getElementById('visitModal');
+        const visitorModal = document.getElementById('visitorModal');
+        const companyModal = document.getElementById('companyModal');
         const deleteModal = document.getElementById('deleteModal');
         const toast = document.getElementById('toast');
         const visitsTableBody = document.getElementById('visitsTableBody');
@@ -1258,18 +1421,19 @@
         
         // Estado da aplicação
         let currentVisitId = null;
+        let currentVisitorId = null;
+        let currentCompanyId = null;
         let isViewMode = false;
         let currentPage = 'dashboard';
+        let deleteType = ''; // 'visit', 'visitor', 'company'
         
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
             // Carregar dados do localStorage
-            loadVisitsFromStorage();
-            loadVisitorsFromStorage();
-            loadCompaniesFromStorage();
+            loadAllData();
             
             // Adicionar dados de exemplo apenas se não houver dados salvos
-            if (visits.length === 0) {
+            if (visits.length === 0 && visitors.length === 0 && companies.length === 0) {
                 addSampleData();
             }
             
@@ -1280,52 +1444,86 @@
             // Configurar event listeners para os botões
             document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
             document.getElementById('addSampleDataBtn').addEventListener('click', addSampleData);
-            document.getElementById('newVisitBtn2').addEventListener('click', () => {
-                openVisitModal('new');
-            });
+            document.getElementById('newVisitBtn').addEventListener('click', () => openVisitModal('new'));
+            document.getElementById('newVisitBtn2').addEventListener('click', () => openVisitModal('new'));
+            document.getElementById('newVisitorBtn').addEventListener('click', () => openVisitorModal('new'));
+            document.getElementById('newCompanyBtn').addEventListener('click', () => openCompanyModal('new'));
             document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+            
+            // Fechar modais
+            document.querySelectorAll('.close-visitor-modal').forEach(btn => {
+                btn.addEventListener('click', closeVisitorModal);
+            });
+            
+            document.querySelectorAll('.close-company-modal').forEach(btn => {
+                btn.addEventListener('click', closeCompanyModal);
+            });
+            
+            document.querySelectorAll('.close-delete-modal').forEach(btn => {
+                btn.addEventListener('click', closeDeleteModal);
+            });
+            
+            // Salvar visitante
+            document.getElementById('saveVisitorBtn').addEventListener('click', saveVisitor);
+            
+            // Salvar empresa
+            document.getElementById('saveCompanyBtn').addEventListener('click', saveCompany);
             
             // Renderizar todas as tabelas
             renderAllTables();
         });
         
         // Funções de persistência de dados
-        function saveVisitsToStorage() {
+        function saveAllData() {
             localStorage.setItem('visitControl_visits', JSON.stringify(visits));
+            localStorage.setItem('visitControl_visitors', JSON.stringify(visitors));
+            localStorage.setItem('visitControl_companies', JSON.stringify(companies));
+            localStorage.setItem('visitControl_settings', JSON.stringify(settings));
         }
         
-        function loadVisitsFromStorage() {
+        function loadAllData() {
             const storedVisits = localStorage.getItem('visitControl_visits');
-            if (storedVisits) {
-                visits = JSON.parse(storedVisits);
-            }
-        }
-        
-        function loadVisitorsFromStorage() {
             const storedVisitors = localStorage.getItem('visitControl_visitors');
-            if (storedVisitors) {
-                visitors = JSON.parse(storedVisitors);
-            }
-        }
-        
-        function loadCompaniesFromStorage() {
             const storedCompanies = localStorage.getItem('visitControl_companies');
-            if (storedCompanies) {
-                companies = JSON.parse(storedCompanies);
-            }
+            const storedSettings = localStorage.getItem('visitControl_settings');
+            
+            if (storedVisits) visits = JSON.parse(storedVisits);
+            if (storedVisitors) visitors = JSON.parse(storedVisitors);
+            if (storedCompanies) companies = JSON.parse(storedCompanies);
+            if (storedSettings) settings = JSON.parse(storedSettings);
+            
+            // Atualizar badges
+            document.getElementById('visitorsBadge').textContent = visitors.length;
+            document.getElementById('companiesBadge').textContent = companies.length;
         }
         
         function clearAllData() {
             if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
                 visits = [];
-                saveVisitsToStorage();
+                visitors = [];
+                companies = [];
+                saveAllData();
                 updateCounters();
                 renderAllTables();
                 showToast('Todos os dados foram removidos.', 'success');
+                
+                // Atualizar badges
+                document.getElementById('visitorsBadge').textContent = '0';
+                document.getElementById('companiesBadge').textContent = '0';
             }
         }
         
         function saveSettings() {
+            // Simular salvamento de configurações
+            settings.companyName = document.getElementById('companyName').value;
+            settings.companyAddress = document.getElementById('companyAddress').value;
+            settings.adminEmail = document.getElementById('adminEmail').value;
+            settings.maxVisits = document.getElementById('maxVisits').value;
+            settings.emailNotifications = document.getElementById('emailNotifications').checked;
+            settings.browserNotifications = document.getElementById('browserNotifications').checked;
+            settings.notificationTime = document.getElementById('notificationTime').value;
+            
+            localStorage.setItem('visitControl_settings', JSON.stringify(settings));
             showToast('Configurações salvas com sucesso!', 'success');
         }
         
@@ -1337,8 +1535,26 @@
             const yesterday = new Date(today);
             yesterday.setDate(yesterday.getDate() - 1);
             
+            // Dados de exemplo para visitantes
+            visitors = [
+                { id: 1, name: "Carlos Silva", document: "123.456.789-00", company: "Tech Solutions Ltda", phone: "(11) 99999-9999", email: "carlos@techsolutions.com", lastVisit: today.toISOString().slice(0, 16), totalVisits: 3 },
+                { id: 2, name: "Ana Oliveira", document: "987.654.321-00", company: "Consultoria Financeira SA", phone: "(11) 98888-8888", email: "ana@consultoriafinanceira.com", lastVisit: today.toISOString().slice(0, 16), totalVisits: 5 },
+                { id: 3, name: "Roberto Santos", document: "456.789.123-00", company: "Vendas Express", phone: "(11) 97777-7777", email: "roberto@vendasexpress.com", lastVisit: yesterday.toISOString().slice(0, 16), totalVisits: 2 },
+                { id: 4, name: "Mariana Costa", document: "789.123.456-00", company: "Recursos Humanos Brasil", phone: "(11) 96666-6666", email: "mariana@rhbrasil.com", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 },
+                { id: 5, name: "Paulo Mendes", document: "321.654.987-00", company: "Indústrias Pesadas", phone: "(11) 95555-5555", email: "paulo@industriaspesadas.com", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 }
+            ];
+            
+            // Dados de exemplo para empresas
+            companies = [
+                { id: 1, name: "Tech Solutions Ltda", cnpj: "12.345.678/0001-90", responsible: "Carlos Silva", phone: "(11) 99999-9999", email: "contato@techsolutions.com", totalVisits: 3, lastVisit: today.toISOString().slice(0, 16) },
+                { id: 2, name: "Consultoria Financeira SA", cnpj: "98.765.432/0001-10", responsible: "Ana Oliveira", phone: "(11) 98888-8888", email: "contato@consultoriafinanceira.com", totalVisits: 5, lastVisit: today.toISOString().slice(0, 16) },
+                { id: 3, name: "Vendas Express", cnpj: "45.678.912/0001-30", responsible: "Roberto Santos", phone: "(11) 97777-7777", email: "contato@vendasexpress.com", totalVisits: 2, lastVisit: yesterday.toISOString().slice(0, 16) },
+                { id: 4, name: "Recursos Humanos Brasil", cnpj: "78.912.345/0001-40", responsible: "Mariana Costa", phone: "(11) 96666-6666", email: "contato@rhbrasil.com", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) },
+                { id: 5, name: "Indústrias Pesadas", cnpj: "32.165.498/0001-70", responsible: "Paulo Mendes", phone: "(11) 95555-5555", email: "contato@industriaspesadas.com", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) }
+            ];
+            
             // Dados de exemplo para visitas
-            const sampleVisits = [
+            visits = [
                 {
                     id: 1,
                     name: "Carlos Silva",
@@ -1391,39 +1607,16 @@
                 }
             ];
             
-            // Dados de exemplo para visitantes
-            visitors = [
-                { id: 1, name: "Carlos Silva", document: "123.456.789-00", company: "Tech Solutions Ltda", lastVisit: today.toISOString().slice(0, 16), totalVisits: 3 },
-                { id: 2, name: "Ana Oliveira", document: "987.654.321-00", company: "Consultoria Financeira SA", lastVisit: today.toISOString().slice(0, 16), totalVisits: 5 },
-                { id: 3, name: "Roberto Santos", document: "456.789.123-00", company: "Vendas Express", lastVisit: yesterday.toISOString().slice(0, 16), totalVisits: 2 },
-                { id: 4, name: "Mariana Costa", document: "789.123.456-00", company: "Recursos Humanos Brasil", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 },
-                { id: 5, name: "Paulo Mendes", document: "321.654.987-00", company: "Indústrias Pesadas", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 }
-            ];
-            
-            // Dados de exemplo para empresas
-            companies = [
-                { id: 1, name: "Tech Solutions Ltda", cnpj: "12.345.678/0001-90", responsible: "Carlos Silva", totalVisits: 3, lastVisit: today.toISOString().slice(0, 16) },
-                { id: 2, name: "Consultoria Financeira SA", cnpj: "98.765.432/0001-10", responsible: "Ana Oliveira", totalVisits: 5, lastVisit: today.toISOString().slice(0, 16) },
-                { id: 3, name: "Vendas Express", cnpj: "45.678.912/0001-30", responsible: "Roberto Santos", totalVisits: 2, lastVisit: yesterday.toISOString().slice(0, 16) },
-                { id: 4, name: "Recursos Humanos Brasil", cnpj: "78.912.345/0001-40", responsible: "Mariana Costa", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) },
-                { id: 5, name: "Indústrias Pesadas", cnpj: "32.165.498/0001-70", responsible: "Paulo Mendes", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) }
-            ];
-            
-            // Adicionar apenas se não houver visitas com os mesmos IDs
-            sampleVisits.forEach(sample => {
-                if (!visits.some(v => v.id === sample.id)) {
-                    visits.push(sample);
-                }
-            });
-            
             // Salvar no localStorage
-            saveVisitsToStorage();
-            localStorage.setItem('visitControl_visitors', JSON.stringify(visitors));
-            localStorage.setItem('visitControl_companies', JSON.stringify(companies));
+            saveAllData();
             
             // Atualizar a interface
             updateCounters();
             renderAllTables();
+            
+            // Atualizar badges
+            document.getElementById('visitorsBadge').textContent = visitors.length;
+            document.getElementById('companiesBadge').textContent = companies.length;
             
             showToast('Dados de exemplo adicionados com sucesso!', 'success');
         }
@@ -1453,38 +1646,25 @@
             });
         });
         
-        // Abrir modal para nova visita
-        document.getElementById('newVisitBtn').addEventListener('click', () => {
-            openVisitModal('new');
-        });
-        
-        // Fechar modal
+        // Fechar modal de visita
         document.getElementById('closeModalBtn').addEventListener('click', closeVisitModal);
         document.getElementById('cancelBtn').addEventListener('click', closeVisitModal);
         
-        // Fechar modal de exclusão
-        document.querySelectorAll('.close-delete-modal').forEach(btn => {
-            btn.addEventListener('click', closeDeleteModal);
-        });
-        
         // Confirmar exclusão
         document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
-            const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
-            if (visitIndex !== -1) {
-                visits.splice(visitIndex, 1);
-                // Salvar no localStorage após exclusão
-                saveVisitsToStorage();
-                showToast('Visita excluída com sucesso!', 'success');
-                updateCounters();
-                renderAllTables();
+            if (deleteType === 'visit') {
+                deleteVisit();
+            } else if (deleteType === 'visitor') {
+                deleteVisitor();
+            } else if (deleteType === 'company') {
+                deleteCompany();
             }
-            closeDeleteModal();
         });
         
         // Salvar nova visita
         document.getElementById('saveBtn').addEventListener('click', () => {
             // Validar formulário
-            if (!validateForm()) return;
+            if (!validateVisitForm()) return;
             
             // Criar nova visita
             const newVisit = {
@@ -1501,8 +1681,11 @@
             // Adicionar à lista
             visits.push(newVisit);
             
+            // Atualizar visitante
+            updateVisitorStats(newVisit.name, newVisit.company, newVisit.document, newVisit.date);
+            
             // Salvar no localStorage
-            saveVisitsToStorage();
+            saveAllData();
             
             // Feedback e fechar modal
             showToast('Visita registrada com sucesso!', 'success');
@@ -1516,7 +1699,7 @@
         // Atualizar visita
         document.getElementById('updateBtn').addEventListener('click', () => {
             // Validar formulário
-            if (!validateForm()) return;
+            if (!validateVisitForm()) return;
             
             // Encontrar e atualizar visita
             const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
@@ -1529,7 +1712,7 @@
                 visits[visitIndex].notes = document.getElementById('notes').value;
                 
                 // Salvar no localStorage após atualização
-                saveVisitsToStorage();
+                saveAllData();
                 
                 showToast('Visita atualizada com sucesso!', 'success');
                 closeVisitModal();
@@ -1552,7 +1735,7 @@
                 visits[visitIndex].status = status;
                 
                 // Salvar no localStorage após alteração de status
-                saveVisitsToStorage();
+                saveAllData();
                 
                 // Atualizar detalhes no modal
                 const statusElement = document.getElementById('detailStatus');
@@ -1577,6 +1760,220 @@
                     closeVisitModal();
                 }, 1500);
             }
+        }
+        
+        // Salvar visitante
+        function saveVisitor() {
+            const name = document.getElementById('visitorFullName').value;
+            const document = document.getElementById('visitorDocument').value;
+            const company = document.getElementById('visitorCompany').value;
+            const phone = document.getElementById('visitorPhone').value;
+            const email = document.getElementById('visitorEmail').value;
+            
+            if (!name || !document || !company) {
+                showToast('Preencha os campos obrigatórios!', 'error');
+                return;
+            }
+            
+            if (currentVisitorId) {
+                // Editar visitante existente
+                const visitorIndex = visitors.findIndex(v => v.id === parseInt(currentVisitorId));
+                if (visitorIndex !== -1) {
+                    visitors[visitorIndex].name = name;
+                    visitors[visitorIndex].document = document;
+                    visitors[visitorIndex].company = company;
+                    visitors[visitorIndex].phone = phone;
+                    visitors[visitorIndex].email = email;
+                    
+                    showToast('Visitante atualizado com sucesso!', 'success');
+                }
+            } else {
+                // Criar novo visitante
+                const newVisitor = {
+                    id: visitors.length > 0 ? Math.max(...visitors.map(v => v.id)) + 1 : 1,
+                    name: name,
+                    document: document,
+                    company: company,
+                    phone: phone,
+                    email: email,
+                    lastVisit: null,
+                    totalVisits: 0
+                };
+                
+                visitors.push(newVisitor);
+                showToast('Visitante cadastrado com sucesso!', 'success');
+            }
+            
+            // Salvar no localStorage
+            saveAllData();
+            
+            // Fechar modal e atualizar interface
+            closeVisitorModal();
+            renderVisitorsTable();
+            
+            // Atualizar badge
+            document.getElementById('visitorsBadge').textContent = visitors.length;
+        }
+        
+        // Salvar empresa
+        function saveCompany() {
+            const name = document.getElementById('companyNameInput').value;
+            const cnpj = document.getElementById('companyCnpj').value;
+            const responsible = document.getElementById('companyResponsible').value;
+            const phone = document.getElementById('companyPhone').value;
+            const email = document.getElementById('companyEmail').value;
+            
+            if (!name || !cnpj) {
+                showToast('Preencha os campos obrigatórios!', 'error');
+                return;
+            }
+            
+            if (currentCompanyId) {
+                // Editar empresa existente
+                const companyIndex = companies.findIndex(c => c.id === parseInt(currentCompanyId));
+                if (companyIndex !== -1) {
+                    companies[companyIndex].name = name;
+                    companies[companyIndex].cnpj = cnpj;
+                    companies[companyIndex].responsible = responsible;
+                    companies[companyIndex].phone = phone;
+                    companies[companyIndex].email = email;
+                    
+                    showToast('Empresa atualizada com sucesso!', 'success');
+                }
+            } else {
+                // Criar nova empresa
+                const newCompany = {
+                    id: companies.length > 0 ? Math.max(...companies.map(c => c.id)) + 1 : 1,
+                    name: name,
+                    cnpj: cnpj,
+                    responsible: responsible,
+                    phone: phone,
+                    email: email,
+                    totalVisits: 0,
+                    lastVisit: null
+                };
+                
+                companies.push(newCompany);
+                showToast('Empresa cadastrada com sucesso!', 'success');
+            }
+            
+            // Salvar no localStorage
+            saveAllData();
+            
+            // Fechar modal e atualizar interface
+            closeCompanyModal();
+            renderCompaniesTable();
+            
+            // Atualizar badge
+            document.getElementById('companiesBadge').textContent = companies.length;
+        }
+        
+        // Excluir visita
+        function deleteVisit() {
+            const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
+            if (visitIndex !== -1) {
+                visits.splice(visitIndex, 1);
+                saveAllData();
+                showToast('Visita excluída com sucesso!', 'success');
+                updateCounters();
+                renderAllTables();
+            }
+            closeDeleteModal();
+        }
+        
+        // Excluir visitante
+        function deleteVisitor() {
+            const visitorIndex = visitors.findIndex(v => v.id === parseInt(currentVisitorId));
+            if (visitorIndex !== -1) {
+                visitors.splice(visitorIndex, 1);
+                saveAllData();
+                showToast('Visitante excluído com sucesso!', 'success');
+                renderVisitorsTable();
+                
+                // Atualizar badge
+                document.getElementById('visitorsBadge').textContent = visitors.length;
+            }
+            closeDeleteModal();
+        }
+        
+        // Excluir empresa
+        function deleteCompany() {
+            const companyIndex = companies.findIndex(c => c.id === parseInt(currentCompanyId));
+            if (companyIndex !== -1) {
+                companies.splice(companyIndex, 1);
+                saveAllData();
+                showToast('Empresa excluída com sucesso!', 'success');
+                renderCompaniesTable();
+                
+                // Atualizar badge
+                document.getElementById('companiesBadge').textContent = companies.length;
+            }
+            closeDeleteModal();
+        }
+        
+        // Atualizar estatísticas do visitante
+        function updateVisitorStats(name, company, document, date) {
+            // Verificar se o visitante já existe
+            let visitor = visitors.find(v => v.document === document);
+            
+            if (visitor) {
+                // Atualizar visitante existente
+                visitor.lastVisit = date;
+                visitor.totalVisits += 1;
+            } else {
+                // Criar novo visitante
+                visitor = {
+                    id: visitors.length > 0 ? Math.max(...visitors.map(v => v.id)) + 1 : 1,
+                    name: name,
+                    document: document,
+                    company: company,
+                    phone: '',
+                    email: '',
+                    lastVisit: date,
+                    totalVisits: 1
+                };
+                visitors.push(visitor);
+            }
+            
+            // Atualizar empresa
+            updateCompanyStats(company, date);
+            
+            // Salvar no localStorage
+            saveAllData();
+            
+            // Atualizar badge
+            document.getElementById('visitorsBadge').textContent = visitors.length;
+        }
+        
+        // Atualizar estatísticas da empresa
+        function updateCompanyStats(companyName, date) {
+            // Verificar se a empresa já existe
+            let company = companies.find(c => c.name === companyName);
+            
+            if (company) {
+                // Atualizar empresa existente
+                company.lastVisit = date;
+                company.totalVisits += 1;
+            } else {
+                // Criar nova empresa
+                company = {
+                    id: companies.length > 0 ? Math.max(...companies.map(c => c.id)) + 1 : 1,
+                    name: companyName,
+                    cnpj: '',
+                    responsible: '',
+                    phone: '',
+                    email: '',
+                    lastVisit: date,
+                    totalVisits: 1
+                };
+                companies.push(company);
+            }
+            
+            // Salvar no localStorage
+            saveAllData();
+            
+            // Atualizar badge
+            document.getElementById('companiesBadge').textContent = companies.length;
         }
         
         // Filtros
@@ -1663,6 +2060,11 @@
                 updateBtn.style.display = 'none';
                 statusActions.style.display = 'none';
                 isViewMode = false;
+                
+                // Preencher com data e hora atual
+                const now = new Date();
+                const localDatetime = now.toISOString().slice(0, 16);
+                document.getElementById('date').value = localDatetime;
             } else if (mode === 'view' && id) {
                 const visit = visits.find(v => v.id === parseInt(id));
                 if (visit) {
@@ -1738,17 +2140,80 @@
             visitModal.classList.remove('active');
         }
         
-        function openDeleteModal(id) {
-            const visit = visits.find(v => v.id === parseInt(id));
-            if (visit) {
-                document.getElementById('deleteVisitName').textContent = visit.name;
-                currentVisitId = id;
-                deleteModal.classList.add('active');
+        function openVisitorModal(mode, id = null) {
+            const modalTitle = document.getElementById('visitorModalTitle');
+            currentVisitorId = id;
+            
+            if (mode === 'new') {
+                modalTitle.textContent = 'Novo Visitante';
+                document.getElementById('visitorForm').reset();
+            } else if (mode === 'edit' && id) {
+                const visitor = visitors.find(v => v.id === parseInt(id));
+                if (visitor) {
+                    modalTitle.textContent = 'Editar Visitante';
+                    document.getElementById('visitorId').value = visitor.id;
+                    document.getElementById('visitorFullName').value = visitor.name;
+                    document.getElementById('visitorDocument').value = visitor.document;
+                    document.getElementById('visitorCompany').value = visitor.company;
+                    document.getElementById('visitorPhone').value = visitor.phone;
+                    document.getElementById('visitorEmail').value = visitor.email;
+                }
             }
+            
+            visitorModal.classList.add('active');
+        }
+        
+        function closeVisitorModal() {
+            visitorModal.classList.remove('active');
+            currentVisitorId = null;
+        }
+        
+        function openCompanyModal(mode, id = null) {
+            const modalTitle = document.getElementById('companyModalTitle');
+            currentCompanyId = id;
+            
+            if (mode === 'new') {
+                modalTitle.textContent = 'Nova Empresa';
+                document.getElementById('companyForm').reset();
+            } else if (mode === 'edit' && id) {
+                const company = companies.find(c => c.id === parseInt(id));
+                if (company) {
+                    modalTitle.textContent = 'Editar Empresa';
+                    document.getElementById('companyId').value = company.id;
+                    document.getElementById('companyNameInput').value = company.name;
+                    document.getElementById('companyCnpj').value = company.cnpj;
+                    document.getElementById('companyResponsible').value = company.responsible;
+                    document.getElementById('companyPhone').value = company.phone;
+                    document.getElementById('companyEmail').value = company.email;
+                }
+            }
+            
+            companyModal.classList.add('active');
+        }
+        
+        function closeCompanyModal() {
+            companyModal.classList.remove('active');
+            currentCompanyId = null;
+        }
+        
+        function openDeleteModal(type, id, name) {
+            deleteType = type;
+            document.getElementById('deleteItemName').textContent = name;
+            
+            if (type === 'visit') {
+                currentVisitId = id;
+            } else if (type === 'visitor') {
+                currentVisitorId = id;
+            } else if (type === 'company') {
+                currentCompanyId = id;
+            }
+            
+            deleteModal.classList.add('active');
         }
         
         function closeDeleteModal() {
             deleteModal.classList.remove('active');
+            deleteType = '';
         }
         
         function showToast(message, type = 'success') {
@@ -1768,7 +2233,7 @@
             }, 3000);
         }
         
-        function validateForm() {
+        function validateVisitForm() {
             const name = document.getElementById('visitorName').value;
             const company = document.getElementById('company').value;
             const destination = document.getElementById('destination').value;
@@ -1872,7 +2337,7 @@
                     });
                     
                     row.querySelector('.delete-btn').addEventListener('click', () => {
-                        openDeleteModal(visit.id);
+                        openDeleteModal('visit', visit.id, visit.name);
                     });
                     
                     visitsTableBody.appendChild(row);
@@ -1936,7 +2401,7 @@
                     });
                     
                     row.querySelector('.delete-btn').addEventListener('click', () => {
-                        openDeleteModal(visit.id);
+                        openDeleteModal('visit', visit.id, visit.name);
                     });
                     
                     allVisitsTableBody.appendChild(row);
@@ -1992,7 +2457,7 @@
                     });
                     
                     row.querySelector('.delete-btn').addEventListener('click', () => {
-                        openDeleteModal(visit.id);
+                        openDeleteModal('visit', visit.id, visit.name);
                     });
                     
                     schedulingTableBody.appendChild(row);
@@ -2027,8 +2492,23 @@
                         <td>
                             <button class="action-btn view-btn" data-id="${visitor.id}"><i class="fas fa-eye"></i></button>
                             <button class="action-btn edit-btn" data-id="${visitor.id}"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete delete-btn" data-id="${visitor.id}"><i class="fas fa-trash"></i></button>
                         </td>
                     `;
+                    
+                    // Adicionar event listeners
+                    row.querySelector('.view-btn').addEventListener('click', () => {
+                        // Aqui você pode implementar a visualização de detalhes do visitante
+                        showToast(`Visualizando detalhes de ${visitor.name}`);
+                    });
+                    
+                    row.querySelector('.edit-btn').addEventListener('click', () => {
+                        openVisitorModal('edit', visitor.id);
+                    });
+                    
+                    row.querySelector('.delete-btn').addEventListener('click', () => {
+                        openDeleteModal('visitor', visitor.id, visitor.name);
+                    });
                     
                     visitorsTableBody.appendChild(row);
                 });
@@ -2062,8 +2542,23 @@
                         <td>
                             <button class="action-btn view-btn" data-id="${company.id}"><i class="fas fa-eye"></i></button>
                             <button class="action-btn edit-btn" data-id="${company.id}"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete delete-btn" data-id="${company.id}"><i class="fas fa-trash"></i></button>
                         </td>
                     `;
+                    
+                    // Adicionar event listeners
+                    row.querySelector('.view-btn').addEventListener('click', () => {
+                        // Aqui você pode implementar a visualização de detalhes da empresa
+                        showToast(`Visualizando detalhes de ${company.name}`);
+                    });
+                    
+                    row.querySelector('.edit-btn').addEventListener('click', () => {
+                        openCompanyModal('edit', company.id);
+                    });
+                    
+                    row.querySelector('.delete-btn').addEventListener('click', () => {
+                        openDeleteModal('company', company.id, company.name);
+                    });
                     
                     companiesTableBody.appendChild(row);
                 });
@@ -2086,9 +2581,6 @@
             todayVisitsCount.textContent = todayVisits;
             pendingVisitsCount.textContent = pendingVisits;
             completedVisitsCount.textContent = completedVisits;
-            
-            // Atualizar badge de visitantes
-            document.querySelector('.nav-item[data-page="visitors"] .badge').textContent = visitors.length;
         }
         
         function getDestinationName(destination) {
