@@ -6,6 +6,7 @@
     <title>VisitControl - Gestão de Visitas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚪</text></svg>">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
             --primary: #2563eb;
@@ -35,6 +36,159 @@
             min-height: 100vh;
         }
         
+        /* Tela de Login */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        
+        .login-logo {
+            margin-bottom: 30px;
+        }
+        
+        .login-logo-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            margin: 0 auto 15px;
+        }
+        
+        .login-logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .login-form {
+            text-align: left;
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .login-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .login-form .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .login-form .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .login-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .login-footer {
+            margin-top: 25px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        .admin-link {
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        /* Modal de Configuração de Chave */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .modal-backdrop.active {
+            display: flex;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        /* Aplicação principal (inicialmente oculta) */
         .app-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -42,6 +196,11 @@
             grid-template-columns: 250px 1fr;
             gap: 20px;
             padding: 20px;
+            display: none;
+        }
+        
+        .app-container.active {
+            display: grid;
         }
         
         @media (max-width: 900px) {
@@ -57,6 +216,7 @@
                 height: 100vh;
                 z-index: 1000;
                 width: 250px;
+                background: white;
             }
             
             .sidebar.active {
@@ -227,12 +387,12 @@
         }
         
         .pending-icon {
-            background: #fef3c7;
+            background: #edd574;
             color: var(--warning);
         }
         
         .completed-icon {
-            background: #d1fae5;
+            background: #73f086;
             color: var(--success);
         }
         
@@ -692,12 +852,227 @@
             color: var(--primary);
             width: 20px;
         }
+
+        /* Checkbox */
+        .checkbox-container {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 25px;
+            width: 25px;
+            background-color: #eee;
+            border-radius: 5px;
+        }
+
+        .checkbox-container:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
+
+        .checkbox-container input:checked ~ .checkmark {
+            background-color: var(--primary);
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .checkbox-container .checkmark:after {
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+        
+        /* QR Code Modal */
+        .qrcode-container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .qrcode-image {
+            margin: 20px auto;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            display: inline-block;
+            min-height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qrcode-link {
+            display: block;
+            margin: 15px 0;
+            padding: 10px;
+            background: #87cfde;
+            border-radius: 8px;
+            word-break: break-all;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .qrcode-link:hover {
+            background: #3de0c5;
+        }
+
+        .qrcode-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-qrcode {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-qrcode:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Booking Page */
+        .booking-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+        }
+        
+        .booking-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+        }
+        
+        .booking-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .booking-logo {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            margin: 0 auto 15px;
+        }
+        
+        .booking-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .booking-subtitle {
+            color: var(--text-light);
+        }
     </style>
 </head>
 <body>
+    <!-- Tela de Login -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-card">
+            <div class="login-logo">
+                <div class="login-logo-icon">
+                    <i class="fas fa-door-open"></i>
+                </div>
+                <div class="login-logo-text">VisitControl</div>
+            </div>
+            
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="accessKey">Chave de Acesso</label>
+                    <input type="password" id="accessKey" class="form-control" placeholder="Digite sua chave de acesso">
+                </div>
+                
+                <button class="login-btn" id="loginBtn">Acessar Sistema</button>
+            </div>
+            
+            <div class="login-footer">
+                <p>É administrador? <span class="admin-link" id="adminLink">Configurar chave de acesso</span></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Configuração de Chave de Acesso -->
+    <div class="modal-backdrop" id="adminModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Configuração de Chave de Acesso</h3>
+                <button class="action-btn" id="closeAdminModalBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="newAccessKey">Nova Chave de Acesso</label>
+                    <input type="password" id="newAccessKey" class="form-control" placeholder="Digite a nova chave">
+                </div>
+                <div class="form-group">
+                    <label for="confirmAccessKey">Confirmar Chave</label>
+                    <input type="password" id="confirmAccessKey" class="form-control" placeholder="Confirme a nova chave">
+                </div>
+                <p class="login-footer">A chave de acesso é necessária para entrar no sistema. Guarde-a em local seguro.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelAdminBtn">Cancelar</button>
+                <button class="btn btn-primary" id="saveAccessKeyBtn">Salvar Chave</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Overlay para menu mobile -->
     <div class="overlay" id="overlay"></div>
     
-    <div class="app-container">
+    <!-- Aplicação Principal (inicialmente oculta) -->
+    <div class="app-container" id="appContainer">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="nav-item active" data-page="dashboard">
@@ -715,11 +1090,12 @@
             <div class="nav-item" data-page="visitors">
                 <i class="fas fa-users"></i>
                 <span>Visitantes</span>
-                <span class="badge">5</span>
+                <span class="badge" id="visitorsBadge">0</span>
             </div>
             <div class="nav-item" data-page="companies">
                 <i class="fas fa-building"></i>
                 <span>Empresas</span>
+                <span class="badge" id="companiesBadge">0</span>
             </div>
             <div class="nav-item" data-page="settings">
                 <i class="fas fa-cog"></i>
@@ -728,6 +1104,10 @@
             <div class="nav-item" data-page="help">
                 <i class="fas fa-question-circle"></i>
                 <span>Ajuda</span>
+            </div>
+            <div class="nav-item" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sair</span>
             </div>
         </aside>
         
@@ -745,9 +1125,11 @@
                     <div class="logo-text">VisitControl</div>
                 </div>
                 <div class="user-menu">
-                    <div class="notifications">
-                        <i class="far fa-bell" style="font-size: 20px; color: var(--text-light); cursor: pointer;" id="notificationsBtn"></i>
-                    </div>
+                    <!-- Botão de QR Code adicionado aqui -->
+                    <button class="btn btn-primary" id="qrcodeBtn" style="margin-right: 10px;">
+                        <i class="fas fa-qrcode"></i>
+                        QR Code Agendamento
+                    </button>
                     <div class="user-avatar" id="userMenuBtn">AG</div>
                 </div>
             </header>
@@ -920,8 +1302,13 @@
             <!-- Visitors Page -->
             <div class="page-content" id="visitors-page">
                 <div class="card">
-                    <h2 class="section-title">Visitantes Cadastrados</h2>
-                    <p>Esta página gerencia o cadastro de visitantes.</p>
+                    <div class="section-header">
+                        <h2 class="section-title">Visitantes Cadastrados</h2>
+                        <button class="btn btn-primary" id="newVisitorBtn">
+                            <i class="fas fa-plus"></i>
+                            Novo Visitante
+                        </button>
+                    </div>
                     
                     <div class="table-container">
                         <table>
@@ -946,8 +1333,13 @@
             <!-- Companies Page -->
             <div class="page-content" id="companies-page">
                 <div class="card">
-                    <h2 class="section-title">Empresas Cadastradas</h2>
-                    <p>Esta página gerencia o cadastro de empresas.</p>
+                    <div class="section-header">
+                        <h2 class="section-title">Empresas Cadastradas</h2>
+                        <button class="btn btn-primary" id="newCompanyBtn">
+                            <i class="fas fa-plus"></i>
+                            Nova Empresa
+                        </button>
+                    </div>
                     
                     <div class="table-container">
                         <table>
@@ -1071,7 +1463,7 @@
                         <h3>Perguntas Frequentes</h3>
                         <div class="help-content">
                             <p><strong>Como adicionar uma nova visita?</strong></p>
-                            <p>Clique no botão "Nova Visita" no Dashboard ou na página de Visitas.</p>
+                            <p>Clique no botão "Nova Visita" no Dashboard или na página de Visitas.</p>
                             
                             <p><strong>Como alterar o status de uma visita?</strong></p>
                             <p>Clique no ícone de visualização (olho) na lista de visitas e use os botões para alterar o status.</p>
@@ -1084,7 +1476,7 @@
                     <div class="help-section">
                         <h3>Suporte Técnico</h3>
                         <div class="help-content">
-                            <p>Para suporte técnico, entre em contato com nosso desenvolvedor:</p>
+                            <p>Para suporte técnico, entre em contato conosco:</p>
                             <div class="contact-info">
                                 <div class="contact-item">
                                     <i class="fas fa-user"></i>
@@ -1092,11 +1484,15 @@
                                 </div>
                                 <div class="contact-item">
                                     <i class="fas fa-envelope"></i>
-                                    <span>contato@aldeimirgarbino.com</span>
+                                    <span>admpsy@hotmail.com</span>
                                 </div>
                                 <div class="contact-item">
                                     <i class="fas fa-phone"></i>
-                                    <span>(XX) XXXXX-XXXX</span>
+                                    <span>(22) 99290-2507</span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-globe"></i>
+                                    <span>www.visitcontrol.com</span>
                                 </div>
                             </div>
                         </div>
@@ -1106,10 +1502,67 @@
         </main>
     </div>
     
+    <!-- Página de Agendamento via QR Code (inicialmente oculta) -->
+    <div class="booking-container" id="bookingContainer" style="display: none;">
+        <div class="booking-card">
+            <div class="booking-header">
+                <div class="booking-logo">
+                    <i class="fas fa-door-open"></i>
+                </div>
+                <h2 class="booking-title">Agendamento de Visita</h2>
+                <p class="booking-subtitle">Preencha os dados para agendar sua visita</p>
+            </div>
+            
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label for="bookingName">Nome Completo</label>
+                    <input type="text" id="bookingName" class="form-control" placeholder="Digite seu nome completo" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookingCompany">Empresa</label>
+                    <input type="text" id="bookingCompany" class="form-control" placeholder="Nome da empresa" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookingDocument">Documento (CPF ou RG)</label>
+                    <input type="text" id="bookingDocument" class="form-control" placeholder="Digite seu documento">
+                </div>
+                <div class="form-group">
+                    <label for="bookingDestination">Destino</label>
+                    <select id="bookingDestination" class="form-control" required>
+                        <option value="">Selecione um departamento</option>
+                        <option value="rh">Recursos Humanos</option>
+                        <option value="ti">Tecnologia da Informação</option>
+                        <option value="financeiro">Financeiro</option>
+                        <option value="comercial">Comercial</option>
+                        <option value="diretoria">Diretoria</option>
+                        <option value="operacional">Operacional</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="bookingDate">Data e Hora</label>
+                    <input type="datetime-local" id="bookingDate" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookingNotes">Observações</label>
+                    <textarea id="bookingNotes" class="form-control" rows="3" placeholder="Informações adicionais..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-calendar-check"></i>
+                    Agendar Visita
+                </button>
+            </form>
+            
+            <div class="login-footer" style="text-align: center; margin-top: 20px;">
+                <p><a href="#" id="backToSystem">Voltar para o sistema</a></p>
+            </div>
+        </div>
+    </div>
+    
     <!-- Footer -->
     <footer class="footer">
         <p>VisitControl - Sistema de Gestão de Visitas</p>
-        <p>Desenvolvido por <span class="footer-brand">Aldemir Garbino</span> &copy; 2023. Todos os direitos reservados.</p>
+        <p>Desenvolvido por <span class="footer-brand">Aldemir Garbino</span> &copy; 2025. Todos os direitos reservados.</p>
     </footer>
     
     <!-- Modals -->
@@ -1207,6 +1660,88 @@
         </div>
     </div>
     
+    <!-- Visitor Modal -->
+    <div class="modal-backdrop" id="visitorModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="visitorModalTitle">Novo Visitante</h3>
+                <button class="action-btn close-visitor-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="visitorForm">
+                    <input type="hidden" id="visitorId">
+                    <div class="form-group">
+                        <label for="visitorFullName">Nome Completo</label>
+                        <input type="text" id="visitorFullName" class="form-control" placeholder="Digite o nome completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="visitorDocument">Documento</label>
+                        <input type="text" id="visitorDocument" class="form-control" placeholder="CPF ou RG" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="visitorCompany">Empresa</label>
+                        <input type="text" id="visitorCompany" class="form-control" placeholder="Nome da empresa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="visitorPhone">Telefone</label>
+                        <input type="tel" id="visitorPhone" class="form-control" placeholder="(11) 99999-9999">
+                    </div>
+                    <div class="form-group">
+                        <label for="visitorEmail">E-mail</label>
+                        <input type="email" id="visitorEmail" class="form-control" placeholder="email@exemplo.com">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline close-visitor-modal">Cancelar</button>
+                <button class="btn btn-primary" id="saveVisitorBtn">Salvar Visitante</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Company Modal -->
+    <div class="modal-backdrop" id="companyModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="companyModalTitle">Nova Empresa</h3>
+                <button class="action-btn close-company-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="companyForm">
+                    <input type="hidden" id="companyId">
+                    <div class="form-group">
+                        <label for="companyNameInput">Nome da Empresa</label>
+                        <input type="text" id="companyNameInput" class="form-control" placeholder="Digite o nome da empresa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="companyCnpj">CNPJ</label>
+                        <input type="text" id="companyCnpj" class="form-control" placeholder="00.000.000/0000-00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="companyResponsible">Responsável</label>
+                        <input type="text" id="companyResponsible" class="form-control" placeholder="Nome do responsável">
+                    </div>
+                    <div class="form-group">
+                        <label for="companyPhone">Telefone</label>
+                        <input type="tel" id="companyPhone" class="form-control" placeholder="(11) 99999-9999">
+                    </div>
+                    <div class="form-group">
+                        <label for="companyEmail">E-mail</label>
+                        <input type="email" id="companyEmail" class="form-control" placeholder="empresa@exemplo.com">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline close-company-modal">Cancelar</button>
+                <button class="btn btn-primary" id="saveCompanyBtn">Salvar Empresa</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Delete Confirmation Modal -->
     <div class="modal-backdrop" id="deleteModal">
         <div class="modal">
@@ -1217,12 +1752,49 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Tem certeza que deseja excluir a visita de <span id="deleteVisitName">-</span>?</p>
+                <p>Tem certeza que deseja excluir <span id="deleteItemName">-</span>?</p>
                 <p>Esta ação não pode ser desfeita.</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline close-delete-modal">Cancelar</button>
                 <button class="btn btn-primary" id="confirmDeleteBtn">Excluir</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- QR Code Modal -->
+    <div class="modal-backdrop" id="qrcodeModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">QR Code para Agendamento de Visitas</h3>
+                <button class="action-btn close-qrcode-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="qrcode-container">
+                    <p>Use este QR Code para permitir que visitantes agendem suas visitas:</p>
+                    <div id="qrcodeImage" class="qrcode-image">O QR Code será gerado aqui...</div>
+                    <p>Ou compartilhe este link:</p>
+                    <div id="qrcodeLink" class="qrcode-link">https://visitcontrol.com/agendamento/?token=abc123</div>
+                    <div class="qrcode-actions">
+                        <button class="btn btn-outline" id="copyLinkBtn">
+                            <i class="fas fa-copy"></i>
+                            Copiar Link
+                        </button>
+                        <button class="btn btn-primary" id="downloadQrcodeBtn">
+                            <i class="fas fa-download"></i>
+                            Baixar QR Code
+                        </button>
+                        <button class="btn btn-primary" id="generateNewBtn">
+                            <i class="fas fa-sync"></i>
+                            Gerar Novo
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline close-qrcode-modal">Fechar</button>
             </div>
         </div>
     </div>
@@ -1238,19 +1810,49 @@
         let visits = [];
         let visitors = [];
         let companies = [];
+        let settings = {};
         
         // Elementos DOM
+        const loginContainer = document.getElementById('loginContainer');
+        const appContainer = document.getElementById('appContainer');
+        const bookingContainer = document.getElementById('bookingContainer');
+        const accessKeyInput = document.getElementById('accessKey');
+        const loginBtn = document.getElementById('loginBtn');
+        const adminLink = document.getElementById('adminLink');
+        const adminModal = document.getElementById('adminModal');
+        const newAccessKeyInput = document.getElementById('newAccessKey');
+        const confirmAccessKeyInput = document.getElementById('confirmAccessKey');
+        const saveAccessKeyBtn = document.getElementById('saveAccessKeyBtn');
+        const closeAdminModalBtn = document.getElementById('closeAdminModalBtn');
+        const cancelAdminBtn = document.getElementById('cancelAdminBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const visitModal = document.getElementById('visitModal');
+        const visitorModal = document.getElementById('visitorModal');
+        const companyModal = document.getElementById('companyModal');
         const deleteModal = document.getElementById('deleteModal');
+        const qrcodeModal = document.getElementById('qrcodeModal');
         const toast = document.getElementById('toast');
         const visitsTableBody = document.getElementById('visitsTableBody');
         const allVisitsTableBody = document.getElementById('allVisitsTableBody');
         const schedulingTableBody = document.getElementById('schedulingTableBody');
         const visitorsTableBody = document.getElementById('visitorsTableBody');
         const companiesTableBody = document.getElementById('companiesTableBody');
+        
+        // QR Code elements
+        const qrcodeBtn = document.getElementById('qrcodeBtn');
+        const qrcodeImage = document.getElementById('qrcodeImage');
+        const qrcodeLink = document.getElementById('qrcodeLink');
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+        const downloadQrcodeBtn = document.getElementById('downloadQrcodeBtn');
+        const generateNewBtn = document.getElementById('generateNewBtn');
+        
+        // Booking elements
+        const bookingForm = document.getElementById('bookingForm');
+        const backToSystem = document.getElementById('backToSystem');
         
         // Contadores
         const todayVisitsCount = document.getElementById('todayVisitsCount');
@@ -1259,74 +1861,481 @@
         
         // Estado da aplicação
         let currentVisitId = null;
+        let currentVisitorId = null;
+        let currentCompanyId = null;
         let isViewMode = false;
         let currentPage = 'dashboard';
+        let deleteType = ''; // 'visit', 'visitor', 'company'
+        let qrcode = null;
         
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            // Carregar dados do localStorage
-            loadVisitsFromStorage();
-            loadVisitorsFromStorage();
-            loadCompaniesFromStorage();
+            // Verificar se há uma chave de acesso configurada
+            const accessKey = localStorage.getItem('visitControl_accessKey');
             
-            // Adicionar dados de exemplo apenas se não houver dados salvos
-            if (visits.length === 0) {
-                addSampleData();
+            if (!accessKey) {
+                // Se não houver chave, mostrar link de administrador
+                adminLink.style.display = 'block';
+            } else {
+                adminLink.style.display = 'none';
             }
             
-            updateCounters();
-            applyFilters();
-            document.getElementById('date').min = new Date().toISOString().slice(0, 16);
+            // Verificar se estamos na página de agendamento
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
             
-            // Configurar event listeners para os botões
-            document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
-            document.getElementById('addSampleDataBtn').addEventListener('click', addSampleData);
-            document.getElementById('newVisitBtn2').addEventListener('click', () => {
-                openVisitModal('new');
+            if (token) {
+                // Mostrar página de agendamento
+                showBookingPage();
+            }
+            
+            // Configurar event listeners para login
+            loginBtn.addEventListener('click', handleLogin);
+            adminLink.addEventListener('click', () => adminModal.classList.add('active'));
+            saveAccessKeyBtn.addEventListener('click', saveAccessKey);
+            closeAdminModalBtn.addEventListener('click', () => adminModal.classList.remove('active'));
+            cancelAdminBtn.addEventListener('click', () => adminModal.classList.remove('active'));
+            logoutBtn.addEventListener('click', handleLogout);
+            
+            // Configurar tecla Enter para login
+            accessKeyInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleLogin();
+                }
             });
-            document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
             
-            // Renderizar todas as tabelas
-            renderAllTables();
+            // Configurar tecla Enter para salvar chave
+            newAccessKeyInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    saveAccessKey();
+                }
+            });
+            
+            confirmAccessKeyInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    saveAccessKey();
+                }
+            });
+            
+            // Configurar formulário de agendamento
+            bookingForm.addEventListener('submit', handleBooking);
+            backToSystem.addEventListener('click', (e) => {
+                e.preventDefault();
+                showMainSystem();
+            });
         });
         
+        // Funções de autenticação
+        function handleLogin() {
+            const accessKey = accessKeyInput.value.trim();
+            const storedAccessKey = localStorage.getItem('visitControl_accessKey');
+            
+            if (!storedAccessKey) {
+                showToast('Nenhuma chave de acesso configurada. Use o link de administrador para configurar.', 'error');
+                return;
+            }
+            
+            if (accessKey === storedAccessKey) {
+                // Login bem-sucedido
+                loginContainer.style.display = 'none';
+                appContainer.classList.add('active');
+                
+                // Carregar dados do sistema
+                loadAllData();
+                
+                // Adicionar dados de exemplo apenas se não houver dados salvos
+                if (visits.length === 0 && visitors.length === 0 && companies.length === 0) {
+                    addSampleData();
+                }
+                
+                updateCounters();
+                applyFilters();
+                document.getElementById('date').min = new Date().toISOString().slice(0, 16);
+                
+                // Configurar event listeners para os botões
+                setupEventListeners();
+                
+                showToast('Login realizado com sucesso!', 'success');
+            } else {
+                showToast('Chave de acesso incorreta!', 'error');
+                accessKeyInput.value = '';
+                accessKeyInput.focus();
+            }
+        }
+        
+        function saveAccessKey() {
+            const newKey = newAccessKeyInput.value.trim();
+            const confirmKey = confirmAccessKeyInput.value.trim();
+            
+            if (!newKey) {
+                showToast('Digite uma chave de acesso válida', 'error');
+                return;
+            }
+            
+            if (newKey !== confirmKey) {
+                showToast('As chaves não coincidem', 'error');
+                return;
+            }
+            
+            // Salvar a chave de acesso
+            localStorage.setItem('visitControl_accessKey', newKey);
+            
+            // Fechar o modal e limpar os campos
+            adminModal.classList.remove('active');
+            newAccessKeyInput.value = '';
+            confirmAccessKeyInput.value = '';
+            
+            // Ocultar o link de administrador
+            adminLink.style.display = 'none';
+            
+            showToast('Chave de acesso configurada com sucesso!', 'success');
+        }
+        
+        function handleLogout() {
+            // Voltar para a tela de login
+            appContainer.classList.remove('active');
+            loginContainer.style.display = 'flex';
+            accessKeyInput.value = '';
+            
+            showToast('Logout realizado com sucesso', 'success');
+        }
+        
+        function showBookingPage() {
+            loginContainer.style.display = 'none';
+            appContainer.style.display = 'none';
+            bookingContainer.style.display = 'flex';
+            
+            // Preencher data e hora atual
+            const now = new Date();
+            // Ajustar para o formato datetime-local (removendo os segundos)
+            const formattedNow = now.toISOString().slice(0, 16);
+            document.getElementById('bookingDate').value = formattedNow;
+        }
+        
+        function showMainSystem() {
+            bookingContainer.style.display = 'none';
+            loginContainer.style.display = 'flex';
+        }
+        
+        function handleBooking(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('bookingName').value.trim();
+            const company = document.getElementById('bookingCompany').value.trim();
+            const document = document.getElementById('bookingDocument').value.trim();
+            const destination = document.getElementById('bookingDestination').value;
+            const date = document.getElementById('bookingDate').value;
+            const notes = document.getElementById('bookingNotes').value.trim();
+            
+            if (!name || !company || !destination || !date) {
+                showToast('Preencha todos os campos obrigatórios', 'error');
+                return;
+            }
+            
+            // Criar nova visita
+            const newVisit = {
+                id: Date.now(),
+                name,
+                company,
+                document,
+                destination,
+                date,
+                status: 'scheduled',
+                notes
+            };
+            
+            // Adicionar à lista de visitas
+            visits.push(newVisit);
+            
+            // Salvar no localStorage
+            saveAllData();
+            
+            showToast('Visita agendada com sucesso!', 'success');
+            
+            // Limpar formulário
+            bookingForm.reset();
+            
+            // Preencher data e hora atual novamente
+            const now = new Date();
+            const formattedNow = now.toISOString().slice(0, 16);
+            document.getElementById('bookingDate').value = formattedNow;
+        }
+        
+        function setupEventListeners() {
+            // Navegação
+            document.querySelectorAll('.nav-item').forEach(item => {
+                if (item.id !== 'logoutBtn') {
+                    item.addEventListener('click', () => {
+                        const page = item.getAttribute('data-page');
+                        navigateToPage(page);
+                        
+                        if (window.innerWidth <= 900) {
+                            sidebar.classList.remove('active');
+                            overlay.classList.remove('active');
+                        }
+                    });
+                }
+            });
+            
+            // Menu mobile
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.add('active');
+                overlay.classList.add('active');
+            });
+            
+            // Fechar menu ao clicar no overlay
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+            
+            // Botões de ação
+            document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
+            document.getElementById('addSampleDataBtn').addEventListener('click', addSampleData);
+            document.getElementById('newVisitBtn').addEventListener('click', () => openVisitModal('new'));
+            document.getElementById('newVisitBtn2').addEventListener('click', () => openVisitModal('new'));
+            document.getElementById('newVisitorBtn').addEventListener('click', () => openVisitorModal('new'));
+            document.getElementById('newCompanyBtn').addEventListener('click', () => openCompanyModal('new'));
+            document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+            
+            // Fechar modais
+            document.getElementById('closeModalBtn').addEventListener('click', closeVisitModal);
+            document.getElementById('cancelBtn').addEventListener('click', closeVisitModal);
+            
+            document.querySelectorAll('.close-visitor-modal').forEach(btn => {
+                btn.addEventListener('click', closeVisitorModal);
+            });
+            
+            document.querySelectorAll('.close-company-modal').forEach(btn => {
+                btn.addEventListener('click', closeCompanyModal);
+            });
+            
+            document.querySelectorAll('.close-delete-modal').forEach(btn => {
+                btn.addEventListener('click', closeDeleteModal);
+            });
+            
+            // Salvar formulários
+            document.getElementById('saveBtn').addEventListener('click', saveVisit);
+            document.getElementById('updateBtn').addEventListener('click', updateVisit);
+            document.getElementById('saveVisitorBtn').addEventListener('click', saveVisitor);
+            document.getElementById('saveCompanyBtn').addEventListener('click', saveCompany);
+            
+            // Confirmar exclusão
+            document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
+            
+            // Alterar status da visita - CORREÇÃO AQUI
+            document.getElementById('markInProgressBtn').addEventListener('click', function() {
+                updateVisitStatus('in-progress');
+            });
+            
+            document.getElementById('markCompletedBtn').addEventListener('click', function() {
+                updateVisitStatus('completed');
+            });
+            
+            // Filtros
+            document.getElementById('statusFilter').addEventListener('change', applyFilters);
+            document.getElementById('dateFilter').addEventListener('change', applyFilters);
+            document.getElementById('searchFilter').addEventListener('input', applyFilters);
+            
+            // Limpar filtros
+            document.getElementById('clearFiltersBtn').addEventListener('click', () => {
+                document.getElementById('statusFilter').value = 'all';
+                document.getElementById('dateFilter').value = '';
+                document.getElementById('searchFilter').value = '';
+                applyFilters();
+            });
+            
+            // Cartões de estatísticas
+            document.getElementById('todayVisitsCard').addEventListener('click', () => {
+                document.getElementById('statusFilter').value = 'all';
+                document.getElementById('dateFilter').value = new Date().toISOString().split('T')[0];
+                applyFilters();
+                showToast('Filtro aplicado: Visitas de hoje');
+            });
+            
+            document.getElementById('pendingVisitsCard').addEventListener('click', () => {
+                document.getElementById('statusFilter').value = 'scheduled';
+                applyFilters();
+                showToast('Filtro aplicado: Visitas pendentes');
+            });
+            
+            document.getElementById('completedVisitsCard').addEventListener('click', () => {
+                document.getElementById('statusFilter').value = 'completed';
+                applyFilters();
+                showToast('Filtro aplicado: Visitas concluídas');
+            });
+            
+            // QR Code
+            qrcodeBtn.addEventListener('click', openQRCodeModal);
+            document.querySelectorAll('.close-qrcode-modal').forEach(btn => {
+                btn.addEventListener('click', closeQRCodeModal);
+            });
+            copyLinkBtn.addEventListener('click', copyBookingLink);
+            downloadQrcodeBtn.addEventListener('click', downloadQRCode);
+            generateNewBtn.addEventListener('click', generateNewQRCode);
+            
+            // Permitir clicar no link para copiar
+            qrcodeLink.addEventListener('click', copyBookingLink);
+        }
+        
+        // Funções de QR Code
+        function generateBookingLink() {
+            // Gerar um token único para o agendamento
+            const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            
+            // URL do sistema de agendamento
+            const currentUrl = window.location.href.split('?')[0]; // Remover query strings existentes
+            return `${currentUrl}?token=${token}`;
+        }
+        
+        function generateQRCode(link) {
+            // Limpar conteúdo anterior
+            qrcodeImage.innerHTML = '';
+            
+            try {
+                // Verificar se a biblioteca QRCode está disponível
+                if (typeof QRCode === 'undefined') {
+                    showToast('Biblioteca QRCode não carregada. Verifique a conexão.', 'error');
+                    qrcodeImage.innerHTML = '<p>Erro: Biblioteca QRCode não carregada</p>';
+                    return;
+                }
+                
+                // Gerar o QR Code
+                qrcode = new QRCode(qrcodeImage, {
+                    text: link,
+                    width: 200,
+                    height: 200,
+                    colorDark: '#2563eb',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                
+                showToast('QR Code gerado com sucesso!', 'success');
+            } catch (error) {
+                console.error('Erro ao gerar QR Code:', error);
+                showToast('Erro ao gerar QR Code', 'error');
+                qrcodeImage.innerHTML = '<p>Erro ao gerar QR Code. Verifique o console.</p>';
+            }
+        }
+        
+        function copyBookingLink() {
+            const link = qrcodeLink.textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                showToast('Link copiado para a área de transferência!', 'success');
+            }).catch(err => {
+                console.error('Falha ao copiar o link: ', err);
+                
+                // Fallback para dispositivos que não suportam clipboard API
+                const textArea = document.createElement('textarea');
+                textArea.value = link;
+                document.body.appendChild(textArea);
+                textArea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    showToast('Link copiado para a área de transferência!', 'success');
+                } catch (fallbackErr) {
+                    showToast('Erro ao copiar o link. Selecione e copie manualmente.', 'error');
+                }
+                
+                document.body.removeChild(textArea);
+            });
+        }
+        
+        function downloadQRCode() {
+            const canvas = qrcodeImage.querySelector('canvas');
+            if (!canvas) {
+                showToast('QR Code não está pronto para download', 'error');
+                return;
+            }
+            
+            try {
+                const link = document.createElement('a');
+                link.download = 'qrcode-agendamento-visitcontrol.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast('QR Code baixado com sucesso!', 'success');
+            } catch (error) {
+                console.error('Erro ao baixar QR Code:', error);
+                showToast('Erro ao baixar QR Code', 'error');
+            }
+        }
+        
+        function generateNewQRCode() {
+            const newLink = generateBookingLink();
+            qrcodeLink.textContent = newLink;
+            generateQRCode(newLink);
+        }
+        
+        function openQRCodeModal() {
+            // Gerar link único de agendamento
+            const bookingLink = generateBookingLink();
+            
+            // Atualizar o link no modal
+            qrcodeLink.textContent = bookingLink;
+            
+            // Gerar o QR Code
+            generateQRCode(bookingLink);
+            
+            // Mostrar o modal
+            qrcodeModal.classList.add('active');
+        }
+        
+        function closeQRCodeModal() {
+            qrcodeModal.classList.remove('active');
+        }
+        
         // Funções de persistência de dados
-        function saveVisitsToStorage() {
+        function saveAllData() {
             localStorage.setItem('visitControl_visits', JSON.stringify(visits));
+            localStorage.setItem('visitControl_visitors', JSON.stringify(visitors));
+            localStorage.setItem('visitControl_companies', JSON.stringify(companies));
+            localStorage.setItem('visitControl_settings', JSON.stringify(settings));
         }
         
-        function loadVisitsFromStorage() {
+        function loadAllData() {
             const storedVisits = localStorage.getItem('visitControl_visits');
-            if (storedVisits) {
-                visits = JSON.parse(storedVisits);
-            }
-        }
-        
-        function loadVisitorsFromStorage() {
             const storedVisitors = localStorage.getItem('visitControl_visitors');
-            if (storedVisitors) {
-                visitors = JSON.parse(storedVisitors);
-            }
-        }
-        
-        function loadCompaniesFromStorage() {
             const storedCompanies = localStorage.getItem('visitControl_companies');
-            if (storedCompanies) {
-                companies = JSON.parse(storedCompanies);
-            }
+            const storedSettings = localStorage.getItem('visitControl_settings');
+            
+            if (storedVisits) visits = JSON.parse(storedVisits);
+            if (storedVisitors) visitors = JSON.parse(storedVisitors);
+            if (storedCompanies) companies = JSON.parse(storedCompanies);
+            if (storedSettings) settings = JSON.parse(storedSettings);
+            
+            // Atualizar badges
+            document.getElementById('visitorsBadge').textContent = visitors.length;
+            document.getElementById('companiesBadge').textContent = companies.length;
         }
         
         function clearAllData() {
             if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
                 visits = [];
-                saveVisitsToStorage();
+                visitors = [];
+                companies = [];
+                saveAllData();
                 updateCounters();
                 renderAllTables();
                 showToast('Todos os dados foram removidos.', 'success');
+                
+                // Atualizar badges
+                document.getElementById('visitorsBadge').textContent = '0';
+                document.getElementById('companiesBadge').textContent = '0';
             }
         }
         
         function saveSettings() {
+            // Simular salvamento de configurações
+            settings.companyName = document.getElementById('companyName').value;
+            settings.companyAddress = document.getElementById('companyAddress').value;
+            settings.adminEmail = document.getElementById('adminEmail').value;
+            settings.maxVisits = document.getElementById('maxVisits').value;
+            settings.emailNotifications = document.getElementById('emailNotifications').checked;
+            settings.browserNotifications = document.getElementById('browserNotifications').checked;
+            settings.notificationTime = document.getElementById('notificationTime').value;
+            
+            localStorage.setItem('visitControl_settings', JSON.stringify(settings));
             showToast('Configurações salvas com sucesso!', 'success');
         }
         
@@ -1338,8 +2347,26 @@
             const yesterday = new Date(today);
             yesterday.setDate(yesterday.getDate() - 1);
             
+            // Dados de exemplo para visitantes
+            visitors = [
+                { id: 1, name: "Carlos Silva", document: "123.456.789-00", company: "Tech Solutions Ltda", phone: "(11) 99999-9999", email: "carlos@techsolutions.com", lastVisit: today.toISOString().slice(0, 16), totalVisits: 3 },
+                { id: 2, name: "Ana Oliveira", document: "987.654.321-00", company: "Consultoria Financeira SA", phone: "(11) 98888-8888", email: "ana@consultoriafinanceira.com", lastVisit: today.toISOString().slice(0, 16), totalVisits: 5 },
+                { id: 3, name: "Roberto Santos", document: "456.789.123-00", company: "Vendas Express", phone: "(11) 97777-7777", email: "roberto@vendasexpress.com", lastVisit: yesterday.toISOString().slice(0, 16), totalVisits: 2 },
+                { id: 4, name: "Mariana Costa", document: "789.123.456-00", company: "Recursos Humanos Brasil", phone: "(11) 96666-6666", email: "mariana@rhbrasil.com", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 },
+                { id: 5, name: "Paulo Mendes", document: "321.654.987-00", company: "Indústrias Pesadas", phone: "(11) 95555-5555", email: "paulo@industriaspesadas.com", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 }
+            ];
+            
+            // Dados de exemplo para empresas
+            companies = [
+                { id: 1, name: "Tech Solutions Ltda", cnpj: "12.345.678/0001-90", responsible: "Carlos Silva", phone: "(11) 99999-9999", email: "contato@techsolutions.com", totalVisits: 3, lastVisit: today.toISOString().slice(0, 16) },
+                { id: 2, name: "Consultoria Financeira SA", cnpj: "98.765.432/0001-10", responsible: "Ana Oliveira", phone: "(11) 98888-8888", email: "contato@consultoriafinanceira.com", totalVisits: 5, lastVisit: today.toISOString().slice(0, 16) },
+                { id: 3, name: "Vendas Express", cnpj: "45.678.912/0001-30", responsible: "Roberto Santos", phone: "(11) 97777-7777", email: "contato@vendasexpress.com", totalVisits: 2, lastVisit: yesterday.toISOString().slice(0, 16) },
+                { id: 4, name: "Recursos Humanos Brasil", cnpj: "78.912.345/0001-40", responsible: "Mariana Costa", phone: "(11) 96666-6666", email: "contato@rhbrasil.com", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) },
+                { id: 5, name: "Indústrias Pesadas", cnpj: "32.165.498/0001-70", responsible: "Paulo Mendes", phone: "(11) 95555-5555", email: "contato@industriaspesadas.com", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) }
+            ];
+            
             // Dados de exemplo para visitas
-            const sampleVisits = [
+            visits = [
                 {
                     id: 1,
                     name: "Carlos Silva",
@@ -1392,240 +2419,39 @@
                 }
             ];
             
-            // Dados de exemplo para visitantes
-            visitors = [
-                { id: 1, name: "Carlos Silva", document: "123.456.789-00", company: "Tech Solutions Ltda", lastVisit: today.toISOString().slice(0, 16), totalVisits: 3 },
-                { id: 2, name: "Ana Oliveira", document: "987.654.321-00", company: "Consultoria Financeira SA", lastVisit: today.toISOString().slice(0, 16), totalVisits: 5 },
-                { id: 3, name: "Roberto Santos", document: "456.789.123-00", company: "Vendas Express", lastVisit: yesterday.toISOString().slice(0, 16), totalVisits: 2 },
-                { id: 4, name: "Mariana Costa", document: "789.123.456-00", company: "Recursos Humanos Brasil", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 },
-                { id: 5, name: "Paulo Mendes", document: "321.654.987-00", company: "Indústrias Pesadas", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 }
-            ];
-            
-            // Dados de exemplo para empresas
-            companies = [
-                { id: 1, name: "Tech Solutions Ltda", cnpj: "12.345.678/0001-90", responsible: "Carlos Silva", totalVisits: 3, lastVisit: today.toISOString().slice(0, 16) },
-                { id: 2, name: "Consultoria Financeira SA", cnpj: "98.765.432/0001-10", responsible: "Ana Oliveira", totalVisits: 5, lastVisit: today.toISOString().slice(0, 16) },
-                { id: 3, name: "Vendas Express", cnpj: "45.678.912/0001-30", responsible: "Roberto Santos", totalVisits: 2, lastVisit: yesterday.toISOString().slice(0, 16) },
-                { id: 4, name: "Recursos Humanos Brasil", cnpj: "78.912.345/0001-40", responsible: "Mariana Costa", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) },
-                { id: 5, name: "Indústrias Pesadas", cnpj: "32.165.498/0001-70", responsible: "Paulo Mendes", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) }
-            ];
-            
-            // Adicionar apenas se não houver visitas com os mesmos IDs
-            sampleVisits.forEach(sample => {
-                if (!visits.some(v => v.id === sample.id)) {
-                    visits.push(sample);
-                }
-            });
-            
             // Salvar no localStorage
-            saveVisitsToStorage();
-            localStorage.setItem('visitControl_visitors', JSON.stringify(visitors));
-            localStorage.setItem('visitControl_companies', JSON.stringify(companies));
+            saveAllData();
             
             // Atualizar a interface
             updateCounters();
             renderAllTables();
             
+            // Atualizar badges
+            document.getElementById('visitorsBadge').textContent = visitors.length;
+            document.getElementById('companiesBadge').textContent = companies.length;
+            
             showToast('Dados de exemplo adicionados com sucesso!', 'success');
         }
         
-        // Alternar menu mobile
-        mobileMenuBtn.addEventListener('click', () => {
-            sidebar.classList.add('active');
-            overlay.classList.add('active');
-        });
-        
-        // Fechar menu ao clicar no overlay
-        overlay.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-        });
-        
-        // Navegação do menu lateral
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const page = item.getAttribute('data-page');
-                navigateToPage(page);
-                
-                if (window.innerWidth <= 900) {
-                    sidebar.classList.remove('active');
-                    overlay.classList.remove('active');
-                }
-            });
-        });
-        
-        // Abrir modal para nova visita
-        document.getElementById('newVisitBtn').addEventListener('click', () => {
-            openVisitModal('new');
-        });
-        
-        // Fechar modal
-        document.getElementById('closeModalBtn').addEventListener('click', closeVisitModal);
-        document.getElementById('cancelBtn').addEventListener('click', closeVisitModal);
-        
-        // Fechar modal de exclusão
-        document.querySelectorAll('.close-delete-modal').forEach(btn => {
-            btn.addEventListener('click', closeDeleteModal);
-        });
-        
-        // Confirmar exclusão
-        document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
-            const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
-            if (visitIndex !== -1) {
-                visits.splice(visitIndex, 1);
-                // Salvar no localStorage após exclusão
-                saveVisitsToStorage();
-                showToast('Visita excluída com sucesso!', 'success');
-                updateCounters();
-                renderAllTables();
-            }
-            closeDeleteModal();
-        });
-        
-        // Salvar nova visita
-        document.getElementById('saveBtn').addEventListener('click', () => {
-            // Validar formulário
-            if (!validateForm()) return;
-            
-            // Criar nova visita
-            const newVisit = {
-                id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 1 : 1,
-                name: document.getElementById('visitorName').value,
-                company: document.getElementById('company').value,
-                document: document.getElementById('document').value,
-                destination: document.getElementById('destination').value,
-                date: document.getElementById('date').value,
-                status: "scheduled",
-                notes: document.getElementById('notes').value
-            };
-            
-            // Adicionar à lista
-            visits.push(newVisit);
-            
-            // Salvar no localStorage
-            saveVisitsToStorage();
-            
-            // Feedback e fechar modal
-            showToast('Visita registrada com sucesso!', 'success');
-            closeVisitModal();
-            
-            // Atualizar interface
-            updateCounters();
-            renderAllTables();
-        });
-        
-        // Atualizar visita
-        document.getElementById('updateBtn').addEventListener('click', () => {
-            // Validar formulário
-            if (!validateForm()) return;
-            
-            // Encontrar e atualizar visita
-            const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
-            if (visitIndex !== -1) {
-                visits[visitIndex].name = document.getElementById('visitorName').value;
-                visits[visitIndex].company = document.getElementById('company').value;
-                visits[visitIndex].document = document.getElementById('document').value;
-                visits[visitIndex].destination = document.getElementById('destination').value;
-                visits[visitIndex].date = document.getElementById('date').value;
-                visits[visitIndex].notes = document.getElementById('notes').value;
-                
-                // Salvar no localStorage após atualização
-                saveVisitsToStorage();
-                
-                showToast('Visita atualizada com sucesso!', 'success');
-                closeVisitModal();
-                renderAllTables();
-            }
-        });
-        
-        // Alterar status da visita
-        document.getElementById('markInProgressBtn').addEventListener('click', () => {
-            updateVisitStatus('in-progress');
-        });
-        
-        document.getElementById('markCompletedBtn').addEventListener('click', () => {
-            updateVisitStatus('completed');
-        });
-        
-        function updateVisitStatus(status) {
-            const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
-            if (visitIndex !== -1) {
-                visits[visitIndex].status = status;
-                
-                // Salvar no localStorage após alteração de status
-                saveVisitsToStorage();
-                
-                // Atualizar detalhes no modal
-                const statusElement = document.getElementById('detailStatus');
-                statusElement.className = 'status';
-                
-                if (status === 'in-progress') {
-                    statusElement.classList.add('status-in-progress');
-                    statusElement.textContent = 'Em Andamento';
-                } else if (status === 'completed') {
-                    statusElement.classList.add('status-completed');
-                    statusElement.textContent = 'Concluída';
-                }
-                
-                showToast(`Status atualizado para ${status === 'in-progress' ? 'Em Andamento' : 'Concluída'}!`, 'success');
-                
-                // Atualizar contadores e tabela
-                updateCounters();
-                renderAllTables();
-                
-                // Fechar o modal após a atualização
-                setTimeout(() => {
-                    closeVisitModal();
-                }, 1500);
-            }
-        }
-        
-        // Filtros
-        document.getElementById('statusFilter').addEventListener('change', applyFilters);
-        document.getElementById('dateFilter').addEventListener('change', applyFilters);
-        document.getElementById('searchFilter').addEventListener('input', applyFilters);
-        
-        // Limpar filtros
-        document.getElementById('clearFiltersBtn').addEventListener('click', () => {
-            document.getElementById('statusFilter').value = 'all';
-            document.getElementById('dateFilter').value = '';
-            document.getElementById('searchFilter').value = '';
-            applyFilters();
-        });
-        
-        // Cartões de estatísticas
-        document.getElementById('todayVisitsCard').addEventListener('click', () => {
-            document.getElementById('statusFilter').value = 'all';
-            document.getElementById('dateFilter').value = new Date().toISOString().split('T')[0];
-            applyFilters();
-            showToast('Filtro aplicado: Visitas de hoje');
-        });
-        
-        document.getElementById('pendingVisitsCard').addEventListener('click', () => {
-            document.getElementById('statusFilter').value = 'scheduled';
-            applyFilters();
-            showToast('Filtro aplicado: Visitas pendentes');
-        });
-        
-        document.getElementById('completedVisitsCard').addEventListener('click', () => {
-            document.getElementById('statusFilter').value = 'completed';
-            applyFilters();
-            showToast('Filtro aplicado: Visitas concluídas');
-        });
-        
-        // Funções auxiliares
+        // Funções de navegação
         function navigateToPage(page) {
-            // Atualizar menu
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+            // Remover a classe ativa de todas as páginas
+            document.querySelectorAll('.page-content').forEach(p => {
+                p.classList.remove('active');
+            });
             
-            // Esconder todas as páginas
-            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            // Remover a classe ativa de todos os itens de navegação
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
             
-            // Mostrar página selecionada
+            // Adicionar a classe ativa à página selecionada
             document.getElementById(`${page}-page`).classList.add('active');
             
-            // Atualizar estado atual
+            // Adicionar a classe ativa ao item de navegação selecionado
+            document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+            
+            // Atualizar a página atual
             currentPage = page;
             
             // Renderizar a tabela apropriada
@@ -1637,24 +2463,352 @@
                 renderVisitorsTable();
             } else if (page === 'companies') {
                 renderCompaniesTable();
+            } else if (page === 'dashboard') {
+                applyFilters();
             }
-            
-            showToast(`Navegando para ${document.querySelector(`.nav-item[data-page="${page}"]`).querySelector('span').textContent}`);
         }
         
+        // Funções para renderizar tabelas
+        function renderAllTables() {
+            renderVisitsTable();
+            renderAllVisitsTable();
+            renderSchedulingTable();
+            renderVisitorsTable();
+            renderCompaniesTable();
+        }
+        
+        function renderVisitsTable() {
+            const filteredVisits = filterVisits();
+            const tbody = visitsTableBody;
+            tbody.innerHTML = '';
+            
+            if (filteredVisits.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Nenhuma visita encontrada</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            filteredVisits.slice(0, 5).forEach(visit => {
+                const row = document.createElement('tr');
+                const date = new Date(visit.date);
+                const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                
+                let statusClass = 'status-scheduled';
+                let statusText = 'Agendada';
+                
+                if (visit.status === 'in-progress') {
+                    statusClass = 'status-in-progress';
+                    statusText = 'Em Andamento';
+                } else if (visit.status === 'completed') {
+                    statusClass = 'status-completed';
+                    statusText = 'Concluída';
+                }
+                
+                row.innerHTML = `
+                    <td>${visit.name}</td>
+                    <td>${visit.company}</td>
+                    <td>${formattedDate}</td>
+                    <td>${getDestinationName(visit.destination)}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="action-btn view-visit" data-id="${visit.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit-visit" data-id="${visit.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete delete-visit" data-id="${visit.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões
+            addVisitEventListeners();
+        }
+        
+        function renderAllVisitsTable() {
+            const tbody = allVisitsTableBody;
+            tbody.innerHTML = '';
+            
+            if (visits.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Nenhuma visita encontrada</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Ordenar visitas por data (mais recente primeiro)
+            const sortedVisits = [...visits].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sortedVisits.forEach(visit => {
+                const row = document.createElement('tr');
+                const date = new Date(visit.date);
+                const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                
+                let statusClass = 'status-scheduled';
+                let statusText = 'Agendada';
+                
+                if (visit.status === 'in-progress') {
+                    statusClass = 'status-in-progress';
+                    statusText = 'Em Andamento';
+                } else if (visit.status === 'completed') {
+                    statusClass = 'status-completed';
+                    statusText = 'Concluída';
+                }
+                
+                row.innerHTML = `
+                    <td>${visit.name}</td>
+                    <td>${visit.company}</td>
+                    <td>${formattedDate}</td>
+                    <td>${getDestinationName(visit.destination)}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="action-btn view-visit" data-id="${visit.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit-visit" data-id="${visit.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete delete-visit" data-id="${visit.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões
+            addVisitEventListeners();
+        }
+        
+        function renderSchedulingTable() {
+            const tbody = schedulingTableBody;
+            tbody.innerHTML = '';
+            
+            // Filtrar apenas visitas agendadas para o futuro
+            const now = new Date();
+            const scheduledVisits = visits.filter(visit => {
+                const visitDate = new Date(visit.date);
+                return visitDate > now && visit.status === 'scheduled';
+            });
+            
+            if (scheduledVisits.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Nenhum agendamento futuro</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Ordenar por data (mais próximos primeiro)
+            scheduledVisits.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            scheduledVisits.forEach(visit => {
+                const row = document.createElement('tr');
+                const date = new Date(visit.date);
+                const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                
+                row.innerHTML = `
+                    <td>${visit.name}</td>
+                    <td>${visit.company}</td>
+                    <td>${formattedDate}</td>
+                    <td>${getDestinationName(visit.destination)}</td>
+                    <td><span class="status status-scheduled">Agendada</span></td>
+                    <td>
+                        <button class="action-btn view-visit" data-id="${visit.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit-visit" data-id="${visit.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete delete-visit" data-id="${visit.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões
+            addVisitEventListeners();
+        }
+        
+        function renderVisitorsTable() {
+            const tbody = visitorsTableBody;
+            tbody.innerHTML = '';
+            
+            if (visitors.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Nenhum visitante cadastrado</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            visitors.forEach(visitor => {
+                const row = document.createElement('tr');
+                const lastVisit = visitor.lastVisit ? new Date(visitor.lastVisit).toLocaleDateString() : 'Nunca';
+                
+                row.innerHTML = `
+                    <td>${visitor.name}</td>
+                    <td>${visitor.document}</td>
+                    <td>${visitor.company}</td>
+                    <td>${lastVisit}</td>
+                    <td>${visitor.totalVisits || 0}</td>
+                    <td>
+                        <button class="action-btn edit-visitor" data-id="${visitor.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete delete-visitor" data-id="${visitor.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões
+            addVisitorEventListeners();
+        }
+        
+        function renderCompaniesTable() {
+            const tbody = companiesTableBody;
+            tbody.innerHTML = '';
+            
+            if (companies.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Nenhuma empresa cadastrada</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            companies.forEach(company => {
+                const row = document.createElement('tr');
+                const lastVisit = company.lastVisit ? new Date(company.lastVisit).toLocaleDateString() : 'Nunca';
+                
+                row.innerHTML = `
+                    <td>${company.name}</td>
+                    <td>${company.cnpj}</td>
+                    <td>${company.responsible || '-'}</td>
+                    <td>${company.totalVisits || 0}</td>
+                    <td>${lastVisit}</td>
+                    <td>
+                        <button class="action-btn edit-company" data-id="${company.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete delete-company" data-id="${company.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões
+            addCompanyEventListeners();
+        }
+        
+        function addVisitEventListeners() {
+            document.querySelectorAll('.view-visit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    openVisitModal('view', id);
+                });
+            });
+            
+            document.querySelectorAll('.edit-visit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    openVisitModal('edit', id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-visit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    const visit = visits.find(v => v.id == id);
+                    openDeleteModal('visit', id, visit.name);
+                });
+            });
+        }
+        
+        function addVisitorEventListeners() {
+            document.querySelectorAll('.edit-visitor').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    openVisitorModal('edit', id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-visitor').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    const visitor = visitors.find(v => v.id == id);
+                    openDeleteModal('visitor', id, visitor.name);
+                });
+            });
+        }
+        
+        function addCompanyEventListeners() {
+            document.querySelectorAll('.edit-company').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    openCompanyModal('edit', id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-company').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    const company = companies.find(c => c.id == id);
+                    openDeleteModal('company', id, company.name);
+                });
+            });
+        }
+        
+        // Funções para modais
         function openVisitModal(mode, id = null) {
+            const modal = document.getElementById('visitModal');
             const modalTitle = document.getElementById('modalTitle');
             const visitForm = document.getElementById('visitForm');
             const visitDetails = document.getElementById('visitDetails');
             const saveBtn = document.getElementById('saveBtn');
             const updateBtn = document.getElementById('updateBtn');
-            const statusActions = document.getElementById('statusActions');
-            const markInProgressBtn = document.getElementById('markInProgressBtn');
-            const markCompletedBtn = document.getElementById('markCompletedBtn');
             
-            // Resetar formulário
+            // Reset do formulário
             visitForm.reset();
-            currentVisitId = id;
             
             if (mode === 'new') {
                 modalTitle.textContent = 'Registrar Nova Visita';
@@ -1662,96 +2816,467 @@
                 visitDetails.style.display = 'none';
                 saveBtn.style.display = 'block';
                 updateBtn.style.display = 'none';
-                statusActions.style.display = 'none';
+                
+                // Preencher data e hora atual
+                const now = new Date();
+                // Ajustar para o formato datetime-local (removendo os segundos)
+                const formattedNow = now.toISOString().slice(0, 16);
+                document.getElementById('date').value = formattedNow;
+                
                 isViewMode = false;
-            } else if (mode === 'view' && id) {
-                const visit = visits.find(v => v.id === parseInt(id));
-                if (visit) {
-                    modalTitle.textContent = 'Detalhes da Visita';
-                    visitForm.style.display = 'none';
-                    visitDetails.style.display = 'block';
-                    saveBtn.style.display = 'none';
-                    updateBtn.style.display = 'none';
-                    
-                    // Mostrar/ocultar ações de status conforme o status atual
+                currentVisitId = null;
+            } else if (mode === 'view') {
+                const visit = visits.find(v => v.id == id);
+                if (!visit) return;
+                
+                modalTitle.textContent = 'Detalhes da Visita';
+                visitForm.style.display = 'none';
+                visitDetails.style.display = 'block';
+                saveBtn.style.display = 'none';
+                updateBtn.style.display = 'none';
+                
+                // Preencher detalhes
+                document.getElementById('detailName').textContent = visit.name;
+                document.getElementById('detailCompany').textContent = visit.company;
+                document.getElementById('detailDocument').textContent = visit.document;
+                document.getElementById('detailDestination').textContent = getDestinationName(visit.destination);
+                
+                const date = new Date(visit.date);
+                document.getElementById('detailDate').textContent = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                
+                let statusText = 'Agendada';
+                if (visit.status === 'in-progress') {
+                    statusText = 'Em Andamento';
+                } else if (visit.status === 'completed') {
+                    statusText = 'Concluída';
+                }
+                document.getElementById('detailStatus').textContent = statusText;
+                
+                document.getElementById('detailNotes').textContent = visit.notes || '-';
+                
+                // Mostrar/ocultar botões de status
+                const statusActions = document.getElementById('statusActions');
+                if (visit.status === 'scheduled') {
                     statusActions.style.display = 'flex';
-                    if (visit.status === 'scheduled') {
-                        markInProgressBtn.style.display = 'block';
-                        markCompletedBtn.style.display = 'block';
-                    } else if (visit.status === 'in-progress') {
-                        markInProgressBtn.style.display = 'none';
-                        markCompletedBtn.style.display = 'block';
-                    } else {
-                        statusActions.style.display = 'none';
-                    }
-                    
-                    // Preencher detalhes
-                    document.getElementById('detailName').textContent = visit.name;
-                    document.getElementById('detailCompany').textContent = visit.company;
-                    document.getElementById('detailDocument').textContent = visit.document;
-                    document.getElementById('detailDestination').textContent = getDestinationName(visit.destination);
-                    document.getElementById('detailDate').textContent = formatDateTime(visit.date);
-                    document.getElementById('detailNotes').textContent = visit.notes;
-                    
-                    // Atualizar status
-                    const statusElement = document.getElementById('detailStatus');
-                    statusElement.className = 'status';
-                    if (visit.status === 'scheduled') {
-                        statusElement.classList.add('status-scheduled');
-                        statusElement.textContent = 'Agendada';
-                    } else if (visit.status === 'in-progress') {
-                        statusElement.classList.add('status-in-progress');
-                        statusElement.textContent = 'Em Andamento';
-                    } else {
-                        statusElement.classList.add('status-completed');
-                        statusElement.textContent = 'Concluída';
-                    }
-                    
-                    isViewMode = true;
-                }
-            } else if (mode === 'edit' && id) {
-                const visit = visits.find(v => v.id === parseInt(id));
-                if (visit) {
-                    modalTitle.textContent = 'Editar Visita';
-                    visitForm.style.display = 'block';
-                    visitDetails.style.display = 'none';
-                    saveBtn.style.display = 'none';
-                    updateBtn.style.display = 'block';
+                } else {
                     statusActions.style.display = 'none';
-                    
-                    // Preencher formulário
-                    document.getElementById('visitId').value = visit.id;
-                    document.getElementById('visitorName').value = visit.name;
-                    document.getElementById('company').value = visit.company;
-                    document.getElementById('document').value = visit.document;
-                    document.getElementById('destination').value = visit.destination;
-                    document.getElementById('date').value = visit.date;
-                    document.getElementById('notes').value = visit.notes;
-                    
-                    isViewMode = false;
                 }
+                
+                isViewMode = true;
+                currentVisitId = id;
+            } else if (mode === 'edit') {
+                const visit = visits.find(v => v.id == id);
+                if (!visit) return;
+                
+                modalTitle.textContent = 'Editar Visita';
+                visitForm.style.display = 'block';
+                visitDetails.style.display = 'none';
+                saveBtn.style.display = 'none';
+                updateBtn.style.display = 'block';
+                
+                // Preencher formulário
+                document.getElementById('visitId').value = visit.id;
+                document.getElementById('visitorName').value = visit.name;
+                document.getElementById('company').value = visit.company;
+                document.getElementById('document').value = visit.document;
+                document.getElementById('destination').value = visit.destination;
+                document.getElementById('date').value = visit.date.slice(0, 16);
+                document.getElementById('notes').value = visit.notes || '';
+                
+                isViewMode = false;
+                currentVisitId = id;
             }
             
-            visitModal.classList.add('active');
+            modal.classList.add('active');
         }
         
         function closeVisitModal() {
             visitModal.classList.remove('active');
         }
         
-        function openDeleteModal(id) {
-            const visit = visits.find(v => v.id === parseInt(id));
-            if (visit) {
-                document.getElementById('deleteVisitName').textContent = visit.name;
-                currentVisitId = id;
-                deleteModal.classList.add('active');
+        function openVisitorModal(mode, id = null) {
+            const modal = document.getElementById('visitorModal');
+            const modalTitle = document.getElementById('visitorModalTitle');
+            
+            // Reset do formulário
+            document.getElementById('visitorForm').reset();
+            
+            if (mode === 'new') {
+                modalTitle.textContent = 'Novo Visitante';
+                currentVisitorId = null;
+            } else if (mode === 'edit') {
+                const visitor = visitors.find(v => v.id == id);
+                if (!visitor) return;
+                
+                modalTitle.textContent = 'Editar Visitante';
+                
+                // Preencher formulário
+                document.getElementById('visitorId').value = visitor.id;
+                document.getElementById('visitorFullName').value = visitor.name;
+                document.getElementById('visitorDocument').value = visitor.document;
+                document.getElementById('visitorCompany').value = visitor.company;
+                document.getElementById('visitorPhone').value = visitor.phone || '';
+                document.getElementById('visitorEmail').value = visitor.email || '';
+                
+                currentVisitorId = id;
             }
+            
+            modal.classList.add('active');
+        }
+        
+        function closeVisitorModal() {
+            visitorModal.classList.remove('active');
+        }
+        
+        function openCompanyModal(mode, id = null) {
+            const modal = document.getElementById('companyModal');
+            const modalTitle = document.getElementById('companyModalTitle');
+            
+            // Reset do formulário
+            document.getElementById('companyForm').reset();
+            
+            if (mode === 'new') {
+                modalTitle.textContent = 'Nova Empresa';
+                currentCompanyId = null;
+            } else if (mode === 'edit') {
+                const company = companies.find(c => c.id == id);
+                if (!company) return;
+                
+                modalTitle.textContent = 'Editar Empresa';
+                
+                // Preencher formulário
+                document.getElementById('companyId').value = company.id;
+                document.getElementById('companyNameInput').value = company.name;
+                document.getElementById('companyCnpj').value = company.cnpj;
+                document.getElementById('companyResponsible').value = company.responsible || '';
+                document.getElementById('companyPhone').value = company.phone || '';
+                document.getElementById('companyEmail').value = company.email || '';
+                
+                currentCompanyId = id;
+            }
+            
+            modal.classList.add('active');
+        }
+        
+        function closeCompanyModal() {
+            companyModal.classList.remove('active');
+        }
+        
+        function openDeleteModal(type, id, name) {
+            const modal = document.getElementById('deleteModal');
+            document.getElementById('deleteItemName').textContent = name;
+            
+            deleteType = type;
+            if (type === 'visit') {
+                currentVisitId = id;
+            } else if (type === 'visitor') {
+                currentVisitorId = id;
+            } else if (type === 'company') {
+                currentCompanyId = id;
+            }
+            
+            modal.classList.add('active');
         }
         
         function closeDeleteModal() {
             deleteModal.classList.remove('active');
         }
         
+        function confirmDelete() {
+            if (deleteType === 'visit') {
+                deleteVisit(currentVisitId);
+            } else if (deleteType === 'visitor') {
+                deleteVisitor(currentVisitorId);
+            } else if (deleteType === 'company') {
+                deleteCompany(currentCompanyId);
+            }
+            
+            closeDeleteModal();
+        }
+        
+        // Funções CRUD
+        function saveVisit() {
+            const name = document.getElementById('visitorName').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const document = document.getElementById('document').value.trim();
+            const destination = document.getElementById('destination').value;
+            const date = document.getElementById('date').value;
+            const notes = document.getElementById('notes').value.trim();
+            
+            if (!name || !company || !destination || !date) {
+                showToast('Preencha todos os campos obrigatórios', 'error');
+                return;
+            }
+            
+            const newVisit = {
+                id: Date.now(),
+                name,
+                company,
+                document,
+                destination,
+                date,
+                status: 'scheduled',
+                notes
+            };
+            
+            visits.push(newVisit);
+            saveAllData();
+            
+            updateCounters();
+            renderAllTables();
+            closeVisitModal();
+            
+            showToast('Visita registrada com sucesso!', 'success');
+        }
+        
+        function updateVisit() {
+            const id = document.getElementById('visitId').value;
+            const name = document.getElementById('visitorName').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const document = document.getElementById('document').value.trim();
+            const destination = document.getElementById('destination').value;
+            const date = document.getElementById('date').value;
+            const notes = document.getElementById('notes').value.trim();
+            
+            if (!name || !company || !destination || !date) {
+                showToast('Preencha todos os campos obrigatórios', 'error');
+                return;
+            }
+            
+            const visitIndex = visits.findIndex(v => v.id == id);
+            if (visitIndex === -1) return;
+            
+            visits[visitIndex] = {
+                ...visits[visitIndex],
+                name,
+                company,
+                document,
+                destination,
+                date,
+                notes
+            };
+            
+            saveAllData();
+            updateCounters();
+            renderAllTables();
+            closeVisitModal();
+            
+            showToast('Visita atualizada com sucesso!', 'success');
+        }
+        
+        // CORREÇÃO: Função para atualizar status da visita
+        function updateVisitStatus(status) {
+            const visitIndex = visits.findIndex(v => v.id == currentVisitId);
+            if (visitIndex === -1) return;
+            
+            visits[visitIndex].status = status;
+            saveAllData();
+            
+            updateCounters();
+            renderAllTables();
+            closeVisitModal();
+            
+            showToast(`Status da visita atualizado para ${status === 'in-progress' ? 'Em Andamento' : 'Concluída'}!`, 'success');
+        }
+        
+        function deleteVisit(id) {
+            visits = visits.filter(v => v.id != id);
+            saveAllData();
+            updateCounters();
+            renderAllTables();
+            
+            showToast('Visita excluída com sucesso!', 'success');
+        }
+        
+        function saveVisitor() {
+            const name = document.getElementById('visitorFullName').value.trim();
+            const document = document.getElementById('visitorDocument').value.trim();
+            const company = document.getElementById('visitorCompany').value.trim();
+            const phone = document.getElementById('visitorPhone').value.trim();
+            const email = document.getElementById('visitorEmail').value.trim();
+            
+            if (!name || !document || !company) {
+                showToast('Preencha todos os campos obrigatórios', 'error');
+                return;
+            }
+            
+            if (currentVisitorId) {
+                // Editar visitante existente
+                const visitorIndex = visitors.findIndex(v => v.id == currentVisitorId);
+                if (visitorIndex === -1) return;
+                
+                visitors[visitorIndex] = {
+                    ...visitors[visitorIndex],
+                    name,
+                    document,
+                    company,
+                    phone,
+                    email
+                };
+                
+                showToast('Visitante atualizado com sucesso!', 'success');
+            } else {
+                // Novo visitante
+                const newVisitor = {
+                    id: Date.now(),
+                    name,
+                    document,
+                    company,
+                    phone,
+                    email,
+                    lastVisit: null,
+                    totalVisits: 0
+                };
+                
+                visitors.push(newVisitor);
+                showToast('Visitante cadastrado com sucesso!', 'success');
+            }
+            
+            saveAllData();
+            renderVisitorsTable();
+            closeVisitorModal();
+            
+            // Atualizar badge
+            document.getElementById('visitorsBadge').textContent = visitors.length;
+        }
+        
+        function deleteVisitor(id) {
+            visitors = visitors.filter(v => v.id != id);
+            saveAllData();
+            renderVisitorsTable();
+            
+            // Atualizar badge
+            document.getElementById('visitorsBadge').textContent = visitors.length;
+            
+            showToast('Visitante excluído com sucesso!', 'success');
+        }
+        
+        function saveCompany() {
+            const name = document.getElementById('companyNameInput').value.trim();
+            const cnpj = document.getElementById('companyCnpj').value.trim();
+            const responsible = document.getElementById('companyResponsible').value.trim();
+            const phone = document.getElementById('companyPhone').value.trim();
+            const email = document.getElementById('companyEmail').value.trim();
+            
+            if (!name || !cnpj) {
+                showToast('Preencha todos os campos obrigatórios', 'error');
+                return;
+            }
+            
+            if (currentCompanyId) {
+                // Editar empresa existente
+                const companyIndex = companies.findIndex(c => c.id == currentCompanyId);
+                if (companyIndex === -1) return;
+                
+                companies[companyIndex] = {
+                    ...companies[companyIndex],
+                    name,
+                    cnpj,
+                    responsible,
+                    phone,
+                    email
+                };
+                
+                showToast('Empresa atualizada com sucesso!', 'success');
+            } else {
+                // Nova empresa
+                const newCompany = {
+                    id: Date.now(),
+                    name,
+                    cnpj,
+                    responsible,
+                    phone,
+                    email,
+                    totalVisits: 0,
+                    lastVisit: null
+                };
+                
+                companies.push(newCompany);
+                showToast('Empresa cadastrada com sucesso!', 'success');
+            }
+            
+            saveAllData();
+            renderCompaniesTable();
+            closeCompanyModal();
+            
+            // Atualizar badge
+            document.getElementById('companiesBadge').textContent = companies.length;
+        }
+        
+        function deleteCompany(id) {
+            companies = companies.filter(c => c.id != id);
+            saveAllData();
+            renderCompaniesTable();
+            
+            // Atualizar badge
+            document.getElementById('companiesBadge').textContent = companies.length;
+            
+            showToast('Empresa excluída com sucesso!', 'success');
+        }
+        
+        // Funções auxiliares
+        function getDestinationName(destination) {
+            const destinations = {
+                'rh': 'Recursos Humanos',
+                'ti': 'Tecnologia da Informação',
+                'financeiro': 'Financeiro',
+                'comercial': 'Comercial',
+                'diretoria': 'Diretoria',
+                'operacional': 'Operacional'
+                'outros': 'Outros'
+            };
+            
+            return destinations[destination] || destination;
+        }
+        
+        function updateCounters() {
+            const today = new Date().toDateString();
+            const todayVisits = visits.filter(v => new Date(v.date).toDateString() === today);
+            const pendingVisits = visits.filter(v => v.status === 'scheduled');
+            const completedVisits = visits.filter(v => v.status === 'completed');
+            
+            todayVisitsCount.textContent = todayVisits.length;
+            pendingVisitsCount.textContent = pendingVisits.length;
+            completedVisitsCount.textContent = completedVisits.length;
+        }
+        
+        function filterVisits() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
+            
+            let filteredVisits = visits;
+            
+            // Filtrar por status
+            if (statusFilter !== 'all') {
+                filteredVisits = filteredVisits.filter(v => v.status === statusFilter);
+            }
+            
+            // Filtrar por data
+            if (dateFilter) {
+                filteredVisits = filteredVisits.filter(v => {
+                    const visitDate = new Date(v.date).toDateString();
+                    const filterDate = new Date(dateFilter).toDateString();
+                    return visitDate === filterDate;
+                });
+            }
+            
+            // Filtrar por busca
+            if (searchFilter) {
+                filteredVisits = filteredVisits.filter(v => {
+                    return v.name.toLowerCase().includes(searchFilter) || 
+                           v.company.toLowerCase().includes(searchFilter);
+                });
+            }
+            
+            return filteredVisits;
+        }
+        
+        function applyFilters() {
+            renderVisitsTable();
+        }
+        
+        // Função para mostrar notificação
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toastMessage');
@@ -1767,348 +3292,6 @@
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
-        }
-        
-        function validateForm() {
-            const name = document.getElementById('visitorName').value;
-            const company = document.getElementById('company').value;
-            const destination = document.getElementById('destination').value;
-            const date = document.getElementById('date').value;
-            
-            if (!name || !company || !destination || !date) {
-                showToast('Preencha todos os campos obrigatórios!', 'error');
-                return false;
-            }
-            
-            return true;
-        }
-        
-        function applyFilters() {
-            renderVisitsTable();
-        }
-        
-        function renderAllTables() {
-            renderVisitsTable();
-            renderAllVisitsTable();
-            renderSchedulingTable();
-            renderVisitorsTable();
-            renderCompaniesTable();
-        }
-        
-        function renderVisitsTable() {
-            const statusFilter = document.getElementById('statusFilter').value;
-            const dateFilter = document.getElementById('dateFilter').value;
-            const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
-            
-            // Limpar tabela
-            visitsTableBody.innerHTML = '';
-            
-            // Filtrar visitas
-            const filteredVisits = visits.filter(visit => {
-                const statusMatch = statusFilter === 'all' || 
-                                 (statusFilter === 'scheduled' && visit.status === 'scheduled') ||
-                                 (statusFilter === 'in-progress' && visit.status === 'in-progress') ||
-                                 (statusFilter === 'completed' && visit.status === 'completed');
-                
-                const dateMatch = !dateFilter || visit.date.includes(dateFilter);
-                const searchMatch = !searchFilter || 
-                                  visit.name.toLowerCase().includes(searchFilter) || 
-                                  visit.company.toLowerCase().includes(searchFilter);
-                
-                return statusMatch && dateMatch && searchMatch;
-            });
-            
-            // Ordenar por data (mais recente primeiro)
-            filteredVisits.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            // Limitar a 5 visitas para o dashboard
-            const limitedVisits = filteredVisits.slice(0, 5);
-            
-            // Renderizar visitas
-            if (limitedVisits.length === 0) {
-                visitsTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
-                            <i class="fas fa-inbox" style="font-size: 40px; margin-bottom: 10px; display: block;"></i>
-                            <p>Nenhuma visita encontrada</p>
-                        </td>
-                    </tr>
-                `;
-            } else {
-                limitedVisits.forEach(visit => {
-                    const row = document.createElement('tr');
-                    
-                    // Determinar classe de status
-                    let statusClass = 'status-scheduled';
-                    let statusText = 'Agendada';
-                    
-                    if (visit.status === 'in-progress') {
-                        statusClass = 'status-in-progress';
-                        statusText = 'Em Andamento';
-                    } else if (visit.status === 'completed') {
-                        statusClass = 'status-completed';
-                        statusText = 'Concluída';
-                    }
-                    
-                    row.innerHTML = `
-                        <td>${visit.name}</td>
-                        <td>${visit.company}</td>
-                        <td>${formatDateTime(visit.date)}</td>
-                        <td>${getDestinationName(visit.destination)}</td>
-                        <td><span class="status ${statusClass}">${statusText}</span></td>
-                        <td>
-                            <button class="action-btn view-btn" data-id="${visit.id}"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn edit-btn" data-id="${visit.id}"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn delete delete-btn" data-id="${visit.id}"><i class="fas fa-trash"></i></button>
-                        </td>
-                    `;
-                    
-                    // Adicionar event listeners
-                    row.querySelector('.view-btn').addEventListener('click', () => {
-                        openVisitModal('view', visit.id);
-                    });
-                    
-                    row.querySelector('.edit-btn').addEventListener('click', () => {
-                        openVisitModal('edit', visit.id);
-                    });
-                    
-                    row.querySelector('.delete-btn').addEventListener('click', () => {
-                        openDeleteModal(visit.id);
-                    });
-                    
-                    visitsTableBody.appendChild(row);
-                });
-            }
-        }
-        
-        function renderAllVisitsTable() {
-            // Limpar tabela
-            allVisitsTableBody.innerHTML = '';
-            
-            // Ordenar por data (mais recente primeiro)
-            const sortedVisits = [...visits].sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            // Renderizar todas as visitas
-            if (sortedVisits.length === 0) {
-                allVisitsTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
-                            <i class="fas fa-inbox" style="font-size: 40px; margin-bottom: 10px; display: block;"></i>
-                            <p>Nenhuma visita encontrada</p>
-                        </td>
-                    </tr>
-                `;
-            } else {
-                sortedVisits.forEach(visit => {
-                    const row = document.createElement('tr');
-                    
-                    // Determinar classe de status
-                    let statusClass = 'status-scheduled';
-                    let statusText = 'Agendada';
-                    
-                    if (visit.status === 'in-progress') {
-                        statusClass = 'status-in-progress';
-                        statusText = 'Em Andamento';
-                    } else if (visit.status === 'completed') {
-                        statusClass = 'status-completed';
-                        statusText = 'Concluída';
-                    }
-                    
-                    row.innerHTML = `
-                        <td>${visit.name}</td>
-                        <td>${visit.company}</td>
-                        <td>${formatDateTime(visit.date)}</td>
-                        <td>${getDestinationName(visit.destination)}</td>
-                        <td><span class="status ${statusClass}">${statusText}</span></td>
-                        <td>
-                            <button class="action-btn view-btn" data-id="${visit.id}"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn edit-btn" data-id="${visit.id}"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn delete delete-btn" data-id="${visit.id}"><i class="fas fa-trash"></i></button>
-                        </td>
-                    `;
-                    
-                    // Adicionar event listeners
-                    row.querySelector('.view-btn').addEventListener('click', () => {
-                        openVisitModal('view', visit.id);
-                    });
-                    
-                    row.querySelector('.edit-btn').addEventListener('click', () => {
-                        openVisitModal('edit', visit.id);
-                    });
-                    
-                    row.querySelector('.delete-btn').addEventListener('click', () => {
-                        openDeleteModal(visit.id);
-                    });
-                    
-                    allVisitsTableBody.appendChild(row);
-                });
-            }
-        }
-        
-        function renderSchedulingTable() {
-            // Limpar tabela
-            schedulingTableBody.innerHTML = '';
-            
-            // Filtrar apenas agendamentos futuros
-            const today = new Date().toISOString().slice(0, 16);
-            const futureVisits = visits.filter(visit => visit.date >= today && visit.status === 'scheduled');
-            
-            // Ordenar por data (mais recente primeiro)
-            futureVisits.sort((a, b) => new Date(a.date) - new Date(b.date));
-            
-            // Renderizar agendamentos
-            if (futureVisits.length === 0) {
-                schedulingTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
-                            <i class="fas fa-calendar" style="font-size: 40px; margin-bottom: 10px; display: block;"></i>
-                            <p>Nenhum agendamento futuro</p>
-                        </td>
-                    </tr>
-                `;
-            } else {
-                futureVisits.forEach(visit => {
-                    const row = document.createElement('tr');
-                    
-                    row.innerHTML = `
-                        <td>${visit.name}</td>
-                        <td>${visit.company}</td>
-                        <td>${formatDateTime(visit.date)}</td>
-                        <td>${getDestinationName(visit.destination)}</td>
-                        <td><span class="status status-scheduled">Agendada</span></td>
-                        <td>
-                            <button class="action-btn view-btn" data-id="${visit.id}"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn edit-btn" data-id="${visit.id}"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn delete delete-btn" data-id="${visit.id}"><i class="fas fa-trash"></i></button>
-                        </td>
-                    `;
-                    
-                    // Adicionar event listeners
-                    row.querySelector('.view-btn').addEventListener('click', () => {
-                        openVisitModal('view', visit.id);
-                    });
-                    
-                    row.querySelector('.edit-btn').addEventListener('click', () => {
-                        openVisitModal('edit', visit.id);
-                    });
-                    
-                    row.querySelector('.delete-btn').addEventListener('click', () => {
-                        openDeleteModal(visit.id);
-                    });
-                    
-                    schedulingTableBody.appendChild(row);
-                });
-            }
-        }
-        
-        function renderVisitorsTable() {
-            // Limpar tabela
-            visitorsTableBody.innerHTML = '';
-            
-            // Renderizar visitantes
-            if (visitors.length === 0) {
-                visitorsTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
-                            <i class="fas fa-users" style="font-size: 40px; margin-bottom: 10px; display: block;"></i>
-                            <p>Nenhum visitante cadastrado</p>
-                        </td>
-                    </tr>
-                `;
-            } else {
-                visitors.forEach(visitor => {
-                    const row = document.createElement('tr');
-                    
-                    row.innerHTML = `
-                        <td>${visitor.name}</td>
-                        <td>${visitor.document}</td>
-                        <td>${visitor.company}</td>
-                        <td>${visitor.lastVisit ? formatDateTime(visitor.lastVisit) : 'N/A'}</td>
-                        <td>${visitor.totalVisits}</td>
-                        <td>
-                            <button class="action-btn view-btn" data-id="${visitor.id}"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn edit-btn" data-id="${visitor.id}"><i class="fas fa-edit"></i></button>
-                        </td>
-                    `;
-                    
-                    visitorsTableBody.appendChild(row);
-                });
-            }
-        }
-        
-        function renderCompaniesTable() {
-            // Limpar tabela
-            companiesTableBody.innerHTML = '';
-            
-            // Renderizar empresas
-            if (companies.length === 0) {
-                companiesTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-light);">
-                            <i class="fas fa-building" style="font-size: 40px; margin-bottom: 10px; display: block;"></i>
-                            <p>Nenhuma empresa cadastrada</p>
-                        </td>
-                    </tr>
-                `;
-            } else {
-                companies.forEach(company => {
-                    const row = document.createElement('tr');
-                    
-                    row.innerHTML = `
-                        <td>${company.name}</td>
-                        <td>${company.cnpj}</td>
-                        <td>${company.responsible}</td>
-                        <td>${company.totalVisits}</td>
-                        <td>${company.lastVisit ? formatDateTime(company.lastVisit) : 'N/A'}</td>
-                        <td>
-                            <button class="action-btn view-btn" data-id="${company.id}"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn edit-btn" data-id="${company.id}"><i class="fas fa-edit"></i></button>
-                        </td>
-                    `;
-                    
-                    companiesTableBody.appendChild(row);
-                });
-            }
-        }
-        
-        function updateCounters() {
-            const today = new Date().toISOString().split('T')[0];
-            
-            // Contar visitas de hoje
-            const todayVisits = visits.filter(visit => visit.date.includes(today)).length;
-            
-            // Contar visitas pendentes
-            const pendingVisits = visits.filter(visit => visit.status === 'scheduled').length;
-            
-            // Contar visitas concluídas
-            const completedVisits = visits.filter(visit => visit.status === 'completed').length;
-            
-            // Atualizar contadores
-            todayVisitsCount.textContent = todayVisits;
-            pendingVisitsCount.textContent = pendingVisits;
-            completedVisitsCount.textContent = completedVisits;
-            
-            // Atualizar badge de visitantes
-            document.querySelector('.nav-item[data-page="visitors"] .badge').textContent = visitors.length;
-        }
-        
-        function getDestinationName(destination) {
-            const destinations = {
-                'rh': 'Recursos Humanos',
-                'ti': 'Tecnologia da Informação',
-                'financeiro': 'Financeiro',
-                'comercial': 'Comercial',
-                'diretoria': 'Diretoria',
-                'operacional': 'Operacional'
-                'Outros': 'Outros'
-            };
-            
-            return destinations[destination] || destination;
-        }
-        
-        function formatDateTime(dateTimeString) {
-            const date = new Date(dateTimeString);
-            return `${date.toLocaleDateString('pt-BR')} ${date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
         }
     </script>
 </body>
