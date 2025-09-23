@@ -1,0 +1,3820 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisitControl - Gestão de Visitas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚪</text></svg>">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --primary-light: #e6eeff;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --success-light: #e8f5e9;
+            --warning: #ffc107;
+            --warning-light: #fff8e1;
+            --danger: #dc3545;
+            --danger-light: #ffebee;
+            --dark: #343a40;
+            --light: #f8f9fa;
+            --text: #2d3748;
+            --text-light: #718096;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        /* Tela de Login */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%234361ee" opacity="0.05"/><path d="M0 0L100 100" stroke="%234361ee" stroke-width="1" opacity="0.1"/><path d="M100 0L0 100" stroke="%234361ee" stroke-width="1" opacity="0.1"/></svg>');
+            background-size: cover;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+        }
+        
+        .login-logo {
+            margin-bottom: 30px;
+        }
+        
+        .login-logo-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            margin: 0 auto 15px;
+            box-shadow: 0 6px 12px rgba(67, 97, 238, 0.3);
+        }
+        
+        .login-logo-text {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+        
+        .login-form {
+            text-align: left;
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .login-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 14px;
+        }
+        
+        .login-form .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .login-form .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        }
+        
+        .login-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(67, 97, 238, 0.4);
+        }
+        
+        .login-btn:active {
+            transform: translateY(0);
+        }
+        
+        .login-footer {
+            margin-top: 25px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        .admin-link {
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .admin-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Modal de Configuração de Chave */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal-backdrop.active {
+            display: flex;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow-lg);
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--light);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .modal-body {
+            padding: 25px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            background: var(--light);
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+        
+        /* Aplicação principal (inicialmente oculta) */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 20px;
+            padding: 20px;
+            display: none;
+        }
+        
+        .app-container.active {
+            display: grid;
+        }
+        
+        @media (max-width: 900px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100vh;
+                z-index: 1000;
+                width: 260px;
+                background: white;
+                box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            }
+            
+            .sidebar.active {
+                display: block;
+            }
+            
+            .mobile-menu-btn {
+                display: block !important;
+            }
+            
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+                backdrop-filter: blur(4px);
+            }
+            
+            .overlay.active {
+                display: block;
+            }
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+        
+        .mobile-menu-btn:hover {
+            background: var(--primary-light);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            border: 1px solid var(--border);
+        }
+        
+        .nav-item {
+            padding: 14px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-light);
+            border-left: 4px solid transparent;
+            margin: 5px 0;
+            position: relative;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+        
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+        
+        .nav-item span {
+            font-weight: 500;
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .visits-icon {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        
+        .pending-icon {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+        
+        .completed-icon {
+            background: var(--success-light);
+            color: var(--success);
+        }
+        
+        .stat-info h3 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .stat-info p {
+            color: var(--text-light);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* Visits Section */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+        
+        .btn {
+            padding: 10px 18px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+        
+        .btn-outline:hover {
+            background: var(--light);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .filter-select {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            background: white;
+            transition: var(--transition);
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 14px;
+            background: var(--light);
+            position: sticky;
+            top: 0;
+        }
+        
+        tbody tr {
+            transition: var(--transition);
+        }
+        
+        tbody tr:hover {
+            background: var(--primary-light);
+        }
+        
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status-scheduled {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        
+        .status-in-progress {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+        
+        .status-completed {
+            background: var(--success-light);
+            color: var(--success);
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            transition: var(--transition);
+            padding: 8px;
+            border-radius: 6px;
+        }
+        
+        .action-btn:hover {
+            color: var(--primary-dark);
+            background: var(--primary-light);
+        }
+        
+        .action-btn.delete {
+            color: var(--danger);
+        }
+        
+        .action-btn.delete:hover {
+            color: #b91c1c;
+            background: var(--danger-light);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+            font-size: 14px;
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .footer-brand {
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        /* Modal */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 14px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 1001;
+            border-left: 4px solid var(--success);
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast.success {
+            border-left-color: var(--success);
+        }
+        
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+        
+        .toast i {
+            font-size: 20px;
+        }
+        
+        .toast.success i {
+            color: var(--success);
+        }
+        
+        .toast.error i {
+            color: var(--danger);
+        }
+        
+        /* Visit Details */
+        .visit-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .detail-group {
+            margin-bottom: 15px;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-size: 16px;
+            color: var(--text);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+        }
+        
+        .empty-state i {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: var(--border);
+        }
+        
+        /* Badge */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: var(--primary);
+            color: white;
+            margin-left: 5px;
+        }
+        
+        /* Page Content */
+        .page-content {
+            display: none;
+        }
+        
+        .page-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Status Actions */
+        .status-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .status-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .status-btn.progress {
+            background: var(--warning);
+            color: white;
+            box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+        }
+        
+        .status-btn.progress:hover {
+            background: #e69a09;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 193, 7, 0.4);
+        }
+        
+        .status-btn.complete {
+            background: var(--success);
+            color: white;
+            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+        }
+        
+        .status-btn.complete:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(40, 167, 69, 0.4);
+        }
+        
+        .status-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        /* Data Management */
+        .data-management {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        /* About Section */
+        .about-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--light);
+            border-radius: var(--radius);
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        .developer-name {
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .settings-group {
+            margin-bottom: 25px;
+        }
+        
+        .settings-group h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .help-section {
+            margin-bottom: 25px;
+        }
+        
+        .help-section h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .help-content {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .contact-item i {
+            color: var(--primary);
+            width: 20px;
+        }
+
+        /* Checkbox */
+        .checkbox-container {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 25px;
+            width: 25px;
+            background-color: #eee;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .checkbox-container:hover input ~ .checkmark {
+            background-color: #ddd;
+        }
+
+        .checkbox-container input:checked ~ .checkmark {
+            background-color: var(--primary);
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .checkbox-container .checkmark:after {
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+        
+        /* QR Code Modal */
+        .qrcode-container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .qrcode-image {
+            margin: 20px auto;
+            padding: 10px;
+            background: white;
+            border-radius: 12px;
+            display: inline-block;
+            min-height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+        }
+
+        .qrcode-link {
+            display: block;
+            margin: 15px 0;
+            padding: 12px;
+            background: var(--light);
+            border-radius: 10px;
+            word-break: break-all;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--border);
+        }
+
+        .qrcode-link:hover {
+            background: var(--primary-light);
+        }
+
+        .qrcode-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-qrcode {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-qrcode:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Booking Page */
+        .booking-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+        }
+        
+        .booking-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .booking-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+        }
+        
+        .booking-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .booking-logo {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            margin: 0 auto 15px;
+            box-shadow: 0 6px 12px rgba(67, 97, 238, 0.3);
+        }
+        
+        .booking-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .booking-subtitle {
+            color: var(--text-light);
+        }
+        
+        /* Token Section */
+        .token-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--light);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+        
+        .token-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .token-value {
+            flex: 1;
+            padding: 12px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-family: monospace;
+            word-break: break-all;
+            font-size: 14px;
+        }
+        
+        .token-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        /* Tela de Carregamento */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        .loading-text {
+            font-size: 16px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Validação de formulário */
+        .error-message {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-control.error {
+            border-color: var(--danger);
+        }
+
+        /* Botões com gradiente e efeitos melhorados */
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-gradient:hover::before {
+            left: 100%;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #218838 100%);
+            color: white;
+            border: none;
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning) 0%, #e0a800 100%);
+            color: white;
+            border: none;
+        }
+        
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #e0a800 0%, #d39e00 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 193, 7, 0.4);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger) 0%, #c82333 100%);
+            color: white;
+            border: none;
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(220, 53, 69, 0.4);
+        }
+        
+        /* Melhorias nos cards */
+        .card-header {
+            padding: 20px 25px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .card-subtitle {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        /* Melhorias na tabela */
+        .table-hover tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+            transform: translateX(5px);
+            transition: all 0.2s ease;
+        }
+        
+        /* Efeito de destaque nos badges */
+        .badge-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(67, 97, 238, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Carregamento -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Carregando sistema...</div>
+    </div>
+
+    <!-- Tela de Login -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-card">
+            <div class="login-logo">
+                <div class="login-logo-icon">
+                    <i class="fas fa-door-open"></i>
+                </div>
+                <div class="login-logo-text">VisitControl</div>
+            </div>
+            
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="accessKey">Chave de Acesso</label>
+                    <input type="password" id="accessKey" class="form-control" placeholder="Digite sua chave de acesso">
+                    <div class="error-message" id="accessKeyError"></div>
+                </div>
+                
+                <button class="login-btn btn-gradient" id="loginBtn">Acessar Sistema</button>
+            </div>
+            
+            <div class="login-footer">
+                <p>É administrador? <span class="admin-link" id="adminLink">Configurar chave de acesso</span></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Configuração de Chave de Acesso -->
+    <div class="modal-backdrop" id="adminModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Configuração de Chave de Acesso</h3>
+                <button class="action-btn" id="closeAdminModalBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="newAccessKey">Nova Chave de Acesso</label>
+                    <input type="password" id="newAccessKey" class="form-control" placeholder="Digite a nova chave">
+                    <div class="error-message" id="newAccessKeyError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmAccessKey">Confirmar Chave</label>
+                    <input type="password" id="confirmAccessKey" class="form-control" placeholder="Confirme a nova chave">
+                    <div class="error-message" id="confirmAccessKeyError"></div>
+                </div>
+                <p class="login-footer">A chave de acesso é necessária para entrar no sistema. Guarde-a em local seguro.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelAdminBtn">Cancelar</button>
+                <button class="btn btn-gradient" id="saveAccessKeyBtn">Salvar Chave</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Overlay para menu mobile -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- Aplicação Principal (inicialmente oculta) -->
+    <div class="app-container" id="appContainer">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="nav-item active" data-page="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item" data-page="visits">
+                <i class="fas fa-list"></i>
+                <span>Visitas</span>
+            </div>
+            <div class="nav-item" data-page="scheduling">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Agendamentos</span>
+            </div>
+            <div class="nav-item" data-page="visitors">
+                <i class="fas fa-users"></i>
+                <span>Visitantes</span>
+                <span class="badge badge-pulse" id="visitorsBadge">0</span>
+            </div>
+            <div class="nav-item" data-page="companies">
+                <i class="fas fa-building"></i>
+                <span>Empresas</span>
+                <span class="badge badge-pulse" id="companiesBadge">0</span>
+            </div>
+            <div class="nav-item" data-page="settings">
+                <i class="fas fa-cog"></i>
+                <span>Configurações</span>
+            </div>
+            <div class="nav-item" data-page="help">
+                <i class="fas fa-question-circle"></i>
+                <span>Ajuda</span>
+            </div>
+            <div class="nav-item" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sair</span>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="logo">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="logo-icon">
+                        <i class="fas fa-door-open"></i>
+                    </div>
+                    <div class="logo-text">VisitControl</div>
+                </div>
+                <div class="user-menu">
+                    <!-- Botão de QR Code adicionado aqui -->
+                    <button class="btn btn-gradient" id="qrcodeBtn" style="margin-right: 10px;">
+                        <i class="fas fa-qrcode"></i>
+                        QR Code Agendamento
+                    </button>
+                    <div class="user-avatar" id="userMenuBtn">AG</div>
+                </div>
+            </header>
+            
+            <!-- Dashboard Page -->
+            <div class="page-content active" id="dashboard-page">
+                <!-- Dashboard Stats -->
+                <div class="dashboard">
+                    <div class="card stat-card" id="todayVisitsCard">
+                        <div class="stat-icon visits-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="todayVisitsCount">0</h3>
+                            <p>Visitas Hoje</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card stat-card" id="pendingVisitsCard">
+                        <div class="stat-icon pending-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="pendingVisitsCount">0</h3>
+                            <p>Pendentes</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card stat-card" id="completedVisitsCard">
+                        <div class="stat-icon completed-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="completedVisitsCount">0</h3>
+                            <p>Concluídas</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="statusFilter">Status:</label>
+                        <select id="statusFilter" class="filter-select">
+                            <option value="all">Todos</option>
+                            <option value="scheduled">Agendadas</option>
+                            <option value="in-progress">Em Andamento</option>
+                            <option value="completed">Concluídas</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateFilter">Data:</label>
+                        <input type="date" id="dateFilter" class="filter-select">
+                    </div>
+                    <div class="filter-group">
+                        <label for="searchFilter">Buscar:</label>
+                        <input type="text" id="searchFilter" class="filter-select" placeholder="Nome ou empresa...">
+                    </div>
+                    <button class="btn btn-outline" id="clearFiltersBtn">
+                        <i class="fas fa-times"></i>
+                        Limpar Filtros
+                    </button>
+                </div>
+                
+                <!-- Visits Section -->
+                <div class="card">
+                    <div class="section-header">
+                        <h2 class="section-title">Visitas Recentes</h2>
+                        <button class="btn btn-gradient" id="newVisitBtn">
+                            <i class="fas fa-plus"></i>
+                            Nova Visita
+                        </button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Visitante</th>
+                                    <th>Empresa</th>
+                                    <th>Data/Hora</th>
+                                    <th>Destino</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="visitsTableBody">
+                                <!-- As visitas serão carregadas aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Data Management -->
+                    <div class="data-management">
+                        <button class="btn btn-danger" id="clearDataBtn">
+                            <i class="fas fa-trash"></i>
+                            Limpar Todos os Dados
+                        </button>
+                        <button class="btn btn-warning" id="addSampleDataBtn">
+                            <i class="fas fa-plus-circle"></i>
+                            Adicionar Dados de Exemplo
+                        </button>
+                    </div>
+
+                    <!-- About Section -->
+                    <div class="about-section">
+                        <p>Sistema desenvolvido por <span class="developer-name">Aldemir Garbino</span></p>
+                        <p>VisitControl - Solução completa para gestão de visitas</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Visits Page -->
+            <div class="page-content" id="visits-page">
+                <div class="card">
+                    <div class="section-header">
+                        <h2 class="section-title">Todas as Visitas</h2>
+                        <button class="btn btn-gradient" id="newVisitBtn2">
+                            <i class="fas fa-plus"></i>
+                            Nova Visita
+                        </button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Visitante</th>
+                                    <th>Empresa</th>
+                                    <th>Data/Hora</th>
+                                    <th>Destino</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allVisitsTableBody">
+                                <!-- Todas as visitas serão carregadas aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scheduling Page -->
+            <div class="page-content" id="scheduling-page">
+                <div class="card">
+                    <h2 class="section-title">Agendamentos Futuros</h2>
+                    <p>Esta página gerencia os agendamentos futuros de visitas.</p>
+                    
+                    <div class="table-container">
+                        <table class="table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Visitante</th>
+                                    <th>Empresa</th>
+                                    <th>Data/Hora</th>
+                                    <th>Destino</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schedulingTableBody">
+                                <!-- Agendamentos serão carregados aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Visitors Page -->
+            <div class="page-content" id="visitors-page">
+                <div class="card">
+                    <div class="section-header">
+                        <h2 class="section-title">Visitantes Cadastrados</h2>
+                        <button class="btn btn-gradient" id="newVisitorBtn">
+                            <i class="fas fa-plus"></i>
+                            Novo Visitante
+                        </button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Documento</th>
+                                    <th>Empresa</th>
+                                    <th>Última Visita</th>
+                                    <th>Total de Visitas</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="visitorsTableBody">
+                                <!-- Visitantes serão carregados aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Companies Page -->
+            <div class="page-content" id="companies-page">
+                <div class="card">
+                    <div class="section-header">
+                        <h2 class="section-title">Empresas Cadastradas</h2>
+                        <button class="btn btn-gradient" id="newCompanyBtn">
+                            <i class="fas fa-plus"></i>
+                            Nova Empresa
+                        </button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>CNPJ</th>
+                                    <th>Responsável</th>
+                                    <th>Total de Visitas</th>
+                                    <th>Última Visita</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="companiesTableBody">
+                                <!-- Empresas serão carregadas aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Page -->
+            <div class="page-content" id="settings-page">
+                <div class="card">
+                    <h2 class="section-title">Configurações do Sistema</h2>
+                    
+                    <div class="settings-group">
+                        <h3>Preferências Gerais</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="companyName">Nome da Empresa</label>
+                                <input type="text" id="companyName" class="form-control" placeholder="Digite o nome da sua empresa">
+                            </div>
+                            <div class="form-group">
+                                <label for="companyAddress">Endereço</label>
+                                <input type="text" id="companyAddress" class="form-control" placeholder="Digite o endereço">
+                            </div>
+                            <div class="form-group">
+                                <label for="adminEmail">E-mail do Administrador</label>
+                                <input type="email" id="adminEmail" class="form-control" placeholder="admin@exemplo.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="maxVisits">Máximo de Visitas Diárias</label>
+                                <input type="number" id="maxVisits" class="form-control" placeholder="Ex: 50" min="1">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h3>Configurações de Notificação</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                    <span class="checkmark"></span>
+                                    Notificações por E-mail
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="browserNotifications" checked>
+                                    <span class="checkmark"></span>
+                                    Notificações do Navegador
+                                </label>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="notificationTime">Horário para Notificações Diárias</label>
+                                <input type="time" id="notificationTime" class="form-control" value="08:00">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h3>Gerenciamento de Tokens</h3>
+                        <div class="token-section">
+                            <p>Gere tokens de acesso para usuários do sistema:</p>
+                            <div class="token-display">
+                                <span class="token-value" id="userTokenDisplay">Nenhum token gerado</span>
+                                <button class="btn btn-outline" id="copyTokenBtn" disabled>
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                            <div class="token-actions">
+                                <button class="btn btn-gradient" id="generateTokenBtn">
+                                    <i class="fas fa-key"></i>
+                                    Gerar Novo Token
+                                </button>
+                                <button class="btn btn-outline" id="revokeTokenBtn" disabled>
+                                    <i class="fas fa-ban"></i>
+                                    Revogar Token
+                                </button>
+                            </div>
+                            <div class="error-message" id="tokenError"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h3>Backup de Dados</h3>
+                        <div class="data-management">
+                            <button class="btn btn-success" id="exportDataBtn">
+                                <i class="fas fa-download"></i>
+                                Exportar Dados
+                            </button>
+                            <button class="btn btn-warning" id="importDataBtn">
+                                <i class="fas fa-upload"></i>
+                                Importar Dados
+                            </button>
+                            <button class="btn btn-danger" id="resetSettingsBtn">
+                                <i class="fas fa-undo"></i>
+                                Restaurar Padrões
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <button class="btn btn-gradient" id="saveSettingsBtn">
+                            <i class="fas fa-save"></i>
+                            Salvar Configurações
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Help Page -->
+            <div class="page-content" id="help-page">
+                <div class="card">
+                    <h2 class="section-title">Ajuda e Suporte</h2>
+                    
+                    <div class="help-section">
+                        <h3>Como Usar o Sistema</h3>
+                        <div class="help-content">
+                            <p>O <strong>VisitControl</strong> é um sistema completo para gestão de visitas. Abaixo estão os principais recursos:</p>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li><strong>Dashboard:</strong> Visualize estatísticas e visitas recentes</li>
+                                <li><strong>Visitas:</strong> Gerencie todas as visitas registradas</li>
+                                <li><strong>Agendamentos:</strong> Visualize e gerencie visitas futuras</li>
+                                <li><strong>Visitantes:</strong> Mantenha um cadastro de visitantes frequentes</li>
+                                <li><strong>Empresas:</strong> Cadastre empresas visitantes</li>
+                                <li><strong>Configurações:</strong> Personalize o sistema conforme suas necessidades</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3>Perguntas Frequentes</h3>
+                        <div class="help-content">
+                            <p><strong>Como adicionar uma nova visita?</strong></p>
+                            <p>Clique no botão "Nova Visita" no Dashboard или na página de Visitas.</p>
+                            
+                            <p><strong>Como alterar o status de uma visita?</strong></p>
+                            <p>Clique no ícone de visualização (olho) na lista de visitas и use os botões para alterar o status.</p>
+                            
+                            <p><strong>Os dados são salvos automaticamente?</strong></p>
+                            <p>Sim, todos os dados são salvos automaticamente no seu navegador.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3>Suporte Técnico</h3>
+                        <div class="help-content">
+                            <p>Para suporte técnico, entre em contato conosco:</p>
+                            <div class="contact-info">
+                                <div class="contact-item">
+                                    <i class="fas fa-user"></i>
+                                    <span><strong>Aldemir Garbino</strong></span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>contato@visitcontrol.com</span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-phone"></i>
+                                    <span>(11) 99999-9999</span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-globe"></i>
+                                    <span>www.visitcontrol.com</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Página de Agendamento via QR Code (inicialmente oculta) -->
+    <div class="booking-container" id="bookingContainer" style="display: none;">
+        <div class="booking-card">
+            <div class="booking-header">
+                <div class="booking-logo">
+                    <i class="fas fa-door-open"></i>
+                </div>
+                <h2 class="booking-title">Agendamento de Visita</h2>
+                <p class="booking-subtitle">Preencha os dados para agendar sua visita</p>
+            </div>
+            
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label for="bookingName">Nome Completo</label>
+                    <input type="text" id="bookingName" class="form-control" placeholder="Digite seu nome completo" required>
+                    <div class="error-message" id="bookingNameError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="bookingCompany">Empresa</label>
+                    <input type="text" id="bookingCompany" class="form-control" placeholder="Nome da empresa" required>
+                    <div class="error-message" id="bookingCompanyError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="bookingDocument">Documento (CPF ou RG)</label>
+                    <input type="text" id="bookingDocument" class="form-control" placeholder="Digite seu documento">
+                    <div class="error-message" id="bookingDocumentError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="bookingDestination">Destino</label>
+                    <select id="bookingDestination" class="form-control" required>
+                        <option value="">Selecione um departamento</option>
+                        <option value="rh">Recursos Humanos</option>
+                        <option value="ti">Tecnologia da Informação</option>
+                        <option value="financeiro">Financeiro</option>
+                        <option value="comercial">Comercial</option>
+                        <option value="diretoria">Diretoria</option>
+                        <option value="operacional">Operacional</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                    <div class="error-message" id="bookingDestinationError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="bookingDate">Data e Hora</label>
+                    <input type="datetime-local" id="bookingDate" class="form-control" required>
+                    <div class="error-message" id="bookingDateError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="bookingNotes">Observações</label>
+                    <textarea id="bookingNotes" class="form-control" rows="3" placeholder="Informações adicionais..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-gradient" style="width: 100%;">
+                    <i class="fas fa-calendar-check"></i>
+                    Agendar Visita
+                </button>
+            </form>
+            
+            <div class="login-footer" style="text-align: center; margin-top: 20px;">
+                <p><a href="#" id="backToSystem">Voltar para o sistema</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>VisitControl - Sistema de Gestão de Visitas</p>
+        <p>Desenvolvido por <span class="footer-brand">Aldemir Garbino</span> &copy; 2023. Todos os direitos reservados.</p>
+    </footer>
+    
+    <!-- Modals -->
+    <div class="modal-backdrop" id="visitModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Registrar Nova Visita</h3>
+                <button class="action-btn" id="closeModalBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="visitForm">
+                    <input type="hidden" id="visitId">
+                    <div class="form-group">
+                        <label for="visitorName">Nome do Visitante</label>
+                        <input type="text" id="visitorName" class="form-control" placeholder="Digite o nome completo" required>
+                        <div class="error-message" id="visitorNameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="company">Empresa</label>
+                        <input type="text" id="company" class="form-control" placeholder="Nome da empresa" required>
+                        <div class="error-message" id="companyError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="document">Documento</label>
+                        <input type="text" id="document" class="form-control" placeholder="CPF ou RG">
+                        <div class="error-message" id="documentError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">Destino</label>
+                        <select id="destination" class="form-control" required>
+                            <option value="">Selecione um departamento</option>
+                            <option value="rh">Recursos Humanos</option>
+                            <option value="ti">Tecnologia da Informação</option>
+                            <option value="financeiro">Financeiro</option>
+                            <option value="comercial">Comercial</option>
+                            <option value="diretoria">Diretoria</option>
+                            <option value="operacional">Operacional</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                        <div class="error-message" id="destinationError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Data e Hora</label>
+                        <input type="datetime-local" id="date" class="form-control" required>
+                        <div class="error-message" id="dateError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Observações</label>
+                        <textarea id="notes" class="form-control" rows="3" placeholder="Informações adicionais..."></textarea>
+                    </div>
+                </form>
+                
+                <!-- Visit Details (hidden by default) -->
+                <div id="visitDetails" style="display: none;">
+                    <div class="visit-details">
+                        <div class="detail-group">
+                            <div class="detail-label">Visitante</div>
+                            <div class="detail-value" id="detailName">-</div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Empresa</div>
+                            <div class="detail-value" id="detailCompany">-</div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Documento</div>
+                            <div class="detail-value" id="detailDocument">-</div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Destino</div>
+                            <div class="detail-value" id="detailDestination">-</div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Data e Hora</div>
+                            <div class="detail-value" id="detailDate">-</div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Status</div>
+                            <div class="detail-value"><span class="status status-scheduled" id="detailStatus">-</span></div>
+                        </div>
+                        <div class="detail-group">
+                            <div class="detail-label">Observações</div>
+                            <div class="detail-value" id="detailNotes">-</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Status Actions -->
+                    <div class="status-actions" id="statusActions">
+                        <button class="status-btn progress" id="markInProgressBtn">Marcar como Em Andamento</button>
+                        <button class="status-btn complete" id="markCompletedBtn" disabled>Marcar como Concluída</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelBtn">Cancelar</button>
+                <button class="btn btn-gradient" id="saveBtn" style="display: none;">Salvar Visita</button>
+                <button class="btn btn-gradient" id="updateBtn" style="display: none;">Atualizar Visita</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Visitor Modal -->
+    <div class="modal-backdrop" id="visitorModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="visitorModalTitle">Novo Visitante</h3>
+                <button class="action-btn close-visitor-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="visitorForm">
+                    <input type="hidden" id="visitorId">
+                    <div class="form-group">
+                        <label for="visitorFullName">Nome Completo</label>
+                        <input type="text" id="visitorFullName" class="form-control" placeholder="Digite o nome completo" required>
+                        <div class="error-message" id="visitorFullNameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="visitorDocument">Documento</label>
+                        <input type="text" id="visitorDocument" class="form-control" placeholder="CPF ou RG" required>
+                        <div class="error-message" id="visitorDocumentError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="visitorCompany">Empresa</label>
+                        <input type="text" id="visitorCompany" class="form-control" placeholder="Nome da empresa" required>
+                        <div class="error-message" id="visitorCompanyError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="visitorPhone">Telefone</label>
+                        <input type="tel" id="visitorPhone" class="form-control" placeholder="(11) 99999-9999">
+                        <div class="error-message" id="visitorPhoneError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="visitorEmail">E-mail</label>
+                        <input type="email" id="visitorEmail" class="form-control" placeholder="email@exemplo.com">
+                        <div class="error-message" id="visitorEmailError"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline close-visitor-modal">Cancelar</button>
+                <button class="btn btn-gradient" id="saveVisitorBtn">Salvar Visitante</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Company Modal -->
+    <div class="modal-backdrop" id="companyModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="companyModalTitle">Nova Empresa</h3>
+                <button class="action-btn close-company-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="companyForm">
+                    <input type="hidden" id="companyId">
+                    <div class="form-group">
+                        <label for="companyNameInput">Nome da Empresa</label>
+                        <input type="text" id="companyNameInput" class="form-control" placeholder="Digite o nome da empresa" required>
+                        <div class="error-message" id="companyNameInputError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="companyCnpj">CNPJ</label>
+                        <input type="text" id="companyCnpj" class="form-control" placeholder="00.000.000/0000-00" required>
+                        <div class="error-message" id="companyCnpjError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="companyResponsible">Responsável</label>
+                        <input type="text" id="companyResponsible" class="form-control" placeholder="Nome do responsável">
+                    </div>
+                    <div class="form-group">
+                        <label for="companyPhone">Telefone</label>
+                        <input type="tel" id="companyPhone" class="form-control" placeholder="(11) 99999-9999">
+                    </div>
+                    <div class="form-group">
+                        <label for="companyEmail">E-mail</label>
+                        <input type="email" id="companyEmail" class="form-control" placeholder="empresa@exemplo.com">
+                        <div class="error-message" id="companyEmailError"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline close-company-modal">Cancelar</button>
+                <button class="btn btn-gradient" id="saveCompanyBtn">Salvar Empresa</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-backdrop" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirmar Exclusão</h3>
+                <button class="action-btn close-delete-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir <span id="deleteItemName">-</span>?</p>
+                <p>Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline close-delete-modal">Cancelar</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Excluir</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- QR Code Modal -->
+    <div class="modal-backdrop" id="qrcodeModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">QR Code para Agendamento de Visitas</h3>
+                <button class="action-btn close-qrcode-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="qrcode-container">
+                    <p>Use este QR Code para permitir que visitantes agendem suas visitas:</p>
+                    <div id="qrcodeImage" class="qrcode-image">O QR Code será gerado aqui...</div>
+                    <p>Ou compartilhe este link:</p>
+                    <div id="qrcodeLink" class="qrcode-link">https://visitcontrol.com/agendamento/?token=abc123</div>
+                    <div class="qrcode-actions">
+                        <button class="btn btn-outline" id="copyLinkBtn">
+                            <i class="fas fa-copy"></i>
+                            Copiar Link
+                        </button>
+                        <button class="btn btn-gradient" id="downloadQrcodeBtn">
+                            <i class="fas fa-download"></i>
+                            Baixar QR Code
+                        </button>
+                        <button class="btn btn-warning" id="generateNewBtn">
+                            <i class="fas fa-sync"></i>
+                            Gerar Novo
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline close-qrcode-modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Operação realizada com sucesso!</span>
+    </div>
+
+    <script>
+        // Dados de exemplo (inicialmente vazios)
+        let visits = [];
+        let visitors = [];
+        let companies = [];
+        let settings = {};
+        let userTokens = [];
+        
+        // Elementos DOM
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loginContainer = document.getElementById('loginContainer');
+        const appContainer = document.getElementById('appContainer');
+        const bookingContainer = document.getElementById('bookingContainer');
+        const accessKeyInput = document.getElementById('accessKey');
+        const loginBtn = document.getElementById('loginBtn');
+        const adminLink = document.getElementById('adminLink');
+        const adminModal = document.getElementById('adminModal');
+        const newAccessKeyInput = document.getElementById('newAccessKey');
+        const confirmAccessKeyInput = document.getElementById('confirmAccessKey');
+        const saveAccessKeyBtn = document.getElementById('saveAccessKeyBtn');
+        const closeAdminModalBtn = document.getElementById('closeAdminModalBtn');
+        const cancelAdminBtn = document.getElementById('cancelAdminBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const visitModal = document.getElementById('visitModal');
+        const visitorModal = document.getElementById('visitorModal');
+        const companyModal = document.getElementById('companyModal');
+        const deleteModal = document.getElementById('deleteModal');
+        const qrcodeModal = document.getElementById('qrcodeModal');
+        const toast = document.getElementById('toast');
+        const visitsTableBody = document.getElementById('visitsTableBody');
+        const allVisitsTableBody = document.getElementById('allVisitsTableBody');
+        const schedulingTableBody = document.getElementById('schedulingTableBody');
+        const visitorsTableBody = document.getElementById('visitorsTableBody');
+        const companiesTableBody = document.getElementById('companiesTableBody');
+        
+        // QR Code elements
+        const qrcodeBtn = document.getElementById('qrcodeBtn');
+        const qrcodeImage = document.getElementById('qrcodeImage');
+        const qrcodeLink = document.getElementById('qrcodeLink');
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+        const downloadQrcodeBtn = document.getElementById('downloadQrcodeBtn');
+        const generateNewBtn = document.getElementById('generateNewBtn');
+        
+        // Token elements
+        const userTokenDisplay = document.getElementById('userTokenDisplay');
+        const copyTokenBtn = document.getElementById('copyTokenBtn');
+        const generateTokenBtn = document.getElementById('generateTokenBtn');
+        const revokeTokenBtn = document.getElementById('revokeTokenBtn');
+        
+        // Booking elements
+        const bookingForm = document.getElementById('bookingForm');
+        const backToSystem = document.getElementById('backToSystem');
+        
+        // Contadores
+        const todayVisitsCount = document.getElementById('todayVisitsCount');
+        const pendingVisitsCount = document.getElementById('pendingVisitsCount');
+        const completedVisitsCount = document.getElementById('completedVisitsCount');
+        
+        // Botões de status
+        const markInProgressBtn = document.getElementById('markInProgressBtn');
+        const markCompletedBtn = document.getElementById('markCompletedBtn');
+        
+        // Estado da aplicação
+        let currentVisitId = null;
+        let currentVisitorId = null;
+        let currentCompanyId = null;
+        let isViewMode = false;
+        let currentPage = 'dashboard';
+        let deleteType = ''; // 'visit', 'visitor', 'company'
+        let qrcode = null;
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Sistema VisitControl iniciando...');
+            
+            // Mostrar tela de carregamento inicialmente
+            showLoading();
+            
+            // Simular tempo de carregamento do sistema
+            setTimeout(() => {
+                try {
+                    // Verificar se há uma chave de acesso configurada
+                    const accessKey = localStorage.getItem('visitControl_accessKey');
+                    
+                    if (!accessKey) {
+                        // Se não houver chave, mostrar link de administrador
+                        adminLink.style.display = 'block';
+                    } else {
+                        adminLink.style.display = 'none';
+                    }
+                    
+                    // Verificar se estamos na página de agendamento
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const token = urlParams.get('token');
+                    
+                    if (token) {
+                        // Mostrar página de agendamento
+                        showBookingPage();
+                    }
+                    
+                    // Configurar event listeners para login
+                    setupLoginEventListeners();
+                    
+                    // Esconder tela de carregamento
+                    hideLoading();
+                    
+                    console.log('Sistema VisitControl carregado com sucesso!');
+                } catch (error) {
+                    console.error('Erro ao inicializar o sistema:', error);
+                    hideLoading();
+                    showToast('Erro ao carregar o sistema. Recarregue a página.', 'error');
+                }
+            }, 1000);
+        });
+        
+        // Configurar event listeners para login
+        function setupLoginEventListeners() {
+            loginBtn.addEventListener('click', handleLogin);
+            adminLink.addEventListener('click', () => adminModal.classList.add('active'));
+            saveAccessKeyBtn.addEventListener('click', saveAccessKey);
+            closeAdminModalBtn.addEventListener('click', () => adminModal.classList.remove('active'));
+            cancelAdminBtn.addEventListener('click', () => adminModal.classList.remove('active'));
+            logoutBtn.addEventListener('click', handleLogout);
+            
+            // Configurar tecla Enter para login
+            accessKeyInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleLogin();
+                }
+            });
+            
+            // Configurar tecla Enter para salvar chave
+            newAccessKeyInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    saveAccessKey();
+                }
+            });
+            
+            confirmAccessKeyInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    saveAccessKey();
+                }
+            });
+            
+            // Configurar formulário de agendamento
+            if (bookingForm) {
+                bookingForm.addEventListener('submit', handleBooking);
+            }
+            
+            if (backToSystem) {
+                backToSystem.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showMainSystem();
+                });
+            }
+        }
+        
+        // Funções para gerenciar a tela de carregamento
+        function showLoading(message = 'Carregando...') {
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'flex';
+                const loadingText = document.querySelector('.loading-text');
+                if (loadingText) {
+                    loadingText.textContent = message;
+                }
+            }
+        }
+        
+        function hideLoading() {
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'none';
+            }
+        }
+        
+        // Funções de autenticação
+        function handleLogin() {
+            showLoading('Verificando credenciais...');
+            
+            setTimeout(() => {
+                try {
+                    const accessKey = accessKeyInput.value.trim();
+                    const storedAccessKey = localStorage.getItem('visitControl_accessKey');
+                    
+                    if (!storedAccessKey) {
+                        hideLoading();
+                        showToast('Nenhuma chave de acesso configurada. Use o link de administrador para configurar.', 'error');
+                        return;
+                    }
+                    
+                    if (accessKey === storedAccessKey) {
+                        // Login bem-sucedido
+                        loginContainer.style.display = 'none';
+                        appContainer.classList.add('active');
+                        
+                        // Carregar dados do sistema
+                        loadAllData();
+                        
+                        // Adicionar dados de exemplo apenas se não houver dados salvos
+                        if (visits.length === 0 && visitors.length === 0 && companies.length === 0) {
+                            addSampleData();
+                        }
+                        
+                        updateCounters();
+                        applyFilters();
+                        
+                        // Configurar data mínima para formulários
+                        const dateInput = document.getElementById('date');
+                        if (dateInput) {
+                            dateInput.min = new Date().toISOString().slice(0, 16);
+                        }
+                        
+                        // Configurar event listeners para os botões
+                        setupEventListeners();
+                        
+                        showToast('Login realizado com sucesso!', 'success');
+                    } else {
+                        showToast('Chave de acesso incorreta!', 'error');
+                        accessKeyInput.value = '';
+                        accessKeyInput.focus();
+                    }
+                    
+                    hideLoading();
+                } catch (error) {
+                    console.error('Erro no login:', error);
+                    hideLoading();
+                    showToast('Erro durante o login. Tente novamente.', 'error');
+                }
+            }, 800);
+        }
+        
+        function saveAccessKey() {
+            try {
+                const newKey = newAccessKeyInput.value.trim();
+                const confirmKey = confirmAccessKeyInput.value.trim();
+                
+                if (!newKey) {
+                    showToast('Digite uma chave de acesso válida', 'error');
+                    return;
+                }
+                
+                if (newKey !== confirmKey) {
+                    showToast('As chaves não coincidem', 'error');
+                    return;
+                }
+                
+                // Salvar a chave de acesso
+                localStorage.setItem('visitControl_accessKey', newKey);
+                
+                // Fechar o modal e limpar os campos
+                adminModal.classList.remove('active');
+                newAccessKeyInput.value = '';
+                confirmAccessKeyInput.value = '';
+                
+                // Ocultar o link de administrador
+                adminLink.style.display = 'none';
+                
+                showToast('Chave de acesso configurada com sucesso!', 'success');
+            } catch (error) {
+                console.error('Erro ao salvar chave de acesso:', error);
+                showToast('Erro ao salvar chave de acesso.', 'error');
+            }
+        }
+        
+        function handleLogout() {
+            try {
+                // Voltar para a tela de login
+                appContainer.classList.remove('active');
+                loginContainer.style.display = 'flex';
+                accessKeyInput.value = '';
+                
+                showToast('Logout realizado com sucesso', 'success');
+            } catch (error) {
+                console.error('Erro no logout:', error);
+            }
+        }
+        
+        function showBookingPage() {
+            try {
+                loginContainer.style.display = 'none';
+                appContainer.style.display = 'none';
+                if (bookingContainer) {
+                    bookingContainer.style.display = 'flex';
+                }
+                
+                // Preencher data e hora atual
+                const now = new Date();
+                // Ajustar para o formato datetime-local (removendo os segundos)
+                const formattedNow = now.toISOString().slice(0, 16);
+                const bookingDateInput = document.getElementById('bookingDate');
+                if (bookingDateInput) {
+                    bookingDateInput.value = formattedNow;
+                }
+            } catch (error) {
+                console.error('Erro ao mostrar página de agendamento:', error);
+            }
+        }
+        
+        function showMainSystem() {
+            try {
+                if (bookingContainer) {
+                    bookingContainer.style.display = 'none';
+                }
+                loginContainer.style.display = 'flex';
+            } catch (error) {
+                console.error('Erro ao voltar para o sistema:', error);
+            }
+        }
+        
+        function handleBooking(e) {
+            e.preventDefault();
+            
+            try {
+                const name = document.getElementById('bookingName').value.trim();
+                const company = document.getElementById('bookingCompany').value.trim();
+                const document = document.getElementById('bookingDocument').value.trim();
+                const destination = document.getElementById('bookingDestination').value;
+                const date = document.getElementById('bookingDate').value;
+                const notes = document.getElementById('bookingNotes').value.trim();
+                
+                if (!name || !company || !destination || !date) {
+                    showToast('Preencha todos os campos obrigatórios', 'error');
+                    return;
+                }
+                
+                // Criar nova visita
+                const newVisit = {
+                    id: Date.now(),
+                    name,
+                    company,
+                    document,
+                    destination,
+                    date,
+                    status: 'scheduled',
+                    notes
+                };
+                
+                // Adicionar à lista de visitas
+                visits.push(newVisit);
+                
+                // Salvar no localStorage
+                saveAllData();
+                
+                showToast('Visita agendada com sucesso!', 'success');
+                
+                // Limpar formulário
+                bookingForm.reset();
+                
+                // Preencher data e hora atual novamente
+                const now = new Date();
+                const formattedNow = now.toISOString().slice(0, 16);
+                document.getElementById('bookingDate').value = formattedNow;
+            } catch (error) {
+                console.error('Erro ao processar agendamento:', error);
+                showToast('Erro ao agendar visita.', 'error');
+            }
+        }
+        
+        // CORREÇÃO: Função addSampleData corrigida
+        function addSampleData() {
+            try {
+                const today = new Date();
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                
+                // Dados de exemplo para visitantes
+                visitors = [
+                    { id: 1, name: "Carlos Silva", document: "123.456.789-00", company: "Tech Solutions Ltda", phone: "(11) 99999-9999", email: "carlos@techsolutions.com", lastVisit: today.toISOString().slice(0, 16), totalVisits: 3 },
+                    { id: 2, name: "Ana Oliveira", document: "987.654.321-00", company: "Consultoria Financeira SA", phone: "(11) 98888-8888", email: "ana@consultoriafinanceira.com", lastVisit: today.toISOString().slice(0, 16), totalVisits: 5 },
+                    { id: 3, name: "Roberto Santos", document: "456.789.123-00", company: "Vendas Express", phone: "(11) 97777-7777", email: "roberto@vendasexpress.com", lastVisit: yesterday.toISOString().slice(0, 16), totalVisits: 2 },
+                    { id: 4, name: "Mariana Costa", document: "789.123.456-00", company: "Recursos Humanos Brasil", phone: "(11) 96666-6666", email: "mariana@rhbrasil.com", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 },
+                    { id: 5, name: "Paulo Mendes", document: "321.654.987-00", company: "Indústrias Pesadas", phone: "(11) 95555-5555", email: "paulo@industriaspesadas.com", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 }
+                ];
+                
+                // Dados de exemplo para empresas
+                companies = [
+                    { id: 1, name: "Tech Solutions Ltda", cnpj: "12.345.678/0001-90", responsible: "Carlos Silva", phone: "(11) 99999-9999", email: "contato@techsolutions.com", totalVisits: 3, lastVisit: today.toISOString().slice(0, 16) },
+                    { id: 2, name: "Consultoria Financeira SA", cnpj: "98.765.432/0001-10", responsible: "Ana Oliveira", phone: "(11) 98888-8888", email: "contato@consultoriafinanceira.com", totalVisits: 5, lastVisit: today.toISOString().slice(0, 16) },
+                    { id: 3, name: "Vendas Express", cnpj: "45.678.912/0001-30", responsible: "Roberto Santos", phone: "(11) 97777-7777", email: "contato@vendasexpress.com", totalVisits: 2, lastVisit: yesterday.toISOString().slice(0, 16) },
+                    { id: 4, name: "Recursos Humanos Brasil", cnpj: "78.912.345/0001-40", responsible: "Mariana Costa", phone: "(11) 96666-6666", email: "contato@rhbrasil.com", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) },
+                    { id: 5, name: "Indústrias Pesadas", cnpj: "32.165.498/0001-70", responsible: "Paulo Mendes", phone: "(11) 95555-5555", email: "contato@industriaspesadas.com", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) }
+                ];
+                
+                // Dados de exemplo para visitas
+                visits = [
+                    {
+                        id: 1,
+                        name: "Carlos Silva",
+                        company: "Tech Solutions Ltda",
+                        document: "123.456.789-00",
+                        destination: "ti",
+                        date: today.toISOString().slice(0, 16),
+                        status: "scheduled",
+                        notes: "Reunião sobre novo projeto de software"
+                    },
+                    {
+                        id: 2,
+                        name: "Ana Oliveira",
+                        company: "Consultoria Financeira SA",
+                        document: "987.654.321-00",
+                        destination: "financeiro",
+                        date: today.toISOString().slice(0, 16),
+                        status: "in-progress",
+                        notes: "Apresentação de relatórios trimestrais"
+                    },
+                    {
+                        id: 3,
+                        name: "Roberto Santos",
+                        company: "Vendas Express",
+                        document: "456.789.123-00",
+                        destination: "comercial",
+                        date: yesterday.toISOString().slice(0, 16),
+                        status: "completed",
+                        notes: "Negociação de contrato"
+                    },
+                    {
+                        id: 4,
+                        name: "Mariana Costa",
+                        company: "Recursos Humanos Brasil",
+                        document: "789.123.456-00",
+                        destination: "rh",
+                        date: tomorrow.toISOString().slice(0, 16),
+                        status: "scheduled",
+                        notes: "Processo seletivo - segunda fase"
+                    },
+                    {
+                        id: 5,
+                        name: "Paulo Mendes",
+                        company: "Indústrias Pesadas",
+                        document: "321.654.987-00",
+                        destination: "operacional",
+                        date: tomorrow.toISOString().slice(0, 16),
+                        status: "scheduled",
+                        notes: "Visita técnica às instalações"
+                    }
+                ];
+                
+                // Salvar no localStorage
+                saveAllData();
+                
+                // Atualizar a interface
+                updateCounters();
+                renderAllTables();
+                
+                // Atualizar badges
+                const visitorsBadge = document.getElementById('visitorsBadge');
+                const companiesBadge = document.getElementById('companiesBadge');
+                
+                if (visitorsBadge) visitorsBadge.textContent = visitors.length;
+                if (companiesBadge) companiesBadge.textContent = companies.length;
+                
+                showToast('Dados de exemplo adicionados com sucesso!', 'success');
+            } catch (error) {
+                console.error('Erro ao adicionar dados de exemplo:', error);
+                showToast('Erro ao adicionar dados de exemplo.', 'error');
+            }
+        }
+
+        // Função para configurar todos os event listeners após o login
+        function setupEventListeners() {
+            // Navegação do menu lateral
+            const navItems = document.querySelectorAll('.nav-item[data-page]');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const page = this.getAttribute('data-page');
+                    navigateToPage(page);
+                });
+            });
+            
+            // Botão de menu mobile
+            mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            overlay.addEventListener('click', toggleMobileMenu);
+            
+            // Botões de nova visita
+            document.getElementById('newVisitBtn').addEventListener('click', () => openVisitModal());
+            document.getElementById('newVisitBtn2').addEventListener('click', () => openVisitModal());
+            
+            // Botões de novo visitante e empresa
+            document.getElementById('newVisitorBtn').addEventListener('click', () => openVisitorModal());
+            document.getElementById('newCompanyBtn').addEventListener('click', () => openCompanyModal());
+            
+            // Botões de fechar modais
+            document.getElementById('closeModalBtn').addEventListener('click', closeVisitModal);
+            document.querySelectorAll('.close-visitor-modal').forEach(btn => {
+                btn.addEventListener('click', closeVisitorModal);
+            });
+            document.querySelectorAll('.close-company-modal').forEach(btn => {
+                btn.addEventListener('click', closeCompanyModal);
+            });
+            document.querySelectorAll('.close-delete-modal').forEach(btn => {
+                btn.addEventListener('click', closeDeleteModal);
+            });
+            document.querySelectorAll('.close-qrcode-modal').forEach(btn => {
+                btn.addEventListener('click', closeQRCodeModal);
+            });
+            
+            // Botões de salvar
+            document.getElementById('saveBtn').addEventListener('click', saveVisit);
+            document.getElementById('updateBtn').addEventListener('click', updateVisit);
+            document.getElementById('saveVisitorBtn').addEventListener('click', saveVisitor);
+            document.getElementById('saveCompanyBtn').addEventListener('click', saveCompany);
+            
+            // Botões de cancelar
+            document.getElementById('cancelBtn').addEventListener('click', closeVisitModal);
+            
+            // Botões de status
+            markInProgressBtn.addEventListener('click', () => updateVisitStatus('in-progress'));
+            markCompletedBtn.addEventListener('click', () => updateVisitStatus('completed'));
+            
+            // Botões de ação (filtros, limpar dados, etc.)
+            document.getElementById('clearFiltersBtn').addEventListener('click', clearFilters);
+            document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
+            document.getElementById('addSampleDataBtn').addEventListener('click', addSampleData);
+            
+            // Botões de configurações
+            document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+            document.getElementById('exportDataBtn').addEventListener('click', exportData);
+            document.getElementById('importDataBtn').addEventListener('click', importData);
+            document.getElementById('resetSettingsBtn').addEventListener('click', resetSettings);
+            
+            // Botões de token
+            document.getElementById('generateTokenBtn').addEventListener('click', generateToken);
+            document.getElementById('copyTokenBtn').addEventListener('click', copyToken);
+            document.getElementById('revokeTokenBtn').addEventListener('click', revokeToken);
+            
+            // Botões de QR Code
+            document.getElementById('qrcodeBtn').addEventListener('click', openQRCodeModal);
+            document.getElementById('copyLinkBtn').addEventListener('click', copyQRCodeLink);
+            document.getElementById('downloadQrcodeBtn').addEventListener('click', downloadQRCode);
+            document.getElementById('generateNewBtn').addEventListener('click', generateNewQRCode);
+            
+            // Filtros
+            document.getElementById('statusFilter').addEventListener('change', applyFilters);
+            document.getElementById('dateFilter').addEventListener('change', applyFilters);
+            document.getElementById('searchFilter').addEventListener('input', applyFilters);
+            
+            // Configurar data mínima para formulários
+            const dateInputs = document.querySelectorAll('input[type="datetime-local"]');
+            const now = new Date().toISOString().slice(0, 16);
+            dateInputs.forEach(input => {
+                input.min = now;
+            });
+        }
+
+        // Funções de navegação
+        function navigateToPage(page) {
+            // Remover classe active de todas as páginas
+            document.querySelectorAll('.page-content').forEach(p => {
+                p.classList.remove('active');
+            });
+            
+            // Remover classe active de todos os itens do menu
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Adicionar classe active à página selecionada
+            document.getElementById(`${page}-page`).classList.add('active');
+            
+            // Adicionar classe active ao item do menu selecionado
+            document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+            
+            // Atualizar a página atual
+            currentPage = page;
+            
+            // Fechar menu mobile se estiver aberto
+            if (window.innerWidth <= 900) {
+                toggleMobileMenu();
+            }
+            
+            // Atualizar a tabela específica da página
+            if (page === 'dashboard' || page === 'visits') {
+                renderVisitsTable();
+            } else if (page === 'scheduling') {
+                renderSchedulingTable();
+            } else if (page === 'visitors') {
+                renderVisitorsTable();
+            } else if (page === 'companies') {
+                renderCompaniesTable();
+            }
+        }
+
+        function toggleMobileMenu() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Funções para abrir e fechar modais
+        function openVisitModal(visitId = null, viewMode = false) {
+            const modal = document.getElementById('visitModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const visitForm = document.getElementById('visitForm');
+            const visitDetails = document.getElementById('visitDetails');
+            const saveBtn = document.getElementById('saveBtn');
+            const updateBtn = document.getElementById('updateBtn');
+            
+            isViewMode = viewMode;
+            currentVisitId = visitId;
+            
+            if (visitId) {
+                // Modo edição ou visualização
+                const visit = visits.find(v => v.id === visitId);
+                if (visit) {
+                    if (viewMode) {
+                        // Modo visualização
+                        modalTitle.textContent = 'Detalhes da Visita';
+                        visitForm.style.display = 'none';
+                        visitDetails.style.display = 'block';
+                        
+                        // Preencher detalhes
+                        document.getElementById('detailName').textContent = visit.name;
+                        document.getElementById('detailCompany').textContent = visit.company;
+                        document.getElementById('detailDocument').textContent = visit.document || 'Não informado';
+                        document.getElementById('detailDestination').textContent = getDestinationLabel(visit.destination);
+                        document.getElementById('detailDate').textContent = formatDateTime(visit.date);
+                        document.getElementById('detailStatus').textContent = getStatusLabel(visit.status);
+                        document.getElementById('detailStatus').className = `status status-${visit.status}`;
+                        document.getElementById('detailNotes').textContent = visit.notes || 'Nenhuma observação';
+                        
+                        // Configurar botões de status
+                        setupStatusButtons(visit.status);
+                        
+                        saveBtn.style.display = 'none';
+                        updateBtn.style.display = 'none';
+                    } else {
+                        // Modo edição
+                        modalTitle.textContent = 'Editar Visita';
+                        visitForm.style.display = 'block';
+                        visitDetails.style.display = 'none';
+                        
+                        // Preencher formulário
+                        document.getElementById('visitId').value = visit.id;
+                        document.getElementById('visitorName').value = visit.name;
+                        document.getElementById('company').value = visit.company;
+                        document.getElementById('document').value = visit.document || '';
+                        document.getElementById('destination').value = visit.destination;
+                        document.getElementById('date').value = visit.date;
+                        document.getElementById('notes').value = visit.notes || '';
+                        
+                        saveBtn.style.display = 'none';
+                        updateBtn.style.display = 'inline-block';
+                    }
+                }
+            } else {
+                // Modo criação
+                modalTitle.textContent = 'Registrar Nova Visita';
+                visitForm.style.display = 'block';
+                visitDetails.style.display = 'none';
+                visitForm.reset();
+                
+                // Definir data mínima como agora
+                const now = new Date().toISOString().slice(0, 16);
+                document.getElementById('date').value = now;
+                document.getElementById('date').min = now;
+                
+                saveBtn.style.display = 'inline-block';
+                updateBtn.style.display = 'none';
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeVisitModal() {
+            document.getElementById('visitModal').classList.remove('active');
+        }
+
+        function openVisitorModal(visitorId = null) {
+            const modal = document.getElementById('visitorModal');
+            const modalTitle = document.getElementById('visitorModalTitle');
+            
+            currentVisitorId = visitorId;
+            
+            if (visitorId) {
+                // Modo edição
+                modalTitle.textContent = 'Editar Visitante';
+                const visitor = visitors.find(v => v.id === visitorId);
+                if (visitor) {
+                    document.getElementById('visitorId').value = visitor.id;
+                    document.getElementById('visitorFullName').value = visitor.name;
+                    document.getElementById('visitorDocument').value = visitor.document;
+                    document.getElementById('visitorCompany').value = visitor.company;
+                    document.getElementById('visitorPhone').value = visitor.phone || '';
+                    document.getElementById('visitorEmail').value = visitor.email || '';
+                }
+            } else {
+                // Modo criação
+                modalTitle.textContent = 'Novo Visitante';
+                document.getElementById('visitorForm').reset();
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeVisitorModal() {
+            document.getElementById('visitorModal').classList.remove('active');
+        }
+
+        function openCompanyModal(companyId = null) {
+            const modal = document.getElementById('companyModal');
+            const modalTitle = document.getElementById('companyModalTitle');
+            
+            currentCompanyId = companyId;
+            
+            if (companyId) {
+                // Modo edição
+                modalTitle.textContent = 'Editar Empresa';
+                const company = companies.find(c => c.id === companyId);
+                if (company) {
+                    document.getElementById('companyId').value = company.id;
+                    document.getElementById('companyNameInput').value = company.name;
+                    document.getElementById('companyCnpj').value = company.cnpj;
+                    document.getElementById('companyResponsible').value = company.responsible || '';
+                    document.getElementById('companyPhone').value = company.phone || '';
+                    document.getElementById('companyEmail').value = company.email || '';
+                }
+            } else {
+                // Modo criação
+                modalTitle.textContent = 'Nova Empresa';
+                document.getElementById('companyForm').reset();
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeCompanyModal() {
+            document.getElementById('companyModal').classList.remove('active');
+        }
+
+        function openDeleteModal(type, id, name) {
+            const modal = document.getElementById('deleteModal');
+            const itemName = document.getElementById('deleteItemName');
+            
+            deleteType = type;
+            
+            if (type === 'visit') {
+                currentVisitId = id;
+                itemName.textContent = `a visita de ${name}`;
+            } else if (type === 'visitor') {
+                currentVisitorId = id;
+                itemName.textContent = `o visitante ${name}`;
+            } else if (type === 'company') {
+                currentCompanyId = id;
+                itemName.textContent = `a empresa ${name}`;
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+        }
+
+        function openQRCodeModal() {
+            const modal = document.getElementById('qrcodeModal');
+            
+            // Gerar QR Code se ainda não existir
+            if (!qrcode) {
+                generateQRCode();
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeQRCodeModal() {
+            document.getElementById('qrcodeModal').classList.remove('active');
+        }
+
+        // Funções para salvar dados
+        function saveVisit() {
+            const name = document.getElementById('visitorName').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const document = document.getElementById('document').value.trim();
+            const destination = document.getElementById('destination').value;
+            const date = document.getElementById('date').value;
+            const notes = document.getElementById('notes').value.trim();
+            
+            if (!name || !company || !destination || !date) {
+                showToast('Preencha todos os campos obrigatórios', 'error');
+                return;
+            }
+            
+            const newVisit = {
+                id: Date.now(),
+                name,
+                company,
+                document,
+                destination,
+                date,
+                status: 'scheduled',
+                notes
+            };
+            
+            visits.push(newVisit);
+            saveAllData();
+            renderAllTables();
+            updateCounters();
+            closeVisitModal();
+            
+            showToast('Visita registrada com sucesso!', 'success');
+        }
+
+        function updateVisit() {
+            const visitId = parseInt(document.getElementById('visitId').value);
+            const name = document.getElementById('visitorName').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const document = document.getElementById('document').value.trim();
+            const destination = document.getElementById('destination').value;
+            const date = document.getElementById('date').value;
+            const notes = document.getElementById('notes').value.trim();
+            
+            if (!name || !company || !destination || !date) {
+                showToast('Preencha todos os campos obrigatórios', 'error');
+                return;
+            }
+            
+            const visitIndex = visits.findIndex(v => v.id === visitId);
+            if (visitIndex !== -1) {
+                visits[visitIndex] = {
+                    ...visits[visitIndex],
+                    name,
+                    company,
+                    document,
+                    destination,
+                    date,
+                    notes
+                };
+                
+                saveAllData();
+                renderAllTables();
+                updateCounters();
+                closeVisitModal();
+                
+                showToast('Visita atualizada com sucesso!', 'success');
+            }
+        }
+
+        function saveVisitor() {
+            const name = document.getElementById('visitorFullName').value.trim();
+            const document = document.getElementById('visitorDocument').value.trim();
+            const company = document.getElementById('visitorCompany').value.trim();
+            const phone = document.getElementById('visitorPhone').value.trim();
+            const email = document.getElementById('visitorEmail').value.trim();
+            
+            if (!name || !document || !company) {
+                showToast('Preencha todos os campos obrigatórios', 'error');
+                return;
+            }
+            
+            if (currentVisitorId) {
+                // Modo edição
+                const visitorIndex = visitors.findIndex(v => v.id === currentVisitorId);
+                if (visitorIndex !== -1) {
+                    visitors[visitorIndex] = {
+                        ...visitors[visitorIndex],
+                        name,
+                        document,
+                        company,
+                        phone,
+                        email
+                    };
+                }
+            } else {
+                // Modo criação
+                const newVisitor = {
+                    id: Date.now(),
+                    name,
+                    document,
+                    company,
+                    phone,
+                    email,
+                    lastVisit: null,
+                    totalVisits: 0
+                };
+                
+                visitors.push(newVisitor);
+            }
+            
+            saveAllData();
+            renderVisitorsTable();
+            updateBadges();
+            closeVisitorModal();
+            
+            showToast('Visitante salvo com sucesso!', 'success');
+        }
+
+        function saveCompany() {
+            const name = document.getElementById('companyNameInput').value.trim();
+            const cnpj = document.getElementById('companyCnpj').value.trim();
+            const responsible = document.getElementById('companyResponsible').value.trim();
+            const phone = document.getElementById('companyPhone').value.trim();
+            const email = document.getElementById('companyEmail').value.trim();
+            
+            if (!name || !cnpj) {
+                showToast('Preencha todos os campos obrigatórios', 'error');
+                return;
+            }
+            
+            if (currentCompanyId) {
+                // Modo edição
+                const companyIndex = companies.findIndex(c => c.id === currentCompanyId);
+                if (companyIndex !== -1) {
+                    companies[companyIndex] = {
+                        ...companies[companyIndex],
+                        name,
+                        cnpj,
+                        responsible,
+                        phone,
+                        email
+                    };
+                }
+            } else {
+                // Modo criação
+                const newCompany = {
+                    id: Date.now(),
+                    name,
+                    cnpj,
+                    responsible,
+                    phone,
+                    email,
+                    totalVisits: 0,
+                    lastVisit: null
+                };
+                
+                companies.push(newCompany);
+            }
+            
+            saveAllData();
+            renderCompaniesTable();
+            updateBadges();
+            closeCompanyModal();
+            
+            showToast('Empresa salva com sucesso!', 'success');
+        }
+
+        // Funções para atualizar status
+        function setupStatusButtons(currentStatus) {
+            const inProgressBtn = document.getElementById('markInProgressBtn');
+            const completedBtn = document.getElementById('markCompletedBtn');
+            
+            if (currentStatus === 'scheduled') {
+                inProgressBtn.disabled = false;
+                completedBtn.disabled = true;
+            } else if (currentStatus === 'in-progress') {
+                inProgressBtn.disabled = true;
+                completedBtn.disabled = false;
+            } else {
+                inProgressBtn.disabled = true;
+                completedBtn.disabled = true;
+            }
+        }
+
+        function updateVisitStatus(newStatus) {
+            if (!currentVisitId) return;
+            
+            const visitIndex = visits.findIndex(v => v.id === currentVisitId);
+            if (visitIndex !== -1) {
+                visits[visitIndex].status = newStatus;
+                saveAllData();
+                renderAllTables();
+                updateCounters();
+                closeVisitModal();
+                
+                showToast(`Status da visita atualizado para ${getStatusLabel(newStatus)}`, 'success');
+            }
+        }
+
+        // Funções para gerenciar dados
+        function clearAllData() {
+            if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
+                visits = [];
+                visitors = [];
+                companies = [];
+                saveAllData();
+                renderAllTables();
+                updateCounters();
+                updateBadges();
+                
+                showToast('Todos os dados foram limpos', 'success');
+            }
+        }
+
+        function exportData() {
+            const data = {
+                visits,
+                visitors,
+                companies,
+                settings,
+                exportDate: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `visitcontrol-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showToast('Dados exportados com sucesso!', 'success');
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = event => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        
+                        if (data.visits) visits = data.visits;
+                        if (data.visitors) visitors = data.visitors;
+                        if (data.companies) companies = data.companies;
+                        if (data.settings) settings = data.settings;
+                        
+                        saveAllData();
+                        renderAllTables();
+                        updateCounters();
+                        updateBadges();
+                        
+                        showToast('Dados importados com sucesso!', 'success');
+                    } catch (error) {
+                        showToast('Erro ao importar dados. Verifique o arquivo.', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        function resetSettings() {
+            if (confirm('Tem certeza que deseja restaurar as configurações padrão?')) {
+                settings = {};
+                saveAllData();
+                loadSettings();
+                
+                showToast('Configurações restauradas com sucesso!', 'success');
+            }
+        }
+
+        // Funções para tokens
+        function generateToken() {
+            const token = 'VC_' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            userTokens.push({
+                token,
+                created: new Date().toISOString(),
+                active: true
+            });
+            
+            saveAllData();
+            displayToken(token);
+            
+            showToast('Token gerado com sucesso!', 'success');
+        }
+
+        function displayToken(token) {
+            userTokenDisplay.textContent = token;
+            copyTokenBtn.disabled = false;
+            revokeTokenBtn.disabled = false;
+        }
+
+        function copyToken() {
+            const token = userTokenDisplay.textContent;
+            if (token && token !== 'Nenhum token gerado') {
+                navigator.clipboard.writeText(token).then(() => {
+                    showToast('Token copiado para a área de transferência!', 'success');
+                });
+            }
+        }
+
+        function revokeToken() {
+            if (confirm('Tem certeza que deseja revogar este token?')) {
+                const token = userTokenDisplay.textContent;
+                const tokenIndex = userTokens.findIndex(t => t.token === token);
+                
+                if (tokenIndex !== -1) {
+                    userTokens[tokenIndex].active = false;
+                    saveAllData();
+                    
+                    userTokenDisplay.textContent = 'Nenhum token gerado';
+                    copyTokenBtn.disabled = true;
+                    revokeTokenBtn.disabled = true;
+                    
+                    showToast('Token revogado com sucesso!', 'success');
+                }
+            }
+        }
+
+        // Funções para QR Code
+        function generateQRCode() {
+            // Limpar QR Code anterior
+            if (qrcode) {
+                qrcode.clear();
+            }
+            
+            // Gerar URL única para agendamento
+            const token = 'VC_QR_' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            const url = `${window.location.origin}${window.location.pathname}?token=${token}`;
+            
+            // Atualizar link
+            qrcodeLink.textContent = url;
+            
+            // Gerar QR Code
+            qrcode = new QRCode(qrcodeImage, {
+                text: url,
+                width: 200,
+                height: 200,
+                colorDark: '#4361ee',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function generateNewQRCode() {
+            generateQRCode();
+            showToast('Novo QR Code gerado com sucesso!', 'success');
+        }
+
+        function copyQRCodeLink() {
+            const link = qrcodeLink.textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                showToast('Link copiado para a área de transferência!', 'success');
+            });
+        }
+
+        function downloadQRCode() {
+            const canvas = qrcodeImage.querySelector('canvas');
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = 'visitcontrol-qrcode.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                showToast('QR Code baixado com sucesso!', 'success');
+            }
+        }
+
+        // Funções para filtros
+        function applyFilters() {
+            renderVisitsTable();
+        }
+
+        function clearFilters() {
+            document.getElementById('statusFilter').value = 'all';
+            document.getElementById('dateFilter').value = '';
+            document.getElementById('searchFilter').value = '';
+            
+            renderVisitsTable();
+        }
+
+        // Funções para renderizar tabelas
+        function renderVisitsTable() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
+            
+            let filteredVisits = visits;
+            
+            // Aplicar filtros
+            if (statusFilter !== 'all') {
+                filteredVisits = filteredVisits.filter(v => v.status === statusFilter);
+            }
+            
+            if (dateFilter) {
+                filteredVisits = filteredVisits.filter(v => v.date.startsWith(dateFilter));
+            }
+            
+            if (searchFilter) {
+                filteredVisits = filteredVisits.filter(v => 
+                    v.name.toLowerCase().includes(searchFilter) || 
+                    v.company.toLowerCase().includes(searchFilter)
+                );
+            }
+            
+            // Ordenar por data (mais recente primeiro)
+            filteredVisits.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Limitar a 10 registros no dashboard
+            const visitsToShow = currentPage === 'dashboard' ? 
+                filteredVisits.slice(0, 10) : filteredVisits;
+            
+            // Renderizar tabela
+            const tableBody = currentPage === 'dashboard' ? visitsTableBody : allVisitsTableBody;
+            tableBody.innerHTML = '';
+            
+            if (visitsToShow.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Nenhuma visita encontrada</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            visitsToShow.forEach(visit => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${visit.name}</td>
+                    <td>${visit.company}</td>
+                    <td>${formatDateTime(visit.date)}</td>
+                    <td>${getDestinationLabel(visit.destination)}</td>
+                    <td><span class="status status-${visit.status}">${getStatusLabel(visit.status)}</span></td>
+                    <td>
+                        <button class="action-btn view-visit" data-id="${visit.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit-visit" data-id="${visit.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete delete-visit" data-id="${visit.id}" data-name="${visit.name}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões
+            tableBody.querySelectorAll('.view-visit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    openVisitModal(id, true);
+                });
+            });
+            
+            tableBody.querySelectorAll('.edit-visit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    openVisitModal(id, false);
+                });
+            });
+            
+            tableBody.querySelectorAll('.delete-visit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    const name = e.currentTarget.getAttribute('data-name');
+                    openDeleteModal('visit', id, name);
+                });
+            });
+        }
+
+        function renderSchedulingTable() {
+            const today = new Date().toISOString().split('T')[0];
+            const scheduledVisits = visits.filter(v => v.date.split('T')[0] >= today && v.status === 'scheduled');
+            
+            schedulingTableBody.innerHTML = '';
+            
+            if (scheduledVisits.length === 0) {
+                schedulingTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-calendar-times"></i>
+                            <p>Nenhum agendamento futuro</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            scheduledVisits.forEach(visit => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${visit.name}</td>
+                    <td>${visit.company}</td>
+                    <td>${formatDateTime(visit.date)}</td>
+                    <td>${getDestinationLabel(visit.destination)}</td>
+                    <td><span class="status status-${visit.status}">${getStatusLabel(visit.status)}</span></td>
+                    <td>
+                        <button class="action-btn view-visit" data-id="${visit.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit-visit" data-id="${visit.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete delete-visit" data-id="${visit.id}" data-name="${visit.name}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                schedulingTableBody.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões (mesmo que na função renderVisitsTable)
+            addVisitActionListeners(schedulingTableBody);
+        }
+
+        function renderVisitorsTable() {
+            visitorsTableBody.innerHTML = '';
+            
+            if (visitors.length === 0) {
+                visitorsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-users"></i>
+                            <p>Nenhum visitante cadastrado</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            visitors.forEach(visitor => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${visitor.name}</td>
+                    <td>${visitor.document}</td>
+                    <td>${visitor.company}</td>
+                    <td>${visitor.lastVisit ? formatDateTime(visitor.lastVisit) : 'Nunca'}</td>
+                    <td>${visitor.totalVisits}</td>
+                    <td>
+                        <button class="action-btn edit-visitor" data-id="${visitor.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete delete-visitor" data-id="${visitor.id}" data-name="${visitor.name}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                visitorsTableBody.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões
+            visitorsTableBody.querySelectorAll('.edit-visitor').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    openVisitorModal(id);
+                });
+            });
+            
+            visitorsTableBody.querySelectorAll('.delete-visitor').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    const name = e.currentTarget.getAttribute('data-name');
+                    openDeleteModal('visitor', id, name);
+                });
+            });
+        }
+
+        function renderCompaniesTable() {
+            companiesTableBody.innerHTML = '';
+            
+            if (companies.length === 0) {
+                companiesTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-building"></i>
+                            <p>Nenhuma empresa cadastrada</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            companies.forEach(company => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${company.name}</td>
+                    <td>${company.cnpj}</td>
+                    <td>${company.responsible || 'Não informado'}</td>
+                    <td>${company.totalVisits}</td>
+                    <td>${company.lastVisit ? formatDateTime(company.lastVisit) : 'Nunca'}</td>
+                    <td>
+                        <button class="action-btn edit-company" data-id="${company.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete delete-company" data-id="${company.id}" data-name="${company.name}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                companiesTableBody.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões
+            companiesTableBody.querySelectorAll('.edit-company').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    openCompanyModal(id);
+                });
+            });
+            
+            companiesTableBody.querySelectorAll('.delete-company').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    const name = e.currentTarget.getAttribute('data-name');
+                    openDeleteModal('company', id, name);
+                });
+            });
+        }
+
+        function renderAllTables() {
+            renderVisitsTable();
+            renderSchedulingTable();
+            renderVisitorsTable();
+            renderCompaniesTable();
+        }
+
+        function addVisitActionListeners(tableBody) {
+            tableBody.querySelectorAll('.view-visit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    openVisitModal(id, true);
+                });
+            });
+            
+            tableBody.querySelectorAll('.edit-visit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    openVisitModal(id, false);
+                });
+            });
+            
+            tableBody.querySelectorAll('.delete-visit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    const name = e.currentTarget.getAttribute('data-name');
+                    openDeleteModal('visit', id, name);
+                });
+            });
+        }
+
+        // Funções utilitárias
+        function formatDateTime(dateTimeStr) {
+            const date = new Date(dateTimeStr);
+            return date.toLocaleString('pt-BR');
+        }
+
+        function getDestinationLabel(destination) {
+            const destinations = {
+                'rh': 'Recursos Humanos',
+                'ti': 'Tecnologia da Informação',
+                'financeiro': 'Financeiro',
+                'comercial': 'Comercial',
+                'diretoria': 'Diretoria',
+                'operacional': 'Operacional'
+                'outros': 'Outros'
+            };
+            
+            return destinations[destination] || destination;
+        }
+
+        function getStatusLabel(status) {
+            const statusLabels = {
+                'scheduled': 'Agendada',
+                'in-progress': 'Em Andamento',
+                'completed': 'Concluída'
+            };
+            
+            return statusLabels[status] || status;
+        }
+
+        function updateCounters() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayVisits = visits.filter(v => v.date.split('T')[0] === today).length;
+            const pendingVisits = visits.filter(v => v.status === 'scheduled').length;
+            const completedVisits = visits.filter(v => v.status === 'completed').length;
+            
+            todayVisitsCount.textContent = todayVisits;
+            pendingVisitsCount.textContent = pendingVisits;
+            completedVisitsCount.textContent = completedVisits;
+        }
+
+        function updateBadges() {
+            const visitorsBadge = document.getElementById('visitorsBadge');
+            const companiesBadge = document.getElementById('companiesBadge');
+            
+            if (visitorsBadge) visitorsBadge.textContent = visitors.length;
+            if (companiesBadge) companiesBadge.textContent = companies.length;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = toast.querySelector('i');
+            
+            toastMessage.textContent = message;
+            toast.className = `toast ${type}`;
+            
+            if (type === 'success') {
+                toastIcon.className = 'fas fa-check-circle';
+            } else {
+                toastIcon.className = 'fas fa-exclamation-circle';
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Funções para salvar e carregar dados
+        function saveAllData() {
+            const data = {
+                visits,
+                visitors,
+                companies,
+                settings,
+                userTokens
+            };
+            
+            localStorage.setItem('visitControl_data', JSON.stringify(data));
+        }
+
+        function loadAllData() {
+            const dataStr = localStorage.getItem('visitControl_data');
+            
+            if (dataStr) {
+                try {
+                    const data = JSON.parse(dataStr);
+                    
+                    if (data.visits) visits = data.visits;
+                    if (data.visitors) visitors = data.visitors;
+                    if (data.companies) companies = data.companies;
+                    if (data.settings) settings = data.settings;
+                    if (data.userTokens) userTokens = data.userTokens;
+                    
+                    // Carregar configurações
+                    loadSettings();
+                    
+                    // Carregar token ativo se existir
+                    const activeToken = userTokens.find(t => t.active);
+                    if (activeToken) {
+                        displayToken(activeToken.token);
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar dados:', error);
+                }
+            }
+        }
+
+        function loadSettings() {
+            if (settings.companyName) {
+                document.getElementById('companyName').value = settings.companyName;
+            }
+            if (settings.companyAddress) {
+                document.getElementById('companyAddress').value = settings.companyAddress;
+            }
+            if (settings.adminEmail) {
+                document.getElementById('adminEmail').value = settings.adminEmail;
+            }
+            if (settings.maxVisits) {
+                document.getElementById('maxVisits').value = settings.maxVisits;
+            }
+            if (settings.emailNotifications !== undefined) {
+                document.getElementById('emailNotifications').checked = settings.emailNotifications;
+            }
+            if (settings.browserNotifications !== undefined) {
+                document.getElementById('browserNotifications').checked = settings.browserNotifications;
+            }
+            if (settings.notificationTime) {
+                document.getElementById('notificationTime').value = settings.notificationTime;
+            }
+        }
+
+        function saveSettings() {
+            settings = {
+                companyName: document.getElementById('companyName').value,
+                companyAddress: document.getElementById('companyAddress').value,
+                adminEmail: document.getElementById('adminEmail').value,
+                maxVisits: parseInt(document.getElementById('maxVisits').value) || 50,
+                emailNotifications: document.getElementById('emailNotifications').checked,
+                browserNotifications: document.getElementById('browserNotifications').checked,
+                notificationTime: document.getElementById('notificationTime').value
+            };
+            
+            saveAllData();
+            showToast('Configurações salvas com sucesso!', 'success');
+        }
+
+        // Configurar botão de confirmação de exclusão
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+            if (deleteType === 'visit') {
+                deleteVisit();
+            } else if (deleteType === 'visitor') {
+                deleteVisitor();
+            } else if (deleteType === 'company') {
+                deleteCompany();
+            }
+        });
+
+        function deleteVisit() {
+            visits = visits.filter(v => v.id !== currentVisitId);
+            saveAllData();
+            renderAllTables();
+            updateCounters();
+            closeDeleteModal();
+            
+            showToast('Visita excluída com sucesso!', 'success');
+        }
+
+        function deleteVisitor() {
+            visitors = visitors.filter(v => v.id !== currentVisitorId);
+            saveAllData();
+            renderVisitorsTable();
+            updateBadges();
+            closeDeleteModal();
+            
+            showToast('Visitante excluído com sucesso!', 'success');
+        }
+
+        function deleteCompany() {
+            companies = companies.filter(c => c.id !== currentCompanyId);
+            saveAllData();
+            renderCompaniesTable();
+            updateBadges();
+            closeDeleteModal();
+            
+            showToast('Empresa excluída com sucesso!', 'success');
+        }
+
+        // Inicializar QR Code
+        generateQRCode();
+    </script>
+</body>
+</html>
