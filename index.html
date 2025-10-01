@@ -9,26 +9,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
-            --primary: #4361ee;
-            --primary-dark: #3a56d4;
-            --primary-light: #e6eeff;
-            --secondary: #6c757d;
-            --success: #28a745;
-            --success-light: #e8f5e9;
-            --warning: #ffc107;
-            --warning-light: #fff8e1;
-            --danger: #dc3545;
-            --danger-light: #ffebee;
-            --dark: #343a40;
-            --light: #f8f9fa;
-            --text: #2d3748;
-            --text-light: #718096;
-            --border: #e2e8f0;
+            --primary: #4b5563; /* Cinza escuro */
+            --primary-dark: #374151; /* Cinza mais escuro */
+            --secondary: #f9fafb; /* Cinza muito claro */
+            --accent: #f59e0b; /* Amarelo para detalhes */
+            --accent-dark: #d97706; /* Amarelo escuro */
+            --text: #1f2937; /* Cinza escuro para texto */
+            --text-light: #6b7280; /* Cinza médio */
+            --border: #d1d5db; /* Cinza claro para bordas */
+            --success: #10b981; /* Verde mantido */
+            --warning: #f59e0b; /* Amarelo mantido */
+            --danger: #ef4444; /* Vermelho mantido */
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --radius: 12px;
-            --radius-lg: 16px;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
         }
         
         * {
@@ -39,231 +32,19 @@
         }
         
         body {
-            background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
             color: var(--text);
             min-height: 100vh;
-            line-height: 1.6;
         }
         
-        /* Tela de Login */
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%234361ee" opacity="0.05"/><path d="M0 0L100 100" stroke="%234361ee" stroke-width="1" opacity="0.1"/><path d="M100 0L0 100" stroke="%234361ee" stroke-width="1" opacity="0.1"/></svg>');
-            background-size: cover;
-        }
-        
-        .login-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 40px;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: var(--shadow-lg);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .login-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-        }
-        
-        .login-logo {
-            margin-bottom: 30px;
-        }
-        
-        .login-logo-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--primary);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 36px;
-            margin: 0 auto 15px;
-            box-shadow: 0 6px 12px rgba(67, 97, 238, 0.3);
-        }
-        
-        .login-logo-text {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--primary);
-            letter-spacing: -0.5px;
-        }
-        
-        .login-form {
-            text-align: left;
-        }
-        
-        .login-form .form-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-        
-        .login-form label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text);
-            font-size: 14px;
-        }
-        
-        .login-form .form-control {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-size: 16px;
-            transition: var(--transition);
-        }
-        
-        .login-form .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-        }
-        
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
-        }
-        
-        .login-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(67, 97, 238, 0.4);
-        }
-        
-        .login-btn:active {
-            transform: translateY(0);
-        }
-        
-        .login-footer {
-            margin-top: 25px;
-            font-size: 14px;
-            color: var(--text-light);
-        }
-        
-        .admin-link {
-            color: var(--primary);
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-        
-        .admin-link:hover {
-            text-decoration: underline;
-        }
-        
-        /* Modal de Configuração de Chave */
-        .modal-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            display: none;
-            backdrop-filter: blur(4px);
-        }
-        
-        .modal-backdrop.active {
-            display: flex;
-        }
-        
-        .modal {
-            background: white;
-            border-radius: var(--radius-lg);
-            width: 100%;
-            max-width: 500px;
-            box-shadow: var(--shadow-lg);
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: modalFadeIn 0.3s ease;
-        }
-        
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .modal-header {
-            padding: 20px 25px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--light);
-            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-        }
-        
-        .modal-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--dark);
-        }
-        
-        .modal-body {
-            padding: 25px;
-            max-height: 60vh;
-            overflow-y: auto;
-        }
-        
-        .modal-footer {
-            padding: 20px 25px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            background: var(--light);
-            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-        }
-        
-        /* Aplicação principal (inicialmente oculta) */
+        /* Aplicação principal */
         .app-container {
             max-width: 1400px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 260px 1fr;
+            grid-template-columns: 250px 1fr;
             gap: 20px;
             padding: 20px;
-            display: none;
-        }
-        
-        .app-container.active {
-            display: grid;
         }
         
         @media (max-width: 900px) {
@@ -278,9 +59,8 @@
                 top: 0;
                 height: 100vh;
                 z-index: 1000;
-                width: 260px;
+                width: 250px;
                 background: white;
-                box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
             }
             
             .sidebar.active {
@@ -300,7 +80,6 @@
                 bottom: 0;
                 background: rgba(0, 0, 0, 0.5);
                 z-index: 999;
-                backdrop-filter: blur(4px);
             }
             
             .overlay.active {
@@ -311,14 +90,13 @@
         /* Header */
         .header {
             background: white;
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius);
             padding: 15px 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 20px;
             box-shadow: var(--shadow);
-            border: 1px solid var(--border);
         }
         
         .logo {
@@ -337,14 +115,29 @@
             justify-content: center;
             color: white;
             font-size: 24px;
-            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
         }
         
         .logo-text {
             font-size: 22px;
-            font-weight: 800;
+            font-weight: 700;
             color: var(--primary);
-            letter-spacing: -0.5px;
+        }
+        
+        .tiger-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 20px;
+            padding: 8px 15px;
+            background: var(--accent);
+            border-radius: 8px;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .tiger-logo i {
+            font-size: 20px;
         }
         
         .user-menu {
@@ -362,14 +155,8 @@
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: var(--transition);
-        }
-        
-        .user-avatar:hover {
-            transform: scale(1.05);
         }
         
         .mobile-menu-btn {
@@ -379,52 +166,37 @@
             font-size: 24px;
             color: var(--primary);
             cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: var(--transition);
-        }
-        
-        .mobile-menu-btn:hover {
-            background: var(--primary-light);
         }
         
         /* Sidebar */
         .sidebar {
             background: white;
-            border-radius: var(--radius-lg);
-            padding: 20px 0;
+            border-radius: var(--radius);
+            padding: 25px 0;
             box-shadow: var(--shadow);
             height: fit-content;
-            border: 1px solid var(--border);
         }
         
         .nav-item {
-            padding: 14px 25px;
+            padding: 15px 25px;
             display: flex;
             align-items: center;
             gap: 15px;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s;
             color: var(--text-light);
             border-left: 4px solid transparent;
-            margin: 5px 0;
-            position: relative;
         }
         
         .nav-item:hover, .nav-item.active {
-            background: var(--primary-light);
+            background: #f3f4f6;
             color: var(--primary);
-            border-left-color: var(--primary);
+            border-left-color: var(--accent);
         }
         
         .nav-item i {
             width: 20px;
             text-align: center;
-            font-size: 18px;
-        }
-        
-        .nav-item span {
-            font-weight: 500;
         }
         
         /* Main Content */
@@ -443,15 +215,9 @@
         
         .card {
             background: white;
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius);
             padding: 25px;
             box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            transition: var(--transition);
-        }
-        
-        .card:hover {
-            box-shadow: var(--shadow-lg);
         }
         
         .stat-card {
@@ -459,7 +225,7 @@
             align-items: center;
             gap: 20px;
             cursor: pointer;
-            transition: var(--transition);
+            transition: transform 0.3s;
         }
         
         .stat-card:hover {
@@ -469,40 +235,36 @@
         .stat-icon {
             width: 60px;
             height: 60px;
-            border-radius: 16px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         }
         
         .visits-icon {
-            background: var(--primary-light);
+            background: #e5e7eb;
             color: var(--primary);
         }
         
         .pending-icon {
-            background: var(--warning-light);
+            background: #fef3c7;
             color: var(--warning);
         }
         
         .completed-icon {
-            background: var(--success-light);
+            background: #d1fae5;
             color: var(--success);
         }
         
         .stat-info h3 {
             font-size: 28px;
             margin-bottom: 5px;
-            font-weight: 700;
-            color: var(--dark);
         }
         
         .stat-info p {
             color: var(--text-light);
             font-size: 14px;
-            font-weight: 500;
         }
         
         /* Visits Section */
@@ -514,59 +276,48 @@
         }
         
         .section-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--dark);
-            position: relative;
-            padding-bottom: 10px;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            height: 3px;
-            background: var(--primary);
-            border-radius: 3px;
+            font-size: 20px;
+            font-weight: 600;
         }
         
         .btn {
-            padding: 10px 18px;
-            border-radius: 10px;
+            padding: 10px 20px;
+            border-radius: 8px;
             border: none;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 14px;
         }
         
         .btn-primary {
             background: var(--primary);
             color: white;
-            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
         }
         
         .btn-primary:hover {
             background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-accent:hover {
+            background: var(--accent-dark);
         }
         
         .btn-outline {
             background: white;
-            border: 2px solid var(--border);
+            border: 1px solid var(--border);
             color: var(--text);
         }
         
         .btn-outline:hover {
-            background: var(--light);
-            border-color: var(--primary);
-            color: var(--primary);
+            background: #f9fafb;
         }
         
         /* Filters */
@@ -586,27 +337,18 @@
         .filter-select {
             padding: 8px 15px;
             border-radius: 8px;
-            border: 2px solid var(--border);
+            border: 1px solid var(--border);
             background: white;
-            transition: var(--transition);
-        }
-        
-        .filter-select:focus {
-            outline: none;
-            border-color: var(--primary);
         }
         
         /* Table */
         .table-container {
             overflow-x: auto;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
         }
         
         table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
+            border-collapse: collapse;
         }
         
         th, td {
@@ -619,17 +361,14 @@
             color: var(--text-light);
             font-weight: 600;
             font-size: 14px;
-            background: var(--light);
-            position: sticky;
-            top: 0;
         }
         
         tbody tr {
-            transition: var(--transition);
+            transition: all 0.3s;
         }
         
         tbody tr:hover {
-            background: var(--primary-light);
+            background: #f9fafb;
         }
         
         .status {
@@ -641,17 +380,17 @@
         }
         
         .status-scheduled {
-            background: var(--primary-light);
+            background: #e5e7eb;
             color: var(--primary);
         }
         
         .status-in-progress {
-            background: var(--warning-light);
+            background: #fef3c7;
             color: var(--warning);
         }
         
         .status-completed {
-            background: var(--success-light);
+            background: #d1fae5;
             color: var(--success);
         }
         
@@ -662,14 +401,11 @@
             cursor: pointer;
             font-size: 16px;
             margin-right: 10px;
-            transition: var(--transition);
-            padding: 8px;
-            border-radius: 6px;
+            transition: color 0.3s;
         }
         
         .action-btn:hover {
             color: var(--primary-dark);
-            background: var(--primary-light);
         }
         
         .action-btn.delete {
@@ -678,7 +414,6 @@
         
         .action-btn.delete:hover {
             color: #b91c1c;
-            background: var(--danger-light);
         }
         
         /* Footer */
@@ -694,37 +429,85 @@
         }
         
         .footer-brand {
-            font-weight: 700;
+            font-weight: 600;
             color: var(--primary);
         }
         
         /* Modal */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .modal-backdrop.active {
+            display: flex;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
         .form-group {
             margin-bottom: 20px;
-            position: relative;
         }
         
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text);
-            font-size: 14px;
+            font-weight: 500;
         }
         
         .form-control {
             width: 100%;
-            padding: 12px 14px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             font-size: 16px;
-            transition: var(--transition);
         }
         
         .form-control:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            border-color: var(--accent);
+        }
+        
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
         }
         
         /* Toast Notification */
@@ -733,17 +516,16 @@
             bottom: 20px;
             right: 20px;
             padding: 15px 25px;
-            border-radius: 10px;
+            border-radius: 8px;
             background: white;
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow);
             display: flex;
             align-items: center;
             gap: 10px;
             transform: translateY(100px);
             opacity: 0;
-            transition: var(--transition);
+            transition: all 0.3s;
             z-index: 1001;
-            border-left: 4px solid var(--success);
         }
         
         .toast.show {
@@ -752,11 +534,11 @@
         }
         
         .toast.success {
-            border-left-color: var(--success);
+            border-left: 4px solid var(--success);
         }
         
         .toast.error {
-            border-left-color: var(--danger);
+            border-left: 4px solid var(--danger);
         }
         
         .toast i {
@@ -791,7 +573,6 @@
         
         .detail-value {
             font-size: 16px;
-            color: var(--text);
         }
         
         /* Empty State */
@@ -809,11 +590,11 @@
         
         /* Badge */
         .badge {
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
-            background: var(--primary);
+            background: var(--accent);
             color: white;
             margin-left: 5px;
         }
@@ -825,18 +606,6 @@
         
         .page-content.active {
             display: block;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
         
         /* Status Actions */
@@ -844,50 +613,33 @@
             display: flex;
             gap: 10px;
             margin-top: 10px;
-            flex-wrap: wrap;
         }
         
         .status-btn {
-            padding: 10px 16px;
-            border-radius: 8px;
+            padding: 8px 15px;
+            border-radius: 5px;
             border: none;
             font-size: 14px;
             cursor: pointer;
-            transition: var(--transition);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            transition: all 0.3s;
         }
         
         .status-btn.progress {
             background: var(--warning);
             color: white;
-            box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
         }
         
         .status-btn.progress:hover {
             background: #e69a09;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(255, 193, 7, 0.4);
         }
         
         .status-btn.complete {
             background: var(--success);
             color: white;
-            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
         }
         
         .status-btn.complete:hover {
-            background: #218838;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(40, 167, 69, 0.4);
-        }
-        
-        .status-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
+            background: #0da371;
         }
         
         /* Data Management */
@@ -903,8 +655,8 @@
         /* About Section */
         .about-section {
             margin-top: 20px;
-            padding: 20px;
-            background: var(--light);
+            padding: 15px;
+            background: #f9fafb;
             border-radius: var(--radius);
             text-align: center;
             font-size: 14px;
@@ -912,7 +664,7 @@
         }
         
         .developer-name {
-            font-weight: 700;
+            font-weight: 600;
             color: var(--primary);
         }
         
@@ -935,8 +687,6 @@
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 1px solid var(--border);
-            color: var(--dark);
-            font-weight: 600;
         }
         
         .help-section {
@@ -946,7 +696,6 @@
         .help-section h3 {
             margin-bottom: 15px;
             color: var(--primary);
-            font-weight: 600;
         }
         
         .help-content {
@@ -954,7 +703,6 @@
             padding: 20px;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            border: 1px solid var(--border);
         }
         
         .contact-info {
@@ -1004,12 +752,11 @@
             height: 25px;
             width: 25px;
             background-color: #eee;
-            border-radius: 6px;
-            transition: var(--transition);
+            border-radius: 5px;
         }
 
         .checkbox-container:hover input ~ .checkmark {
-            background-color: #ddd;
+            background-color: #ccc;
         }
 
         .checkbox-container input:checked ~ .checkmark {
@@ -1048,30 +795,28 @@
             margin: 20px auto;
             padding: 10px;
             background: white;
-            border-radius: 12px;
+            border-radius: 8px;
             display: inline-block;
             min-height: 220px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid var(--border);
         }
 
         .qrcode-link {
             display: block;
             margin: 15px 0;
-            padding: 12px;
-            background: var(--light);
-            border-radius: 10px;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 8px;
             word-break: break-all;
             font-size: 14px;
             cursor: pointer;
-            transition: var(--transition);
-            border: 1px solid var(--border);
+            transition: background 0.3s;
         }
 
         .qrcode-link:hover {
-            background: var(--primary-light);
+            background: #e5e7eb;
         }
 
         .qrcode-actions {
@@ -1090,325 +835,13 @@
         .btn-qrcode:hover {
             background: var(--primary-dark);
         }
-        
-        /* Booking Page */
-        .booking-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
-        }
-        
-        .booking-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 40px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .booking-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-        }
-        
-        .booking-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .booking-logo {
-            width: 80px;
-            height: 80px;
-            background: var(--primary);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 36px;
-            margin: 0 auto 15px;
-            box-shadow: 0 6px 12px rgba(67, 97, 238, 0.3);
-        }
-        
-        .booking-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-        
-        .booking-subtitle {
-            color: var(--text-light);
-        }
-        
-        /* Token Section */
-        .token-section {
-            margin-top: 20px;
-            padding: 20px;
-            background: var(--light);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-        }
-        
-        .token-display {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 10px 0;
-        }
-        
-        .token-value {
-            flex: 1;
-            padding: 12px;
-            background: white;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-family: monospace;
-            word-break: break-all;
-            font-size: 14px;
-        }
-        
-        .token-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        /* Tela de Carregamento */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.95);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            flex-direction: column;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid var(--border);
-            border-top: 4px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-        
-        .loading-text {
-            font-size: 16px;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Validação de formulário */
-        .error-message {
-            color: var(--danger);
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
-        }
-        
-        .form-control.error {
-            border-color: var(--danger);
-        }
-
-        /* Botões com gradiente e efeitos melhorados */
-        .btn-gradient {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-gradient::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn-gradient:hover::before {
-            left: 100%;
-        }
-        
-        .btn-gradient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
-        }
-        
-        .btn-success {
-            background: linear-gradient(135deg, var(--success) 0%, #218838 100%);
-            color: white;
-            border: none;
-        }
-        
-        .btn-success:hover {
-            background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
-        }
-        
-        .btn-warning {
-            background: linear-gradient(135deg, var(--warning) 0%, #e0a800 100%);
-            color: white;
-            border: none;
-        }
-        
-        .btn-warning:hover {
-            background: linear-gradient(135deg, #e0a800 0%, #d39e00 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(255, 193, 7, 0.4);
-        }
-        
-        .btn-danger {
-            background: linear-gradient(135deg, var(--danger) 0%, #c82333 100%);
-            color: white;
-            border: none;
-        }
-        
-        .btn-danger:hover {
-            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(220, 53, 69, 0.4);
-        }
-        
-        /* Melhorias nos cards */
-        .card-header {
-            padding: 20px 25px 0;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 20px;
-        }
-        
-        .card-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 10px;
-        }
-        
-        .card-subtitle {
-            color: var(--text-light);
-            font-size: 14px;
-        }
-        
-        /* Melhorias na tabela */
-        .table-hover tbody tr:hover {
-            background-color: rgba(67, 97, 238, 0.05);
-            transform: translateX(5px);
-            transition: all 0.2s ease;
-        }
-        
-        /* Efeito de destaque nos badges */
-        .badge-pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(67, 97, 238, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0);
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Tela de Carregamento -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">Carregando sistema...</div>
-    </div>
-
-    <!-- Tela de Login -->
-    <div class="login-container" id="loginContainer">
-        <div class="login-card">
-            <div class="login-logo">
-                <div class="login-logo-icon">
-                    <i class="fas fa-door-open"></i>
-                </div>
-                <div class="login-logo-text">VisitControl</div>
-            </div>
-            
-            <div class="login-form">
-                <div class="form-group">
-                    <label for="accessKey">Chave de Acesso</label>
-                    <input type="password" id="accessKey" class="form-control" placeholder="Digite sua chave de acesso">
-                    <div class="error-message" id="accessKeyError"></div>
-                </div>
-                
-                <button class="login-btn btn-gradient" id="loginBtn">Acessar Sistema</button>
-            </div>
-            
-            <div class="login-footer">
-                <p>É administrador? <span class="admin-link" id="adminLink">Configurar chave de acesso</span></p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal de Configuração de Chave de Acesso -->
-    <div class="modal-backdrop" id="adminModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Configuração de Chave de Acesso</h3>
-                <button class="action-btn" id="closeAdminModalBtn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="newAccessKey">Nova Chave de Acesso</label>
-                    <input type="password" id="newAccessKey" class="form-control" placeholder="Digite a nova chave">
-                    <div class="error-message" id="newAccessKeyError"></div>
-                </div>
-                <div class="form-group">
-                    <label for="confirmAccessKey">Confirmar Chave</label>
-                    <input type="password" id="confirmAccessKey" class="form-control" placeholder="Confirme a nova chave">
-                    <div class="error-message" id="confirmAccessKeyError"></div>
-                </div>
-                <p class="login-footer">A chave de acesso é necessária para entrar no sistema. Guarde-a em local seguro.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" id="cancelAdminBtn">Cancelar</button>
-                <button class="btn btn-gradient" id="saveAccessKeyBtn">Salvar Chave</button>
-            </div>
-        </div>
-    </div>
-    
     <!-- Overlay para menu mobile -->
     <div class="overlay" id="overlay"></div>
     
-    <!-- Aplicação Principal (inicialmente oculta) -->
+    <!-- Aplicação Principal -->
     <div class="app-container" id="appContainer">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
@@ -1427,12 +860,12 @@
             <div class="nav-item" data-page="visitors">
                 <i class="fas fa-users"></i>
                 <span>Visitantes</span>
-                <span class="badge badge-pulse" id="visitorsBadge">0</span>
+                <span class="badge" id="visitorsBadge">0</span>
             </div>
             <div class="nav-item" data-page="companies">
                 <i class="fas fa-building"></i>
                 <span>Empresas</span>
-                <span class="badge badge-pulse" id="companiesBadge">0</span>
+                <span class="badge" id="companiesBadge">0</span>
             </div>
             <div class="nav-item" data-page="settings">
                 <i class="fas fa-cog"></i>
@@ -1441,10 +874,6 @@
             <div class="nav-item" data-page="help">
                 <i class="fas fa-question-circle"></i>
                 <span>Ajuda</span>
-            </div>
-            <div class="nav-item" id="logoutBtn">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Sair</span>
             </div>
         </aside>
         
@@ -1460,10 +889,14 @@
                         <i class="fas fa-door-open"></i>
                     </div>
                     <div class="logo-text">VisitControl</div>
+                    <div class="tiger-logo">
+                        <i class="fas fa-paw"></i>
+                        <span>Tiger Rentank</span>
+                    </div>
                 </div>
                 <div class="user-menu">
                     <!-- Botão de QR Code adicionado aqui -->
-                    <button class="btn btn-gradient" id="qrcodeBtn" style="margin-right: 10px;">
+                    <button class="btn btn-accent" id="qrcodeBtn" style="margin-right: 10px;">
                         <i class="fas fa-qrcode"></i>
                         QR Code Agendamento
                     </button>
@@ -1535,14 +968,14 @@
                 <div class="card">
                     <div class="section-header">
                         <h2 class="section-title">Visitas Recentes</h2>
-                        <button class="btn btn-gradient" id="newVisitBtn">
+                        <button class="btn btn-accent" id="newVisitBtn">
                             <i class="fas fa-plus"></i>
                             Nova Visita
                         </button>
                     </div>
                     
                     <div class="table-container">
-                        <table class="table-hover">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Visitante</th>
@@ -1561,11 +994,11 @@
 
                     <!-- Data Management -->
                     <div class="data-management">
-                        <button class="btn btn-danger" id="clearDataBtn">
+                        <button class="btn btn-outline" id="clearDataBtn">
                             <i class="fas fa-trash"></i>
                             Limpar Todos os Dados
                         </button>
-                        <button class="btn btn-warning" id="addSampleDataBtn">
+                        <button class="btn btn-outline" id="addSampleDataBtn">
                             <i class="fas fa-plus-circle"></i>
                             Adicionar Dados de Exemplo
                         </button>
@@ -1584,14 +1017,14 @@
                 <div class="card">
                     <div class="section-header">
                         <h2 class="section-title">Todas as Visitas</h2>
-                        <button class="btn btn-gradient" id="newVisitBtn2">
+                        <button class="btn btn-accent" id="newVisitBtn2">
                             <i class="fas fa-plus"></i>
                             Nova Visita
                         </button>
                     </div>
                     
                     <div class="table-container">
-                        <table class="table-hover">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Visitante</th>
@@ -1617,7 +1050,7 @@
                     <p>Esta página gerencia os agendamentos futuros de visitas.</p>
                     
                     <div class="table-container">
-                        <table class="table-hover">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Visitante</th>
@@ -1641,14 +1074,14 @@
                 <div class="card">
                     <div class="section-header">
                         <h2 class="section-title">Visitantes Cadastrados</h2>
-                        <button class="btn btn-gradient" id="newVisitorBtn">
+                        <button class="btn btn-accent" id="newVisitorBtn">
                             <i class="fas fa-plus"></i>
                             Novo Visitante
                         </button>
                     </div>
                     
                     <div class="table-container">
-                        <table class="table-hover">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Nome</th>
@@ -1672,14 +1105,14 @@
                 <div class="card">
                     <div class="section-header">
                         <h2 class="section-title">Empresas Cadastradas</h2>
-                        <button class="btn btn-gradient" id="newCompanyBtn">
+                        <button class="btn btn-accent" id="newCompanyBtn">
                             <i class="fas fa-plus"></i>
                             Nova Empresa
                         </button>
                     </div>
                     
                     <div class="table-container">
-                        <table class="table-hover">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Nome</th>
@@ -1750,41 +1183,17 @@
                     </div>
                     
                     <div class="settings-group">
-                        <h3>Gerenciamento de Tokens</h3>
-                        <div class="token-section">
-                            <p>Gere tokens de acesso para usuários do sistema:</p>
-                            <div class="token-display">
-                                <span class="token-value" id="userTokenDisplay">Nenhum token gerado</span>
-                                <button class="btn btn-outline" id="copyTokenBtn" disabled>
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </div>
-                            <div class="token-actions">
-                                <button class="btn btn-gradient" id="generateTokenBtn">
-                                    <i class="fas fa-key"></i>
-                                    Gerar Novo Token
-                                </button>
-                                <button class="btn btn-outline" id="revokeTokenBtn" disabled>
-                                    <i class="fas fa-ban"></i>
-                                    Revogar Token
-                                </button>
-                            </div>
-                            <div class="error-message" id="tokenError"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="settings-group">
                         <h3>Backup de Dados</h3>
                         <div class="data-management">
-                            <button class="btn btn-success" id="exportDataBtn">
+                            <button class="btn btn-outline" id="exportDataBtn">
                                 <i class="fas fa-download"></i>
                                 Exportar Dados
                             </button>
-                            <button class="btn btn-warning" id="importDataBtn">
+                            <button class="btn btn-outline" id="importDataBtn">
                                 <i class="fas fa-upload"></i>
                                 Importar Dados
                             </button>
-                            <button class="btn btn-danger" id="resetSettingsBtn">
+                            <button class="btn btn-outline" id="resetSettingsBtn">
                                 <i class="fas fa-undo"></i>
                                 Restaurar Padrões
                             </button>
@@ -1792,7 +1201,7 @@
                     </div>
                     
                     <div class="settings-group">
-                        <button class="btn btn-gradient" id="saveSettingsBtn">
+                        <button class="btn btn-accent" id="saveSettingsBtn">
                             <i class="fas fa-save"></i>
                             Salvar Configurações
                         </button>
@@ -1824,10 +1233,10 @@
                         <h3>Perguntas Frequentes</h3>
                         <div class="help-content">
                             <p><strong>Como adicionar uma nova visita?</strong></p>
-                            <p>Clique no botão "Nova Visita" no Dashboard или na página de Visitas.</p>
+                            <p>Clique no botão "Nova Visita" no Dashboard ou na página de Visitas.</p>
                             
                             <p><strong>Como alterar o status de uma visita?</strong></p>
-                            <p>Clique no ícone de visualização (olho) na lista de visitas и use os botões para alterar o status.</p>
+                            <p>Clique no ícone de visualização (olho) na lista de visitas e use os botões para alterar o status.</p>
                             
                             <p><strong>Os dados são salvos automaticamente?</strong></p>
                             <p>Sim, todos os dados são salvos automaticamente no seu navegador.</p>
@@ -1841,7 +1250,7 @@
                             <div class="contact-info">
                                 <div class="contact-item">
                                     <i class="fas fa-user"></i>
-                                    <span><strong>Aldemir Garbino</strong></span>
+                                    <span><strong>Aldemir Garbino</span>
                                 </div>
                                 <div class="contact-item">
                                     <i class="fas fa-envelope"></i>
@@ -1861,67 +1270,6 @@
                 </div>
             </div>
         </main>
-    </div>
-    
-    <!-- Página de Agendamento via QR Code (inicialmente oculta) -->
-    <div class="booking-container" id="bookingContainer" style="display: none;">
-        <div class="booking-card">
-            <div class="booking-header">
-                <div class="booking-logo">
-                    <i class="fas fa-door-open"></i>
-                </div>
-                <h2 class="booking-title">Agendamento de Visita</h2>
-                <p class="booking-subtitle">Preencha os dados para agendar sua visita</p>
-            </div>
-            
-            <form id="bookingForm">
-                <div class="form-group">
-                    <label for="bookingName">Nome Completo</label>
-                    <input type="text" id="bookingName" class="form-control" placeholder="Digite seu nome completo" required>
-                    <div class="error-message" id="bookingNameError"></div>
-                </div>
-                <div class="form-group">
-                    <label for="bookingCompany">Empresa</label>
-                    <input type="text" id="bookingCompany" class="form-control" placeholder="Nome da empresa" required>
-                    <div class="error-message" id="bookingCompanyError"></div>
-                </div>
-                <div class="form-group">
-                    <label for="bookingDocument">Documento (CPF ou RG)</label>
-                    <input type="text" id="bookingDocument" class="form-control" placeholder="Digite seu documento">
-                    <div class="error-message" id="bookingDocumentError"></div>
-                </div>
-                <div class="form-group">
-                    <label for="bookingDestination">Destino</label>
-                    <select id="bookingDestination" class="form-control" required>
-                        <option value="">Selecione um departamento</option>
-                        <option value="rh">Recursos Humanos</option>
-                        <option value="ti">Tecnologia da Informação</option>
-                        <option value="financeiro">Financeiro</option>
-                        <option value="comercial">Comercial</option>
-                        <option value="diretoria">Diretoria</option>
-                        <option value="operacional">Operacional</option>
-                    </select>
-                    <div class="error-message" id="bookingDestinationError"></div>
-                </div>
-                <div class="form-group">
-                    <label for="bookingDate">Data e Hora</label>
-                    <input type="datetime-local" id="bookingDate" class="form-control" required>
-                    <div class="error-message" id="bookingDateError"></div>
-                </div>
-                <div class="form-group">
-                    <label for="bookingNotes">Observações</label>
-                    <textarea id="bookingNotes" class="form-control" rows="3" placeholder="Informações adicionais..."></textarea>
-                </div>
-                <button type="submit" class="btn btn-gradient" style="width: 100%;">
-                    <i class="fas fa-calendar-check"></i>
-                    Agendar Visita
-                </button>
-            </form>
-            
-            <div class="login-footer" style="text-align: center; margin-top: 20px;">
-                <p><a href="#" id="backToSystem">Voltar para o sistema</a></p>
-            </div>
-        </div>
     </div>
     
     <!-- Footer -->
@@ -1945,17 +1293,14 @@
                     <div class="form-group">
                         <label for="visitorName">Nome do Visitante</label>
                         <input type="text" id="visitorName" class="form-control" placeholder="Digite o nome completo" required>
-                        <div class="error-message" id="visitorNameError"></div>
                     </div>
                     <div class="form-group">
                         <label for="company">Empresa</label>
                         <input type="text" id="company" class="form-control" placeholder="Nome da empresa" required>
-                        <div class="error-message" id="companyError"></div>
                     </div>
                     <div class="form-group">
                         <label for="document">Documento</label>
                         <input type="text" id="document" class="form-control" placeholder="CPF ou RG">
-                        <div class="error-message" id="documentError"></div>
                     </div>
                     <div class="form-group">
                         <label for="destination">Destino</label>
@@ -1968,12 +1313,10 @@
                             <option value="diretoria">Diretoria</option>
                             <option value="operacional">Operacional</option>
                         </select>
-                        <div class="error-message" id="destinationError"></div>
                     </div>
                     <div class="form-group">
                         <label for="date">Data e Hora</label>
                         <input type="datetime-local" id="date" class="form-control" required>
-                        <div class="error-message" id="dateError"></div>
                     </div>
                     <div class="form-group">
                         <label for="notes">Observações</label>
@@ -2017,14 +1360,14 @@
                     <!-- Status Actions -->
                     <div class="status-actions" id="statusActions">
                         <button class="status-btn progress" id="markInProgressBtn">Marcar como Em Andamento</button>
-                        <button class="status-btn complete" id="markCompletedBtn" disabled>Marcar como Concluída</button>
+                        <button class="status-btn complete" id="markCompletedBtn">Marcar como Concluída</button>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline" id="cancelBtn">Cancelar</button>
-                <button class="btn btn-gradient" id="saveBtn" style="display: none;">Salvar Visita</button>
-                <button class="btn btn-gradient" id="updateBtn" style="display: none;">Atualizar Visita</button>
+                <button class="btn btn-accent" id="saveBtn" style="display: none;">Salvar Visita</button>
+                <button class="btn btn-accent" id="updateBtn" style="display: none;">Atualizar Visita</button>
             </div>
         </div>
     </div>
@@ -2044,33 +1387,28 @@
                     <div class="form-group">
                         <label for="visitorFullName">Nome Completo</label>
                         <input type="text" id="visitorFullName" class="form-control" placeholder="Digite o nome completo" required>
-                        <div class="error-message" id="visitorFullNameError"></div>
                     </div>
                     <div class="form-group">
                         <label for="visitorDocument">Documento</label>
                         <input type="text" id="visitorDocument" class="form-control" placeholder="CPF ou RG" required>
-                        <div class="error-message" id="visitorDocumentError"></div>
                     </div>
                     <div class="form-group">
                         <label for="visitorCompany">Empresa</label>
                         <input type="text" id="visitorCompany" class="form-control" placeholder="Nome da empresa" required>
-                        <div class="error-message" id="visitorCompanyError"></div>
                     </div>
                     <div class="form-group">
                         <label for="visitorPhone">Telefone</label>
                         <input type="tel" id="visitorPhone" class="form-control" placeholder="(11) 99999-9999">
-                        <div class="error-message" id="visitorPhoneError"></div>
                     </div>
                     <div class="form-group">
                         <label for="visitorEmail">E-mail</label>
                         <input type="email" id="visitorEmail" class="form-control" placeholder="email@exemplo.com">
-                        <div class="error-message" id="visitorEmailError"></div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline close-visitor-modal">Cancelar</button>
-                <button class="btn btn-gradient" id="saveVisitorBtn">Salvar Visitante</button>
+                <button class="btn btn-accent" id="saveVisitorBtn">Salvar Visitante</button>
             </div>
         </div>
     </div>
@@ -2090,12 +1428,10 @@
                     <div class="form-group">
                         <label for="companyNameInput">Nome da Empresa</label>
                         <input type="text" id="companyNameInput" class="form-control" placeholder="Digite o nome da empresa" required>
-                        <div class="error-message" id="companyNameInputError"></div>
                     </div>
                     <div class="form-group">
                         <label for="companyCnpj">CNPJ</label>
                         <input type="text" id="companyCnpj" class="form-control" placeholder="00.000.000/0000-00" required>
-                        <div class="error-message" id="companyCnpjError"></div>
                     </div>
                     <div class="form-group">
                         <label for="companyResponsible">Responsável</label>
@@ -2108,13 +1444,12 @@
                     <div class="form-group">
                         <label for="companyEmail">E-mail</label>
                         <input type="email" id="companyEmail" class="form-control" placeholder="empresa@exemplo.com">
-                        <div class="error-message" id="companyEmailError"></div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline close-company-modal">Cancelar</button>
-                <button class="btn btn-gradient" id="saveCompanyBtn">Salvar Empresa</button>
+                <button class="btn btn-accent" id="saveCompanyBtn">Salvar Empresa</button>
             </div>
         </div>
     </div>
@@ -2134,7 +1469,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline close-delete-modal">Cancelar</button>
-                <button class="btn btn-danger" id="confirmDeleteBtn">Excluir</button>
+                <button class="btn btn-accent" id="confirmDeleteBtn">Excluir</button>
             </div>
         </div>
     </div>
@@ -2159,11 +1494,11 @@
                             <i class="fas fa-copy"></i>
                             Copiar Link
                         </button>
-                        <button class="btn btn-gradient" id="downloadQrcodeBtn">
+                        <button class="btn btn-accent" id="downloadQrcodeBtn">
                             <i class="fas fa-download"></i>
                             Baixar QR Code
                         </button>
-                        <button class="btn btn-warning" id="generateNewBtn">
+                        <button class="btn btn-accent" id="generateNewBtn">
                             <i class="fas fa-sync"></i>
                             Gerar Novo
                         </button>
@@ -2188,24 +1523,9 @@
         let visitors = [];
         let companies = [];
         let settings = {};
-        let userTokens = [];
         
         // Elementos DOM
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const loginContainer = document.getElementById('loginContainer');
         const appContainer = document.getElementById('appContainer');
-        const bookingContainer = document.getElementById('bookingContainer');
-        const accessKeyInput = document.getElementById('accessKey');
-        const loginBtn = document.getElementById('loginBtn');
-        const adminLink = document.getElementById('adminLink');
-        const adminModal = document.getElementById('adminModal');
-        const newAccessKeyInput = document.getElementById('newAccessKey');
-        const confirmAccessKeyInput = document.getElementById('confirmAccessKey');
-        const saveAccessKeyBtn = document.getElementById('saveAccessKeyBtn');
-        const closeAdminModalBtn = document.getElementById('closeAdminModalBtn');
-        const cancelAdminBtn = document.getElementById('cancelAdminBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -2229,24 +1549,10 @@
         const downloadQrcodeBtn = document.getElementById('downloadQrcodeBtn');
         const generateNewBtn = document.getElementById('generateNewBtn');
         
-        // Token elements
-        const userTokenDisplay = document.getElementById('userTokenDisplay');
-        const copyTokenBtn = document.getElementById('copyTokenBtn');
-        const generateTokenBtn = document.getElementById('generateTokenBtn');
-        const revokeTokenBtn = document.getElementById('revokeTokenBtn');
-        
-        // Booking elements
-        const bookingForm = document.getElementById('bookingForm');
-        const backToSystem = document.getElementById('backToSystem');
-        
         // Contadores
         const todayVisitsCount = document.getElementById('todayVisitsCount');
         const pendingVisitsCount = document.getElementById('pendingVisitsCount');
         const completedVisitsCount = document.getElementById('completedVisitsCount');
-        
-        // Botões de status
-        const markInProgressBtn = document.getElementById('markInProgressBtn');
-        const markCompletedBtn = document.getElementById('markCompletedBtn');
         
         // Estado da aplicação
         let currentVisitId = null;
@@ -2259,523 +1565,760 @@
         
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Sistema VisitControl iniciando...');
+            // Carregar dados do sistema
+            loadAllData();
             
-            // Mostrar tela de carregamento inicialmente
-            showLoading();
+            // Adicionar dados de exemplo apenas se não houver dados salvos
+            if (visits.length === 0 && visitors.length === 0 && companies.length === 0) {
+                addSampleData();
+            }
             
-            // Simular tempo de carregamento do sistema
-            setTimeout(() => {
-                try {
-                    // Verificar se há uma chave de acesso configurada
-                    const accessKey = localStorage.getItem('visitControl_accessKey');
-                    
-                    if (!accessKey) {
-                        // Se não houver chave, mostrar link de administrador
-                        adminLink.style.display = 'block';
-                    } else {
-                        adminLink.style.display = 'none';
-                    }
-                    
-                    // Verificar se estamos na página de agendamento
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const token = urlParams.get('token');
-                    
-                    if (token) {
-                        // Mostrar página de agendamento
-                        showBookingPage();
-                    }
-                    
-                    // Configurar event listeners para login
-                    setupLoginEventListeners();
-                    
-                    // Esconder tela de carregamento
-                    hideLoading();
-                    
-                    console.log('Sistema VisitControl carregado com sucesso!');
-                } catch (error) {
-                    console.error('Erro ao inicializar o sistema:', error);
-                    hideLoading();
-                    showToast('Erro ao carregar o sistema. Recarregue a página.', 'error');
-                }
-            }, 1000);
+            updateCounters();
+            applyFilters();
+            document.getElementById('date').min = new Date().toISOString().slice(0, 16);
+            
+            // Configurar event listeners para os botões
+            setupEventListeners();
+            
+            showToast('Sistema de gestão de visitas carregado com sucesso!', 'success');
         });
         
-        // Configurar event listeners para login
-        function setupLoginEventListeners() {
-            loginBtn.addEventListener('click', handleLogin);
-            adminLink.addEventListener('click', () => adminModal.classList.add('active'));
-            saveAccessKeyBtn.addEventListener('click', saveAccessKey);
-            closeAdminModalBtn.addEventListener('click', () => adminModal.classList.remove('active'));
-            cancelAdminBtn.addEventListener('click', () => adminModal.classList.remove('active'));
-            logoutBtn.addEventListener('click', handleLogout);
-            
-            // Configurar tecla Enter para login
-            accessKeyInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    handleLogin();
-                }
-            });
-            
-            // Configurar tecla Enter para salvar chave
-            newAccessKeyInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    saveAccessKey();
-                }
-            });
-            
-            confirmAccessKeyInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    saveAccessKey();
-                }
-            });
-            
-            // Configurar formulário de agendamento
-            if (bookingForm) {
-                bookingForm.addEventListener('submit', handleBooking);
-            }
-            
-            if (backToSystem) {
-                backToSystem.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showMainSystem();
-                });
-            }
-        }
-        
-        // Funções para gerenciar a tela de carregamento
-        function showLoading(message = 'Carregando...') {
-            if (loadingOverlay) {
-                loadingOverlay.style.display = 'flex';
-                const loadingText = document.querySelector('.loading-text');
-                if (loadingText) {
-                    loadingText.textContent = message;
-                }
-            }
-        }
-        
-        function hideLoading() {
-            if (loadingOverlay) {
-                loadingOverlay.style.display = 'none';
-            }
-        }
-        
-        // Funções de autenticação
-        function handleLogin() {
-            showLoading('Verificando credenciais...');
-            
-            setTimeout(() => {
-                try {
-                    const accessKey = accessKeyInput.value.trim();
-                    const storedAccessKey = localStorage.getItem('visitControl_accessKey');
-                    
-                    if (!storedAccessKey) {
-                        hideLoading();
-                        showToast('Nenhuma chave de acesso configurada. Use o link de administrador para configurar.', 'error');
-                        return;
-                    }
-                    
-                    if (accessKey === storedAccessKey) {
-                        // Login bem-sucedido
-                        loginContainer.style.display = 'none';
-                        appContainer.classList.add('active');
-                        
-                        // Carregar dados do sistema
-                        loadAllData();
-                        
-                        // Adicionar dados de exemplo apenas se não houver dados salvos
-                        if (visits.length === 0 && visitors.length === 0 && companies.length === 0) {
-                            addSampleData();
-                        }
-                        
-                        updateCounters();
-                        applyFilters();
-                        
-                        // Configurar data mínima para formulários
-                        const dateInput = document.getElementById('date');
-                        if (dateInput) {
-                            dateInput.min = new Date().toISOString().slice(0, 16);
-                        }
-                        
-                        // Configurar event listeners para os botões
-                        setupEventListeners();
-                        
-                        showToast('Login realizado com sucesso!', 'success');
-                    } else {
-                        showToast('Chave de acesso incorreta!', 'error');
-                        accessKeyInput.value = '';
-                        accessKeyInput.focus();
-                    }
-                    
-                    hideLoading();
-                } catch (error) {
-                    console.error('Erro no login:', error);
-                    hideLoading();
-                    showToast('Erro durante o login. Tente novamente.', 'error');
-                }
-            }, 800);
-        }
-        
-        function saveAccessKey() {
-            try {
-                const newKey = newAccessKeyInput.value.trim();
-                const confirmKey = confirmAccessKeyInput.value.trim();
-                
-                if (!newKey) {
-                    showToast('Digite uma chave de acesso válida', 'error');
-                    return;
-                }
-                
-                if (newKey !== confirmKey) {
-                    showToast('As chaves não coincidem', 'error');
-                    return;
-                }
-                
-                // Salvar a chave de acesso
-                localStorage.setItem('visitControl_accessKey', newKey);
-                
-                // Fechar o modal e limpar os campos
-                adminModal.classList.remove('active');
-                newAccessKeyInput.value = '';
-                confirmAccessKeyInput.value = '';
-                
-                // Ocultar o link de administrador
-                adminLink.style.display = 'none';
-                
-                showToast('Chave de acesso configurada com sucesso!', 'success');
-            } catch (error) {
-                console.error('Erro ao salvar chave de acesso:', error);
-                showToast('Erro ao salvar chave de acesso.', 'error');
-            }
-        }
-        
-        function handleLogout() {
-            try {
-                // Voltar para a tela de login
-                appContainer.classList.remove('active');
-                loginContainer.style.display = 'flex';
-                accessKeyInput.value = '';
-                
-                showToast('Logout realizado com sucesso', 'success');
-            } catch (error) {
-                console.error('Erro no logout:', error);
-            }
-        }
-        
-        function showBookingPage() {
-            try {
-                loginContainer.style.display = 'none';
-                appContainer.style.display = 'none';
-                if (bookingContainer) {
-                    bookingContainer.style.display = 'flex';
-                }
-                
-                // Preencher data e hora atual
-                const now = new Date();
-                // Ajustar para o formato datetime-local (removendo os segundos)
-                const formattedNow = now.toISOString().slice(0, 16);
-                const bookingDateInput = document.getElementById('bookingDate');
-                if (bookingDateInput) {
-                    bookingDateInput.value = formattedNow;
-                }
-            } catch (error) {
-                console.error('Erro ao mostrar página de agendamento:', error);
-            }
-        }
-        
-        function showMainSystem() {
-            try {
-                if (bookingContainer) {
-                    bookingContainer.style.display = 'none';
-                }
-                loginContainer.style.display = 'flex';
-            } catch (error) {
-                console.error('Erro ao voltar para o sistema:', error);
-            }
-        }
-        
-        function handleBooking(e) {
-            e.preventDefault();
-            
-            try {
-                const name = document.getElementById('bookingName').value.trim();
-                const company = document.getElementById('bookingCompany').value.trim();
-                const document = document.getElementById('bookingDocument').value.trim();
-                const destination = document.getElementById('bookingDestination').value;
-                const date = document.getElementById('bookingDate').value;
-                const notes = document.getElementById('bookingNotes').value.trim();
-                
-                if (!name || !company || !destination || !date) {
-                    showToast('Preencha todos os campos obrigatórios', 'error');
-                    return;
-                }
-                
-                // Criar nova visita
-                const newVisit = {
-                    id: Date.now(),
-                    name,
-                    company,
-                    document,
-                    destination,
-                    date,
-                    status: 'scheduled',
-                    notes
-                };
-                
-                // Adicionar à lista de visitas
-                visits.push(newVisit);
-                
-                // Salvar no localStorage
-                saveAllData();
-                
-                showToast('Visita agendada com sucesso!', 'success');
-                
-                // Limpar formulário
-                bookingForm.reset();
-                
-                // Preencher data e hora atual novamente
-                const now = new Date();
-                const formattedNow = now.toISOString().slice(0, 16);
-                document.getElementById('bookingDate').value = formattedNow;
-            } catch (error) {
-                console.error('Erro ao processar agendamento:', error);
-                showToast('Erro ao agendar visita.', 'error');
-            }
-        }
-        
-        // CORREÇÃO: Função addSampleData corrigida
-        function addSampleData() {
-            try {
-                const today = new Date();
-                const tomorrow = new Date(today);
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                const yesterday = new Date(today);
-                yesterday.setDate(yesterday.getDate() - 1);
-                
-                // Dados de exemplo para visitantes
-                visitors = [
-                    { id: 1, name: "Carlos Silva", document: "123.456.789-00", company: "Tech Solutions Ltda", phone: "(11) 99999-9999", email: "carlos@techsolutions.com", lastVisit: today.toISOString().slice(0, 16), totalVisits: 3 },
-                    { id: 2, name: "Ana Oliveira", document: "987.654.321-00", company: "Consultoria Financeira SA", phone: "(11) 98888-8888", email: "ana@consultoriafinanceira.com", lastVisit: today.toISOString().slice(0, 16), totalVisits: 5 },
-                    { id: 3, name: "Roberto Santos", document: "456.789.123-00", company: "Vendas Express", phone: "(11) 97777-7777", email: "roberto@vendasexpress.com", lastVisit: yesterday.toISOString().slice(0, 16), totalVisits: 2 },
-                    { id: 4, name: "Mariana Costa", document: "789.123.456-00", company: "Recursos Humanos Brasil", phone: "(11) 96666-6666", email: "mariana@rhbrasil.com", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 },
-                    { id: 5, name: "Paulo Mendes", document: "321.654.987-00", company: "Indústrias Pesadas", phone: "(11) 95555-5555", email: "paulo@industriaspesadas.com", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 }
-                ];
-                
-                // Dados de exemplo para empresas
-                companies = [
-                    { id: 1, name: "Tech Solutions Ltda", cnpj: "12.345.678/0001-90", responsible: "Carlos Silva", phone: "(11) 99999-9999", email: "contato@techsolutions.com", totalVisits: 3, lastVisit: today.toISOString().slice(0, 16) },
-                    { id: 2, name: "Consultoria Financeira SA", cnpj: "98.765.432/0001-10", responsible: "Ana Oliveira", phone: "(11) 98888-8888", email: "contato@consultoriafinanceira.com", totalVisits: 5, lastVisit: today.toISOString().slice(0, 16) },
-                    { id: 3, name: "Vendas Express", cnpj: "45.678.912/0001-30", responsible: "Roberto Santos", phone: "(11) 97777-7777", email: "contato@vendasexpress.com", totalVisits: 2, lastVisit: yesterday.toISOString().slice(0, 16) },
-                    { id: 4, name: "Recursos Humanos Brasil", cnpj: "78.912.345/0001-40", responsible: "Mariana Costa", phone: "(11) 96666-6666", email: "contato@rhbrasil.com", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) },
-                    { id: 5, name: "Indústrias Pesadas", cnpj: "32.165.498/0001-70", responsible: "Paulo Mendes", phone: "(11) 95555-5555", email: "contato@industriaspesadas.com", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) }
-                ];
-                
-                // Dados de exemplo para visitas
-                visits = [
-                    {
-                        id: 1,
-                        name: "Carlos Silva",
-                        company: "Tech Solutions Ltda",
-                        document: "123.456.789-00",
-                        destination: "ti",
-                        date: today.toISOString().slice(0, 16),
-                        status: "scheduled",
-                        notes: "Reunião sobre novo projeto de software"
-                    },
-                    {
-                        id: 2,
-                        name: "Ana Oliveira",
-                        company: "Consultoria Financeira SA",
-                        document: "987.654.321-00",
-                        destination: "financeiro",
-                        date: today.toISOString().slice(0, 16),
-                        status: "in-progress",
-                        notes: "Apresentação de relatórios trimestrais"
-                    },
-                    {
-                        id: 3,
-                        name: "Roberto Santos",
-                        company: "Vendas Express",
-                        document: "456.789.123-00",
-                        destination: "comercial",
-                        date: yesterday.toISOString().slice(0, 16),
-                        status: "completed",
-                        notes: "Negociação de contrato"
-                    },
-                    {
-                        id: 4,
-                        name: "Mariana Costa",
-                        company: "Recursos Humanos Brasil",
-                        document: "789.123.456-00",
-                        destination: "rh",
-                        date: tomorrow.toISOString().slice(0, 16),
-                        status: "scheduled",
-                        notes: "Processo seletivo - segunda fase"
-                    },
-                    {
-                        id: 5,
-                        name: "Paulo Mendes",
-                        company: "Indústrias Pesadas",
-                        document: "321.654.987-00",
-                        destination: "operacional",
-                        date: tomorrow.toISOString().slice(0, 16),
-                        status: "scheduled",
-                        notes: "Visita técnica às instalações"
-                    }
-                ];
-                
-                // Salvar no localStorage
-                saveAllData();
-                
-                // Atualizar a interface
-                updateCounters();
-                renderAllTables();
-                
-                // Atualizar badges
-                const visitorsBadge = document.getElementById('visitorsBadge');
-                const companiesBadge = document.getElementById('companiesBadge');
-                
-                if (visitorsBadge) visitorsBadge.textContent = visitors.length;
-                if (companiesBadge) companiesBadge.textContent = companies.length;
-                
-                showToast('Dados de exemplo adicionados com sucesso!', 'success');
-            } catch (error) {
-                console.error('Erro ao adicionar dados de exemplo:', error);
-                showToast('Erro ao adicionar dados de exemplo.', 'error');
-            }
-        }
-
-        // Função para configurar todos os event listeners após o login
         function setupEventListeners() {
-            // Navegação do menu lateral
-            const navItems = document.querySelectorAll('.nav-item[data-page]');
-            navItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const page = this.getAttribute('data-page');
+            // Navegação
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const page = item.getAttribute('data-page');
                     navigateToPage(page);
+                    
+                    if (window.innerWidth <= 900) {
+                        sidebar.classList.remove('active');
+                        overlay.classList.remove('active');
+                    }
                 });
             });
             
-            // Botão de menu mobile
-            mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-            overlay.addEventListener('click', toggleMobileMenu);
+            // Menu mobile
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.add('active');
+                overlay.classList.add('active');
+            });
             
-            // Botões de nova visita
-            document.getElementById('newVisitBtn').addEventListener('click', () => openVisitModal());
-            document.getElementById('newVisitBtn2').addEventListener('click', () => openVisitModal());
+            // Fechar menu ao clicar no overlay
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
             
-            // Botões de novo visitante e empresa
-            document.getElementById('newVisitorBtn').addEventListener('click', () => openVisitorModal());
-            document.getElementById('newCompanyBtn').addEventListener('click', () => openCompanyModal());
+            // Botões de ação
+            document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
+            document.getElementById('addSampleDataBtn').addEventListener('click', addSampleData);
+            document.getElementById('newVisitBtn').addEventListener('click', () => openVisitModal('new'));
+            document.getElementById('newVisitBtn2').addEventListener('click', () => openVisitModal('new'));
+            document.getElementById('newVisitorBtn').addEventListener('click', () => openVisitorModal('new'));
+            document.getElementById('newCompanyBtn').addEventListener('click', () => openCompanyModal('new'));
+            document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
             
-            // Botões de fechar modais
+            // Fechar modais
             document.getElementById('closeModalBtn').addEventListener('click', closeVisitModal);
+            document.getElementById('cancelBtn').addEventListener('click', closeVisitModal);
+            
             document.querySelectorAll('.close-visitor-modal').forEach(btn => {
                 btn.addEventListener('click', closeVisitorModal);
             });
+            
             document.querySelectorAll('.close-company-modal').forEach(btn => {
                 btn.addEventListener('click', closeCompanyModal);
             });
+            
             document.querySelectorAll('.close-delete-modal').forEach(btn => {
                 btn.addEventListener('click', closeDeleteModal);
             });
-            document.querySelectorAll('.close-qrcode-modal').forEach(btn => {
-                btn.addEventListener('click', closeQRCodeModal);
-            });
             
-            // Botões de salvar
+            // Salvar formulários
             document.getElementById('saveBtn').addEventListener('click', saveVisit);
             document.getElementById('updateBtn').addEventListener('click', updateVisit);
             document.getElementById('saveVisitorBtn').addEventListener('click', saveVisitor);
             document.getElementById('saveCompanyBtn').addEventListener('click', saveCompany);
             
-            // Botões de cancelar
-            document.getElementById('cancelBtn').addEventListener('click', closeVisitModal);
+            // Confirmar exclusão
+            document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
             
-            // Botões de status
-            markInProgressBtn.addEventListener('click', () => updateVisitStatus('in-progress'));
-            markCompletedBtn.addEventListener('click', () => updateVisitStatus('completed'));
+            // Alterar status da visita
+            document.getElementById('markInProgressBtn').addEventListener('click', function() {
+                updateVisitStatus('in-progress');
+            });
             
-            // Botões de ação (filtros, limpar dados, etc.)
-            document.getElementById('clearFiltersBtn').addEventListener('click', clearFilters);
-            document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
-            document.getElementById('addSampleDataBtn').addEventListener('click', addSampleData);
-            
-            // Botões de configurações
-            document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
-            document.getElementById('exportDataBtn').addEventListener('click', exportData);
-            document.getElementById('importDataBtn').addEventListener('click', importData);
-            document.getElementById('resetSettingsBtn').addEventListener('click', resetSettings);
-            
-            // Botões de token
-            document.getElementById('generateTokenBtn').addEventListener('click', generateToken);
-            document.getElementById('copyTokenBtn').addEventListener('click', copyToken);
-            document.getElementById('revokeTokenBtn').addEventListener('click', revokeToken);
-            
-            // Botões de QR Code
-            document.getElementById('qrcodeBtn').addEventListener('click', openQRCodeModal);
-            document.getElementById('copyLinkBtn').addEventListener('click', copyQRCodeLink);
-            document.getElementById('downloadQrcodeBtn').addEventListener('click', downloadQRCode);
-            document.getElementById('generateNewBtn').addEventListener('click', generateNewQRCode);
+            document.getElementById('markCompletedBtn').addEventListener('click', function() {
+                updateVisitStatus('completed');
+            });
             
             // Filtros
             document.getElementById('statusFilter').addEventListener('change', applyFilters);
             document.getElementById('dateFilter').addEventListener('change', applyFilters);
             document.getElementById('searchFilter').addEventListener('input', applyFilters);
             
-            // Configurar data mínima para formulários
-            const dateInputs = document.querySelectorAll('input[type="datetime-local"]');
-            const now = new Date().toISOString().slice(0, 16);
-            dateInputs.forEach(input => {
-                input.min = now;
+            // Limpar filtros
+            document.getElementById('clearFiltersBtn').addEventListener('click', () => {
+                document.getElementById('statusFilter').value = 'all';
+                document.getElementById('dateFilter').value = '';
+                document.getElementById('searchFilter').value = '';
+                applyFilters();
+            });
+            
+            // Cartões de estatísticas
+            document.getElementById('todayVisitsCard').addEventListener('click', () => {
+                document.getElementById('statusFilter').value = 'all';
+                document.getElementById('dateFilter').value = new Date().toISOString().split('T')[0];
+                applyFilters();
+                showToast('Filtro aplicado: Visitas de hoje');
+            });
+            
+            document.getElementById('pendingVisitsCard').addEventListener('click', () => {
+                document.getElementById('statusFilter').value = 'scheduled';
+                applyFilters();
+                showToast('Filtro aplicado: Visitas pendentes');
+            });
+            
+            document.getElementById('completedVisitsCard').addEventListener('click', () => {
+                document.getElementById('statusFilter').value = 'completed';
+                applyFilters();
+                showToast('Filtro aplicado: Visitas concluídas');
+            });
+            
+            // QR Code
+            qrcodeBtn.addEventListener('click', openQRCodeModal);
+            document.querySelectorAll('.close-qrcode-modal').forEach(btn => {
+                btn.addEventListener('click', closeQRCodeModal);
+            });
+            copyLinkBtn.addEventListener('click', copyBookingLink);
+            downloadQrcodeBtn.addEventListener('click', downloadQRCode);
+            generateNewBtn.addEventListener('click', generateNewQRCode);
+            
+            // Permitir clicar no link para copiar
+            qrcodeLink.addEventListener('click', copyBookingLink);
+        }
+        
+        // Funções de QR Code
+        function generateBookingLink() {
+            // Gerar um token único para o agendamento
+            const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            
+            // URL do sistema de agendamento
+            return `${window.location.origin || 'https://visitcontrol.com'}/agendamento/?token=${token}`;
+        }
+        
+        function generateQRCode(link) {
+            // Limpar conteúdo anterior
+            qrcodeImage.innerHTML = '';
+            
+            try {
+                // Verificar se a biblioteca QRCode está disponível
+                if (typeof QRCode === 'undefined') {
+                    showToast('Biblioteca QRCode não carregada. Verifique a conexão.', 'error');
+                    qrcodeImage.innerHTML = '<p>Erro: Biblioteca QRCode não carregada</p>';
+                    return;
+                }
+                
+                // Gerar o QR Code
+                qrcode = new QRCode(qrcodeImage, {
+                    text: link,
+                    width: 200,
+                    height: 200,
+                    colorDark: '#4b5563',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                
+                showToast('QR Code gerado com sucesso!', 'success');
+            } catch (error) {
+                console.error('Erro ao gerar QR Code:', error);
+                showToast('Erro ao gerar QR Code', 'error');
+                qrcodeImage.innerHTML = '<p>Erro ao gerar QR Code. Verifique o console.</p>';
+            }
+        }
+        
+        function copyBookingLink() {
+            const link = qrcodeLink.textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                showToast('Link copiado para a área de transferência!', 'success');
+            }).catch(err => {
+                console.error('Falha ao copiar o link: ', err);
+                
+                // Fallback para dispositivos que não suportam clipboard API
+                const textArea = document.createElement('textarea');
+                textArea.value = link;
+                document.body.appendChild(textArea);
+                textArea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    showToast('Link copiado para a área de transferência!', 'success');
+                } catch (fallbackErr) {
+                    showToast('Erro ao copiar o link. Selecione e copie manualmente.', 'error');
+                }
+                
+                document.body.removeChild(textArea);
             });
         }
-
+        
+        function downloadQRCode() {
+            const canvas = qrcodeImage.querySelector('canvas');
+            if (!canvas) {
+                showToast('QR Code não está pronto para download', 'error');
+                return;
+            }
+            
+            try {
+                const link = document.createElement('a');
+                link.download = 'qrcode-agendamento-visitcontrol.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast('QR Code baixado com sucesso!', 'success');
+            } catch (error) {
+                console.error('Erro ao baixar QR Code:', error);
+                showToast('Erro ao baixar QR Code', 'error');
+            }
+        }
+        
+        function generateNewQRCode() {
+            const newLink = generateBookingLink();
+            qrcodeLink.textContent = newLink;
+            generateQRCode(newLink);
+        }
+        
+        function openQRCodeModal() {
+            // Gerar link único de agendamento
+            const bookingLink = generateBookingLink();
+            
+            // Atualizar o link no modal
+            qrcodeLink.textContent = bookingLink;
+            
+            // Gerar o QR Code
+            generateQRCode(bookingLink);
+            
+            // Mostrar o modal
+            qrcodeModal.classList.add('active');
+        }
+        
+        function closeQRCodeModal() {
+            qrcodeModal.classList.remove('active');
+        }
+        
+        // Funções de persistência de dados
+        function saveAllData() {
+            localStorage.setItem('visitControl_visits', JSON.stringify(visits));
+            localStorage.setItem('visitControl_visitors', JSON.stringify(visitors));
+            localStorage.setItem('visitControl_companies', JSON.stringify(companies));
+            localStorage.setItem('visitControl_settings', JSON.stringify(settings));
+        }
+        
+        function loadAllData() {
+            const storedVisits = localStorage.getItem('visitControl_visits');
+            const storedVisitors = localStorage.getItem('visitControl_visitors');
+            const storedCompanies = localStorage.getItem('visitControl_companies');
+            const storedSettings = localStorage.getItem('visitControl_settings');
+            
+            if (storedVisits) visits = JSON.parse(storedVisits);
+            if (storedVisitors) visitors = JSON.parse(storedVisitors);
+            if (storedCompanies) companies = JSON.parse(storedCompanies);
+            if (storedSettings) settings = JSON.parse(storedSettings);
+            
+            // Atualizar badges
+            document.getElementById('visitorsBadge').textContent = visitors.length;
+            document.getElementById('companiesBadge').textContent = companies.length;
+        }
+        
+        function clearAllData() {
+            if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
+                visits = [];
+                visitors = [];
+                companies = [];
+                saveAllData();
+                updateCounters();
+                renderAllTables();
+                showToast('Todos os dados foram removidos.', 'success');
+                
+                // Atualizar badges
+                document.getElementById('visitorsBadge').textContent = '0';
+                document.getElementById('companiesBadge').textContent = '0';
+            }
+        }
+        
+        function saveSettings() {
+            // Simular salvamento de configurações
+            settings.companyName = document.getElementById('companyName').value;
+            settings.companyAddress = document.getElementById('companyAddress').value;
+            settings.adminEmail = document.getElementById('adminEmail').value;
+            settings.maxVisits = document.getElementById('maxVisits').value;
+            settings.emailNotifications = document.getElementById('emailNotifications').checked;
+            settings.browserNotifications = document.getElementById('browserNotifications').checked;
+            settings.notificationTime = document.getElementById('notificationTime').value;
+            
+            localStorage.setItem('visitControl_settings', JSON.stringify(settings));
+            showToast('Configurações salvas com sucesso!', 'success');
+        }
+        
+        // Adicionar dados de exemplo
+        function addSampleData() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            // Dados de exemplo para visitantes
+            visitors = [
+                { id: 1, name: "Carlos Silva", document: "123.456.789-00", company: "Tech Solutions Ltda", phone: "(11) 99999-9999", email: "carlos@techsolutions.com", lastVisit: today.toISOString().slice(0, 16), totalVisits: 3 },
+                { id: 2, name: "Ana Oliveira", document: "987.654.321-00", company: "Consultoria Financeira SA", phone: "(11) 98888-8888", email: "ana@consultoriafinanceira.com", lastVisit: today.toISOString().slice(0, 16), totalVisits: 5 },
+                { id: 3, name: "Roberto Santos", document: "456.789.123-00", company: "Vendas Express", phone: "(11) 97777-7777", email: "roberto@vendasexpress.com", lastVisit: yesterday.toISOString().slice(0, 16), totalVisits: 2 },
+                { id: 4, name: "Mariana Costa", document: "789.123.456-00", company: "Recursos Humanos Brasil", phone: "(11) 96666-6666", email: "mariana@rhbrasil.com", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 },
+                { id: 5, name: "Paulo Mendes", document: "321.654.987-00", company: "Indústrias Pesadas", phone: "(11) 95555-5555", email: "paulo@industriaspesadas.com", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 }
+            ];
+            
+            // Dados de exemplo para empresas
+            companies = [
+                { id: 1, name: "Tech Solutions Ltda", cnpj: "12.345.678/0001-90", responsible: "Carlos Silva", phone: "(11) 99999-9999", email: "contato@techsolutions.com", totalVisits: 3, lastVisit: today.toISOString().slice(0, 16) },
+                { id: 2, name: "Consultoria Financeira SA", cnpj: "98.765.432/0001-10", responsible: "Ana Oliveira", phone: "(11) 98888-8888", email: "contato@consultoriafinanceira.com", totalVisits: 5, lastVisit: today.toISOString().slice(0, 16) },
+                { id: 3, name: "Vendas Express", cnpj: "45.678.912/0001-30", responsible: "Roberto Santos", phone: "(11) 97777-7777", email: "contato@vendasexpress.com", totalVisits: 2, lastVisit: yesterday.toISOString().slice(0, 16) },
+                { id: 4, name: "Recursos Humanos Brasil", cnpj: "78.912.345/0001-40", responsible: "Mariana Costa", phone: "(11) 96666-6666", email: "contato@rhbrasil.com", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) },
+                { id: 5, name: "Indústrias Pesadas", cnpj: "32.165.498/0001-70", responsible: "Paulo Mendes", phone: "(11) 95555-5555", email: "contato@industriaspesadas.com", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) }
+            ];
+            
+            // Dados de exemplo para visitas
+            visits = [
+                {
+                    id: 1,
+                    name: "Carlos Silva",
+                    company: "Tech Solutions Ltda",
+                    document: "123.456.789-00",
+                    destination: "ti",
+                    date: today.toISOString().slice(0, 16),
+                    status: "scheduled",
+                    notes: "Reunião sobre novo projeto de software"
+                },
+                {
+                    id: 2,
+                    name: "Ana Oliveira",
+                    company: "Consultoria Financeira SA",
+                    document: "987.654.321-00",
+                    destination: "financeiro",
+                    date: today.toISOString().slice(0, 16),
+                    status: "in-progress",
+                    notes: "Apresentação de relatórios trimestrais"
+                },
+                {
+                    id: 3,
+                    name: "Roberto Santos",
+                    company: "Vendas Express",
+                    document: "456.789.123-00",
+                    destination: "comercial",
+                    date: yesterday.toISOString().slice(0, 16),
+                    status: "completed",
+                    notes: "Negociação de contrato"
+                },
+                {
+                    id: 4,
+                    name: "Mariana Costa",
+                    company: "Recursos Humanos Brasil",
+                    document: "789.123.456-00",
+                    destination: "rh",
+                    date: tomorrow.toISOString().slice(0, 16),
+                    status: "scheduled",
+                    notes: "Processo seletivo - segunda fase"
+                },
+                {
+                    id: 5,
+                    name: "Paulo Mendes",
+                    company: "Indústrias Pesadas",
+                    document: "321.654.987-00",
+                    destination: "operacional",
+                    date: tomorrow.toISOString().slice(0, 16),
+                    status: "scheduled",
+                    notes: "Visita técnica às instalações"
+                }
+            ];
+            
+            // Salvar no localStorage
+            saveAllData();
+            
+            // Atualizar a interface
+            updateCounters();
+            renderAllTables();
+            
+            // Atualizar badges
+            document.getElementById('visitorsBadge').textContent = visitors.length;
+            document.getElementById('companiesBadge').textContent = companies.length;
+            
+            showToast('Dados de exemplo adicionados com sucesso!', 'success');
+        }
+        
         // Funções de navegação
         function navigateToPage(page) {
-            // Remover classe active de todas as páginas
+            // Remover a classe ativa de todas as páginas
             document.querySelectorAll('.page-content').forEach(p => {
                 p.classList.remove('active');
             });
             
-            // Remover classe active de todos os itens do menu
+            // Remover a classe ativa de todos os itens de navegação
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            // Adicionar classe active à página selecionada
+            // Adicionar a classe ativa à página selecionada
             document.getElementById(`${page}-page`).classList.add('active');
             
-            // Adicionar classe active ao item do menu selecionado
+            // Adicionar a classe ativa ao item de navegação selecionado
             document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
             
             // Atualizar a página atual
             currentPage = page;
             
-            // Fechar menu mobile se estiver aberto
-            if (window.innerWidth <= 900) {
-                toggleMobileMenu();
-            }
-            
-            // Atualizar a tabela específica da página
-            if (page === 'dashboard' || page === 'visits') {
-                renderVisitsTable();
+            // Renderizar a tabela apropriada
+            if (page === 'visits') {
+                renderAllVisitsTable();
             } else if (page === 'scheduling') {
                 renderSchedulingTable();
             } else if (page === 'visitors') {
                 renderVisitorsTable();
             } else if (page === 'companies') {
                 renderCompaniesTable();
+            } else if (page === 'dashboard') {
+                applyFilters();
             }
         }
-
-        function toggleMobileMenu() {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
+        
+        // Funções para renderizar tabelas
+        function renderAllTables() {
+            renderVisitsTable();
+            renderAllVisitsTable();
+            renderSchedulingTable();
+            renderVisitorsTable();
+            renderCompaniesTable();
         }
-
-        // Funções para abrir e fechar modais
-        function openVisitModal(visitId = null, viewMode = false) {
+        
+        function renderVisitsTable() {
+            const filteredVisits = filterVisits();
+            const tbody = visitsTableBody;
+            tbody.innerHTML = '';
+            
+            if (filteredVisits.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Nenhuma visita encontrada</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            filteredVisits.slice(0, 5).forEach(visit => {
+                const row = document.createElement('tr');
+                const date = new Date(visit.date);
+                const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                
+                let statusClass = 'status-scheduled';
+                let statusText = 'Agendada';
+                
+                if (visit.status === 'in-progress') {
+                    statusClass = 'status-in-progress';
+                    statusText = 'Em Andamento';
+                } else if (visit.status === 'completed') {
+                    statusClass = 'status-completed';
+                    statusText = 'Concluída';
+                }
+                
+                row.innerHTML = `
+                    <td>${visit.name}</td>
+                    <td>${visit.company}</td>
+                    <td>${formattedDate}</td>
+                    <td>${getDestinationName(visit.destination)}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="action-btn view-visit" data-id="${visit.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit-visit" data-id="${visit.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete delete-visit" data-id="${visit.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões
+            addVisitEventListeners();
+        }
+        
+        function renderAllVisitsTable() {
+            const tbody = allVisitsTableBody;
+            tbody.innerHTML = '';
+            
+            if (visits.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Nenhuma visita encontrada</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Ordenar visitas por data (mais recente primeiro)
+            const sortedVisits = [...visits].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sortedVisits.forEach(visit => {
+                const row = document.createElement('tr');
+                const date = new Date(visit.date);
+                const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                
+                let statusClass = 'status-scheduled';
+                let statusText = 'Agendada';
+                
+                if (visit.status === 'in-progress') {
+                    statusClass = 'status-in-progress';
+                    statusText = 'Em Andamento';
+                } else if (visit.status === 'completed') {
+                    statusClass = 'status-completed';
+                    statusText = 'Concluída';
+                }
+                
+                row.innerHTML = `
+                    <td>${visit.name}</td>
+                    <td>${visit.company}</td>
+                    <td>${formattedDate}</td>
+                    <td>${getDestinationName(visit.destination)}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="action-btn view-visit" data-id="${visit.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit-visit" data-id="${visit.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete delete-visit" data-id="${visit.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões
+            addVisitEventListeners();
+        }
+        
+        function renderSchedulingTable() {
+            const tbody = schedulingTableBody;
+            tbody.innerHTML = '';
+            
+            // Filtrar apenas visitas agendadas para o futuro
+            const now = new Date();
+            const scheduledVisits = visits.filter(visit => {
+                const visitDate = new Date(visit.date);
+                return visitDate > now && visit.status === 'scheduled';
+            });
+            
+            if (scheduledVisits.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Nenhum agendamento futuro</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Ordenar por data (mais próximos primeiro)
+            scheduledVisits.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            scheduledVisits.forEach(visit => {
+                const row = document.createElement('tr');
+                const date = new Date(visit.date);
+                const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                
+                row.innerHTML = `
+                    <td>${visit.name}</td>
+                    <td>${visit.company}</td>
+                    <td>${formattedDate}</td>
+                    <td>${getDestinationName(visit.destination)}</td>
+                    <td><span class="status status-scheduled">Agendada</span></td>
+                    <td>
+                        <button class="action-btn view-visit" data-id="${visit.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit-visit" data-id="${visit.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete delete-visit" data-id="${visit.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões
+            addVisitEventListeners();
+        }
+        
+        function renderVisitorsTable() {
+            const tbody = visitorsTableBody;
+            tbody.innerHTML = '';
+            
+            if (visitors.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Nenhum visitante cadastrado</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            visitors.forEach(visitor => {
+                const row = document.createElement('tr');
+                const lastVisit = visitor.lastVisit ? new Date(visitor.lastVisit).toLocaleDateString() : 'Nunca';
+                
+                row.innerHTML = `
+                    <td>${visitor.name}</td>
+                    <td>${visitor.document}</td>
+                    <td>${visitor.company}</td>
+                    <td>${lastVisit}</td>
+                    <td>${visitor.totalVisits || 0}</td>
+                    <td>
+                        <button class="action-btn edit-visitor" data-id="${visitor.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete delete-visitor" data-id="${visitor.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões
+            addVisitorEventListeners();
+        }
+        
+        function renderCompaniesTable() {
+            const tbody = companiesTableBody;
+            tbody.innerHTML = '';
+            
+            if (companies.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Nenhuma empresa cadastrada</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            companies.forEach(company => {
+                const row = document.createElement('tr');
+                const lastVisit = company.lastVisit ? new Date(company.lastVisit).toLocaleDateString() : 'Nunca';
+                
+                row.innerHTML = `
+                    <td>${company.name}</td>
+                    <td>${company.cnpj}</td>
+                    <td>${company.responsible || '-'}</td>
+                    <td>${company.totalVisits || 0}</td>
+                    <td>${lastVisit}</td>
+                    <td>
+                        <button class="action-btn edit-company" data-id="${company.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete delete-company" data-id="${company.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões
+            addCompanyEventListeners();
+        }
+        
+        function addVisitEventListeners() {
+            document.querySelectorAll('.view-visit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    openVisitModal('view', id);
+                });
+            });
+            
+            document.querySelectorAll('.edit-visit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    openVisitModal('edit', id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-visit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    const visit = visits.find(v => v.id == id);
+                    openDeleteModal('visit', id, visit.name);
+                });
+            });
+        }
+        
+        function addVisitorEventListeners() {
+            document.querySelectorAll('.edit-visitor').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    openVisitorModal('edit', id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-visitor').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    const visitor = visitors.find(v => v.id == id);
+                    openDeleteModal('visitor', id, visitor.name);
+                });
+            });
+        }
+        
+        function addCompanyEventListeners() {
+            document.querySelectorAll('.edit-company').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    openCompanyModal('edit', id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-company').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    const company = companies.find(c => c.id == id);
+                    openDeleteModal('company', id, company.name);
+                });
+            });
+        }
+        
+        // Funções para modais
+        function openVisitModal(mode, id = null) {
             const modal = document.getElementById('visitModal');
             const modalTitle = document.getElementById('modalTitle');
             const visitForm = document.getElementById('visitForm');
@@ -2783,178 +2326,219 @@
             const saveBtn = document.getElementById('saveBtn');
             const updateBtn = document.getElementById('updateBtn');
             
-            isViewMode = viewMode;
-            currentVisitId = visitId;
+            // Reset do formulário
+            visitForm.reset();
             
-            if (visitId) {
-                // Modo edição ou visualização
-                const visit = visits.find(v => v.id === visitId);
-                if (visit) {
-                    if (viewMode) {
-                        // Modo visualização
-                        modalTitle.textContent = 'Detalhes da Visita';
-                        visitForm.style.display = 'none';
-                        visitDetails.style.display = 'block';
-                        
-                        // Preencher detalhes
-                        document.getElementById('detailName').textContent = visit.name;
-                        document.getElementById('detailCompany').textContent = visit.company;
-                        document.getElementById('detailDocument').textContent = visit.document || 'Não informado';
-                        document.getElementById('detailDestination').textContent = getDestinationLabel(visit.destination);
-                        document.getElementById('detailDate').textContent = formatDateTime(visit.date);
-                        document.getElementById('detailStatus').textContent = getStatusLabel(visit.status);
-                        document.getElementById('detailStatus').className = `status status-${visit.status}`;
-                        document.getElementById('detailNotes').textContent = visit.notes || 'Nenhuma observação';
-                        
-                        // Configurar botões de status
-                        setupStatusButtons(visit.status);
-                        
-                        saveBtn.style.display = 'none';
-                        updateBtn.style.display = 'none';
-                    } else {
-                        // Modo edição
-                        modalTitle.textContent = 'Editar Visita';
-                        visitForm.style.display = 'block';
-                        visitDetails.style.display = 'none';
-                        
-                        // Preencher formulário
-                        document.getElementById('visitId').value = visit.id;
-                        document.getElementById('visitorName').value = visit.name;
-                        document.getElementById('company').value = visit.company;
-                        document.getElementById('document').value = visit.document || '';
-                        document.getElementById('destination').value = visit.destination;
-                        document.getElementById('date').value = visit.date;
-                        document.getElementById('notes').value = visit.notes || '';
-                        
-                        saveBtn.style.display = 'none';
-                        updateBtn.style.display = 'inline-block';
-                    }
-                }
-            } else {
-                // Modo criação
+            if (mode === 'new') {
                 modalTitle.textContent = 'Registrar Nova Visita';
                 visitForm.style.display = 'block';
                 visitDetails.style.display = 'none';
-                visitForm.reset();
-                
-                // Definir data mínima como agora
-                const now = new Date().toISOString().slice(0, 16);
-                document.getElementById('date').value = now;
-                document.getElementById('date').min = now;
-                
-                saveBtn.style.display = 'inline-block';
+                saveBtn.style.display = 'block';
                 updateBtn.style.display = 'none';
+                
+                // Preencher data e hora atual
+                const now = new Date();
+                // Ajustar para o formato datetime-local (removendo os segundos)
+                const formattedNow = now.toISOString().slice(0, 16);
+                document.getElementById('date').value = formattedNow;
+                
+                isViewMode = false;
+                currentVisitId = null;
+            } else if (mode === 'view') {
+                const visit = visits.find(v => v.id == id);
+                if (!visit) return;
+                
+                modalTitle.textContent = 'Detalhes da Visita';
+                visitForm.style.display = 'none';
+                visitDetails.style.display = 'block';
+                saveBtn.style.display = 'none';
+                updateBtn.style.display = 'none';
+                
+                // Preencher detalhes
+                document.getElementById('detailName').textContent = visit.name;
+                document.getElementById('detailCompany').textContent = visit.company;
+                document.getElementById('detailDocument').textContent = visit.document;
+                document.getElementById('detailDestination').textContent = getDestinationName(visit.destination);
+                
+                const date = new Date(visit.date);
+                document.getElementById('detailDate').textContent = `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                
+                let statusText = 'Agendada';
+                let statusClass = 'status-scheduled';
+                
+                if (visit.status === 'in-progress') {
+                    statusText = 'Em Andamento';
+                    statusClass = 'status-in-progress';
+                } else if (visit.status === 'completed') {
+                    statusText = 'Concluída';
+                    statusClass = 'status-completed';
+                }
+                
+                document.getElementById('detailStatus').textContent = statusText;
+                document.getElementById('detailStatus').className = `status ${statusClass}`;
+                
+                document.getElementById('detailNotes').textContent = visit.notes || '-';
+                
+                // Mostrar/ocultar botões de status conforme o status atual
+                const statusActions = document.getElementById('statusActions');
+                if (visit.status === 'scheduled') {
+                    statusActions.innerHTML = `
+                        <button class="status-btn progress" id="markInProgressBtn">Marcar como Em Andamento</button>
+                        <button class="status-btn complete" id="markCompletedBtn">Marcar como Concluída</button>
+                    `;
+                } else if (visit.status === 'in-progress') {
+                    statusActions.innerHTML = `
+                        <button class="status-btn complete" id="markCompletedBtn">Marcar como Concluída</button>
+                    `;
+                } else {
+                    statusActions.innerHTML = '';
+                }
+                
+                // Reatribuir os event listeners aos botões
+                if (visit.status === 'scheduled' || visit.status === 'in-progress') {
+                    setTimeout(() => {
+                        document.getElementById('markInProgressBtn')?.addEventListener('click', () => {
+                            updateVisitStatus('in-progress');
+                        });
+                        document.getElementById('markCompletedBtn')?.addEventListener('click', () => {
+                            updateVisitStatus('completed');
+                        });
+                    }, 100);
+                }
+                
+                isViewMode = true;
+                currentVisitId = id;
+            } else if (mode === 'edit') {
+                const visit = visits.find(v => v.id == id);
+                if (!visit) return;
+                
+                modalTitle.textContent = 'Editar Visita';
+                visitForm.style.display = 'block';
+                visitDetails.style.display = 'none';
+                saveBtn.style.display = 'none';
+                updateBtn.style.display = 'block';
+                
+                // Preencher formulário
+                document.getElementById('visitId').value = visit.id;
+                document.getElementById('visitorName').value = visit.name;
+                document.getElementById('company').value = visit.company;
+                document.getElementById('document').value = visit.document;
+                document.getElementById('destination').value = visit.destination;
+                document.getElementById('date').value = visit.date.slice(0, 16);
+                document.getElementById('notes').value = visit.notes || '';
+                
+                isViewMode = false;
+                currentVisitId = id;
             }
             
             modal.classList.add('active');
         }
-
+        
         function closeVisitModal() {
-            document.getElementById('visitModal').classList.remove('active');
+            visitModal.classList.remove('active');
         }
-
-        function openVisitorModal(visitorId = null) {
+        
+        function openVisitorModal(mode, id = null) {
             const modal = document.getElementById('visitorModal');
             const modalTitle = document.getElementById('visitorModalTitle');
             
-            currentVisitorId = visitorId;
+            // Reset do formulário
+            document.getElementById('visitorForm').reset();
             
-            if (visitorId) {
-                // Modo edição
-                modalTitle.textContent = 'Editar Visitante';
-                const visitor = visitors.find(v => v.id === visitorId);
-                if (visitor) {
-                    document.getElementById('visitorId').value = visitor.id;
-                    document.getElementById('visitorFullName').value = visitor.name;
-                    document.getElementById('visitorDocument').value = visitor.document;
-                    document.getElementById('visitorCompany').value = visitor.company;
-                    document.getElementById('visitorPhone').value = visitor.phone || '';
-                    document.getElementById('visitorEmail').value = visitor.email || '';
-                }
-            } else {
-                // Modo criação
+            if (mode === 'new') {
                 modalTitle.textContent = 'Novo Visitante';
-                document.getElementById('visitorForm').reset();
+                currentVisitorId = null;
+            } else if (mode === 'edit') {
+                const visitor = visitors.find(v => v.id == id);
+                if (!visitor) return;
+                
+                modalTitle.textContent = 'Editar Visitante';
+                
+                // Preencher formulário
+                document.getElementById('visitorId').value = visitor.id;
+                document.getElementById('visitorFullName').value = visitor.name;
+                document.getElementById('visitorDocument').value = visitor.document;
+                document.getElementById('visitorCompany').value = visitor.company;
+                document.getElementById('visitorPhone').value = visitor.phone || '';
+                document.getElementById('visitorEmail').value = visitor.email || '';
+                
+                currentVisitorId = id;
             }
             
             modal.classList.add('active');
         }
-
+        
         function closeVisitorModal() {
-            document.getElementById('visitorModal').classList.remove('active');
+            visitorModal.classList.remove('active');
         }
-
-        function openCompanyModal(companyId = null) {
+        
+        function openCompanyModal(mode, id = null) {
             const modal = document.getElementById('companyModal');
             const modalTitle = document.getElementById('companyModalTitle');
             
-            currentCompanyId = companyId;
+            // Reset do formulário
+            document.getElementById('companyForm').reset();
             
-            if (companyId) {
-                // Modo edição
-                modalTitle.textContent = 'Editar Empresa';
-                const company = companies.find(c => c.id === companyId);
-                if (company) {
-                    document.getElementById('companyId').value = company.id;
-                    document.getElementById('companyNameInput').value = company.name;
-                    document.getElementById('companyCnpj').value = company.cnpj;
-                    document.getElementById('companyResponsible').value = company.responsible || '';
-                    document.getElementById('companyPhone').value = company.phone || '';
-                    document.getElementById('companyEmail').value = company.email || '';
-                }
-            } else {
-                // Modo criação
+            if (mode === 'new') {
                 modalTitle.textContent = 'Nova Empresa';
-                document.getElementById('companyForm').reset();
+                currentCompanyId = null;
+            } else if (mode === 'edit') {
+                const company = companies.find(c => c.id == id);
+                if (!company) return;
+                
+                modalTitle.textContent = 'Editar Empresa';
+                
+                // Preencher formulário
+                document.getElementById('companyId').value = company.id;
+                document.getElementById('companyNameInput').value = company.name;
+                document.getElementById('companyCnpj').value = company.cnpj;
+                document.getElementById('companyResponsible').value = company.responsible || '';
+                document.getElementById('companyPhone').value = company.phone || '';
+                document.getElementById('companyEmail').value = company.email || '';
+                
+                currentCompanyId = id;
             }
             
             modal.classList.add('active');
         }
-
+        
         function closeCompanyModal() {
-            document.getElementById('companyModal').classList.remove('active');
+            companyModal.classList.remove('active');
         }
-
+        
         function openDeleteModal(type, id, name) {
             const modal = document.getElementById('deleteModal');
-            const itemName = document.getElementById('deleteItemName');
+            document.getElementById('deleteItemName').textContent = name;
             
             deleteType = type;
-            
             if (type === 'visit') {
                 currentVisitId = id;
-                itemName.textContent = `a visita de ${name}`;
             } else if (type === 'visitor') {
                 currentVisitorId = id;
-                itemName.textContent = `o visitante ${name}`;
             } else if (type === 'company') {
                 currentCompanyId = id;
-                itemName.textContent = `a empresa ${name}`;
             }
             
             modal.classList.add('active');
         }
-
+        
         function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.remove('active');
+            deleteModal.classList.remove('active');
         }
-
-        function openQRCodeModal() {
-            const modal = document.getElementById('qrcodeModal');
-            
-            // Gerar QR Code se ainda não existir
-            if (!qrcode) {
-                generateQRCode();
+        
+        function confirmDelete() {
+            if (deleteType === 'visit') {
+                deleteVisit(currentVisitId);
+            } else if (deleteType === 'visitor') {
+                deleteVisitor(currentVisitorId);
+            } else if (deleteType === 'company') {
+                deleteCompany(currentCompanyId);
             }
             
-            modal.classList.add('active');
+            closeDeleteModal();
         }
-
-        function closeQRCodeModal() {
-            document.getElementById('qrcodeModal').classList.remove('active');
-        }
-
-        // Funções para salvar dados
+        
+        // Funções CRUD
         function saveVisit() {
             const name = document.getElementById('visitorName').value.trim();
             const company = document.getElementById('company').value.trim();
@@ -2981,15 +2565,16 @@
             
             visits.push(newVisit);
             saveAllData();
-            renderAllTables();
+            
             updateCounters();
+            renderAllTables();
             closeVisitModal();
             
             showToast('Visita registrada com sucesso!', 'success');
         }
-
+        
         function updateVisit() {
-            const visitId = parseInt(document.getElementById('visitId').value);
+            const id = document.getElementById('visitId').value;
             const name = document.getElementById('visitorName').value.trim();
             const company = document.getElementById('company').value.trim();
             const document = document.getElementById('document').value.trim();
@@ -3002,27 +2587,51 @@
                 return;
             }
             
-            const visitIndex = visits.findIndex(v => v.id === visitId);
-            if (visitIndex !== -1) {
-                visits[visitIndex] = {
-                    ...visits[visitIndex],
-                    name,
-                    company,
-                    document,
-                    destination,
-                    date,
-                    notes
-                };
-                
-                saveAllData();
-                renderAllTables();
-                updateCounters();
-                closeVisitModal();
-                
-                showToast('Visita atualizada com sucesso!', 'success');
-            }
+            const visitIndex = visits.findIndex(v => v.id == id);
+            if (visitIndex === -1) return;
+            
+            visits[visitIndex] = {
+                ...visits[visitIndex],
+                name,
+                company,
+                document,
+                destination,
+                date,
+                notes
+            };
+            
+            saveAllData();
+            updateCounters();
+            renderAllTables();
+            closeVisitModal();
+            
+            showToast('Visita atualizada com sucesso!', 'success');
         }
-
+        
+        // Função para atualizar status da visita
+        function updateVisitStatus(status) {
+            const visitIndex = visits.findIndex(v => v.id == currentVisitId);
+            if (visitIndex === -1) return;
+            
+            visits[visitIndex].status = status;
+            saveAllData();
+            
+            updateCounters();
+            renderAllTables();
+            closeVisitModal();
+            
+            showToast(`Status da visita atualizado para ${status === 'in-progress' ? 'Em Andamento' : 'Concluída'}!`, 'success');
+        }
+        
+        function deleteVisit(id) {
+            visits = visits.filter(v => v.id != id);
+            saveAllData();
+            updateCounters();
+            renderAllTables();
+            
+            showToast('Visita excluída com sucesso!', 'success');
+        }
+        
         function saveVisitor() {
             const name = document.getElementById('visitorFullName').value.trim();
             const document = document.getElementById('visitorDocument').value.trim();
@@ -3036,20 +2645,22 @@
             }
             
             if (currentVisitorId) {
-                // Modo edição
-                const visitorIndex = visitors.findIndex(v => v.id === currentVisitorId);
-                if (visitorIndex !== -1) {
-                    visitors[visitorIndex] = {
-                        ...visitors[visitorIndex],
-                        name,
-                        document,
-                        company,
-                        phone,
-                        email
-                    };
-                }
+                // Editar visitante existente
+                const visitorIndex = visitors.findIndex(v => v.id == currentVisitorId);
+                if (visitorIndex === -1) return;
+                
+                visitors[visitorIndex] = {
+                    ...visitors[visitorIndex],
+                    name,
+                    document,
+                    company,
+                    phone,
+                    email
+                };
+                
+                showToast('Visitante atualizado com sucesso!', 'success');
             } else {
-                // Modo criação
+                // Novo visitante
                 const newVisitor = {
                     id: Date.now(),
                     name,
@@ -3062,16 +2673,28 @@
                 };
                 
                 visitors.push(newVisitor);
+                showToast('Visitante cadastrado com sucesso!', 'success');
             }
             
             saveAllData();
             renderVisitorsTable();
-            updateBadges();
             closeVisitorModal();
             
-            showToast('Visitante salvo com sucesso!', 'success');
+            // Atualizar badge
+            document.getElementById('visitorsBadge').textContent = visitors.length;
         }
-
+        
+        function deleteVisitor(id) {
+            visitors = visitors.filter(v => v.id != id);
+            saveAllData();
+            renderVisitorsTable();
+            
+            // Atualizar badge
+            document.getElementById('visitorsBadge').textContent = visitors.length;
+            
+            showToast('Visitante excluído com sucesso!', 'success');
+        }
+        
         function saveCompany() {
             const name = document.getElementById('companyNameInput').value.trim();
             const cnpj = document.getElementById('companyCnpj').value.trim();
@@ -3085,20 +2708,22 @@
             }
             
             if (currentCompanyId) {
-                // Modo edição
-                const companyIndex = companies.findIndex(c => c.id === currentCompanyId);
-                if (companyIndex !== -1) {
-                    companies[companyIndex] = {
-                        ...companies[companyIndex],
-                        name,
-                        cnpj,
-                        responsible,
-                        phone,
-                        email
-                    };
-                }
+                // Editar empresa existente
+                const companyIndex = companies.findIndex(c => c.id == currentCompanyId);
+                if (companyIndex === -1) return;
+                
+                companies[companyIndex] = {
+                    ...companies[companyIndex],
+                    name,
+                    cnpj,
+                    responsible,
+                    phone,
+                    email
+                };
+                
+                showToast('Empresa atualizada com sucesso!', 'success');
             } else {
-                // Modo criação
+                // Nova empresa
                 const newCompany = {
                     id: Date.now(),
                     name,
@@ -3111,523 +2736,30 @@
                 };
                 
                 companies.push(newCompany);
+                showToast('Empresa cadastrada com sucesso!', 'success');
             }
             
             saveAllData();
             renderCompaniesTable();
-            updateBadges();
             closeCompanyModal();
             
-            showToast('Empresa salva com sucesso!', 'success');
+            // Atualizar badge
+            document.getElementById('companiesBadge').textContent = companies.length;
         }
-
-        // Funções para atualizar status
-        function setupStatusButtons(currentStatus) {
-            const inProgressBtn = document.getElementById('markInProgressBtn');
-            const completedBtn = document.getElementById('markCompletedBtn');
-            
-            if (currentStatus === 'scheduled') {
-                inProgressBtn.disabled = false;
-                completedBtn.disabled = true;
-            } else if (currentStatus === 'in-progress') {
-                inProgressBtn.disabled = true;
-                completedBtn.disabled = false;
-            } else {
-                inProgressBtn.disabled = true;
-                completedBtn.disabled = true;
-            }
-        }
-
-        function updateVisitStatus(newStatus) {
-            if (!currentVisitId) return;
-            
-            const visitIndex = visits.findIndex(v => v.id === currentVisitId);
-            if (visitIndex !== -1) {
-                visits[visitIndex].status = newStatus;
-                saveAllData();
-                renderAllTables();
-                updateCounters();
-                closeVisitModal();
-                
-                showToast(`Status da visita atualizado para ${getStatusLabel(newStatus)}`, 'success');
-            }
-        }
-
-        // Funções para gerenciar dados
-        function clearAllData() {
-            if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
-                visits = [];
-                visitors = [];
-                companies = [];
-                saveAllData();
-                renderAllTables();
-                updateCounters();
-                updateBadges();
-                
-                showToast('Todos os dados foram limpos', 'success');
-            }
-        }
-
-        function exportData() {
-            const data = {
-                visits,
-                visitors,
-                companies,
-                settings,
-                exportDate: new Date().toISOString()
-            };
-            
-            const dataStr = JSON.stringify(data, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            
-            const url = URL.createObjectURL(dataBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `visitcontrol-backup-${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            
-            showToast('Dados exportados com sucesso!', 'success');
-        }
-
-        function importData() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            
-            input.onchange = e => {
-                const file = e.target.files[0];
-                if (!file) return;
-                
-                const reader = new FileReader();
-                reader.onload = event => {
-                    try {
-                        const data = JSON.parse(event.target.result);
-                        
-                        if (data.visits) visits = data.visits;
-                        if (data.visitors) visitors = data.visitors;
-                        if (data.companies) companies = data.companies;
-                        if (data.settings) settings = data.settings;
-                        
-                        saveAllData();
-                        renderAllTables();
-                        updateCounters();
-                        updateBadges();
-                        
-                        showToast('Dados importados com sucesso!', 'success');
-                    } catch (error) {
-                        showToast('Erro ao importar dados. Verifique o arquivo.', 'error');
-                    }
-                };
-                reader.readAsText(file);
-            };
-            
-            input.click();
-        }
-
-        function resetSettings() {
-            if (confirm('Tem certeza que deseja restaurar as configurações padrão?')) {
-                settings = {};
-                saveAllData();
-                loadSettings();
-                
-                showToast('Configurações restauradas com sucesso!', 'success');
-            }
-        }
-
-        // Funções para tokens
-        function generateToken() {
-            const token = 'VC_' + Math.random().toString(36).substr(2, 9).toUpperCase();
-            userTokens.push({
-                token,
-                created: new Date().toISOString(),
-                active: true
-            });
-            
+        
+        function deleteCompany(id) {
+            companies = companies.filter(c => c.id != id);
             saveAllData();
-            displayToken(token);
-            
-            showToast('Token gerado com sucesso!', 'success');
-        }
-
-        function displayToken(token) {
-            userTokenDisplay.textContent = token;
-            copyTokenBtn.disabled = false;
-            revokeTokenBtn.disabled = false;
-        }
-
-        function copyToken() {
-            const token = userTokenDisplay.textContent;
-            if (token && token !== 'Nenhum token gerado') {
-                navigator.clipboard.writeText(token).then(() => {
-                    showToast('Token copiado para a área de transferência!', 'success');
-                });
-            }
-        }
-
-        function revokeToken() {
-            if (confirm('Tem certeza que deseja revogar este token?')) {
-                const token = userTokenDisplay.textContent;
-                const tokenIndex = userTokens.findIndex(t => t.token === token);
-                
-                if (tokenIndex !== -1) {
-                    userTokens[tokenIndex].active = false;
-                    saveAllData();
-                    
-                    userTokenDisplay.textContent = 'Nenhum token gerado';
-                    copyTokenBtn.disabled = true;
-                    revokeTokenBtn.disabled = true;
-                    
-                    showToast('Token revogado com sucesso!', 'success');
-                }
-            }
-        }
-
-        // Funções para QR Code
-        function generateQRCode() {
-            // Limpar QR Code anterior
-            if (qrcode) {
-                qrcode.clear();
-            }
-            
-            // Gerar URL única para agendamento
-            const token = 'VC_QR_' + Math.random().toString(36).substr(2, 9).toUpperCase();
-            const url = `${window.location.origin}${window.location.pathname}?token=${token}`;
-            
-            // Atualizar link
-            qrcodeLink.textContent = url;
-            
-            // Gerar QR Code
-            qrcode = new QRCode(qrcodeImage, {
-                text: url,
-                width: 200,
-                height: 200,
-                colorDark: '#4361ee',
-                colorLight: '#ffffff',
-                correctLevel: QRCode.CorrectLevel.H
-            });
-        }
-
-        function generateNewQRCode() {
-            generateQRCode();
-            showToast('Novo QR Code gerado com sucesso!', 'success');
-        }
-
-        function copyQRCodeLink() {
-            const link = qrcodeLink.textContent;
-            navigator.clipboard.writeText(link).then(() => {
-                showToast('Link copiado para a área de transferência!', 'success');
-            });
-        }
-
-        function downloadQRCode() {
-            const canvas = qrcodeImage.querySelector('canvas');
-            if (canvas) {
-                const link = document.createElement('a');
-                link.download = 'visitcontrol-qrcode.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                
-                showToast('QR Code baixado com sucesso!', 'success');
-            }
-        }
-
-        // Funções para filtros
-        function applyFilters() {
-            renderVisitsTable();
-        }
-
-        function clearFilters() {
-            document.getElementById('statusFilter').value = 'all';
-            document.getElementById('dateFilter').value = '';
-            document.getElementById('searchFilter').value = '';
-            
-            renderVisitsTable();
-        }
-
-        // Funções para renderizar tabelas
-        function renderVisitsTable() {
-            const statusFilter = document.getElementById('statusFilter').value;
-            const dateFilter = document.getElementById('dateFilter').value;
-            const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
-            
-            let filteredVisits = visits;
-            
-            // Aplicar filtros
-            if (statusFilter !== 'all') {
-                filteredVisits = filteredVisits.filter(v => v.status === statusFilter);
-            }
-            
-            if (dateFilter) {
-                filteredVisits = filteredVisits.filter(v => v.date.startsWith(dateFilter));
-            }
-            
-            if (searchFilter) {
-                filteredVisits = filteredVisits.filter(v => 
-                    v.name.toLowerCase().includes(searchFilter) || 
-                    v.company.toLowerCase().includes(searchFilter)
-                );
-            }
-            
-            // Ordenar por data (mais recente primeiro)
-            filteredVisits.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            // Limitar a 10 registros no dashboard
-            const visitsToShow = currentPage === 'dashboard' ? 
-                filteredVisits.slice(0, 10) : filteredVisits;
-            
-            // Renderizar tabela
-            const tableBody = currentPage === 'dashboard' ? visitsTableBody : allVisitsTableBody;
-            tableBody.innerHTML = '';
-            
-            if (visitsToShow.length === 0) {
-                tableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>Nenhuma visita encontrada</p>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            visitsToShow.forEach(visit => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${visit.name}</td>
-                    <td>${visit.company}</td>
-                    <td>${formatDateTime(visit.date)}</td>
-                    <td>${getDestinationLabel(visit.destination)}</td>
-                    <td><span class="status status-${visit.status}">${getStatusLabel(visit.status)}</span></td>
-                    <td>
-                        <button class="action-btn view-visit" data-id="${visit.id}">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="action-btn edit-visit" data-id="${visit.id}">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn delete delete-visit" data-id="${visit.id}" data-name="${visit.name}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-            
-            // Adicionar event listeners aos botões
-            tableBody.querySelectorAll('.view-visit').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
-                    openVisitModal(id, true);
-                });
-            });
-            
-            tableBody.querySelectorAll('.edit-visit').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
-                    openVisitModal(id, false);
-                });
-            });
-            
-            tableBody.querySelectorAll('.delete-visit').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
-                    const name = e.currentTarget.getAttribute('data-name');
-                    openDeleteModal('visit', id, name);
-                });
-            });
-        }
-
-        function renderSchedulingTable() {
-            const today = new Date().toISOString().split('T')[0];
-            const scheduledVisits = visits.filter(v => v.date.split('T')[0] >= today && v.status === 'scheduled');
-            
-            schedulingTableBody.innerHTML = '';
-            
-            if (scheduledVisits.length === 0) {
-                schedulingTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="empty-state">
-                            <i class="fas fa-calendar-times"></i>
-                            <p>Nenhum agendamento futuro</p>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            scheduledVisits.forEach(visit => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${visit.name}</td>
-                    <td>${visit.company}</td>
-                    <td>${formatDateTime(visit.date)}</td>
-                    <td>${getDestinationLabel(visit.destination)}</td>
-                    <td><span class="status status-${visit.status}">${getStatusLabel(visit.status)}</span></td>
-                    <td>
-                        <button class="action-btn view-visit" data-id="${visit.id}">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="action-btn edit-visit" data-id="${visit.id}">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn delete delete-visit" data-id="${visit.id}" data-name="${visit.name}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                schedulingTableBody.appendChild(row);
-            });
-            
-            // Adicionar event listeners aos botões (mesmo que na função renderVisitsTable)
-            addVisitActionListeners(schedulingTableBody);
-        }
-
-        function renderVisitorsTable() {
-            visitorsTableBody.innerHTML = '';
-            
-            if (visitors.length === 0) {
-                visitorsTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="empty-state">
-                            <i class="fas fa-users"></i>
-                            <p>Nenhum visitante cadastrado</p>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            visitors.forEach(visitor => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${visitor.name}</td>
-                    <td>${visitor.document}</td>
-                    <td>${visitor.company}</td>
-                    <td>${visitor.lastVisit ? formatDateTime(visitor.lastVisit) : 'Nunca'}</td>
-                    <td>${visitor.totalVisits}</td>
-                    <td>
-                        <button class="action-btn edit-visitor" data-id="${visitor.id}">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn delete delete-visitor" data-id="${visitor.id}" data-name="${visitor.name}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                visitorsTableBody.appendChild(row);
-            });
-            
-            // Adicionar event listeners aos botões
-            visitorsTableBody.querySelectorAll('.edit-visitor').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
-                    openVisitorModal(id);
-                });
-            });
-            
-            visitorsTableBody.querySelectorAll('.delete-visitor').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
-                    const name = e.currentTarget.getAttribute('data-name');
-                    openDeleteModal('visitor', id, name);
-                });
-            });
-        }
-
-        function renderCompaniesTable() {
-            companiesTableBody.innerHTML = '';
-            
-            if (companies.length === 0) {
-                companiesTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="empty-state">
-                            <i class="fas fa-building"></i>
-                            <p>Nenhuma empresa cadastrada</p>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            companies.forEach(company => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${company.name}</td>
-                    <td>${company.cnpj}</td>
-                    <td>${company.responsible || 'Não informado'}</td>
-                    <td>${company.totalVisits}</td>
-                    <td>${company.lastVisit ? formatDateTime(company.lastVisit) : 'Nunca'}</td>
-                    <td>
-                        <button class="action-btn edit-company" data-id="${company.id}">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn delete delete-company" data-id="${company.id}" data-name="${company.name}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                companiesTableBody.appendChild(row);
-            });
-            
-            // Adicionar event listeners aos botões
-            companiesTableBody.querySelectorAll('.edit-company').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
-                    openCompanyModal(id);
-                });
-            });
-            
-            companiesTableBody.querySelectorAll('.delete-company').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
-                    const name = e.currentTarget.getAttribute('data-name');
-                    openDeleteModal('company', id, name);
-                });
-            });
-        }
-
-        function renderAllTables() {
-            renderVisitsTable();
-            renderSchedulingTable();
-            renderVisitorsTable();
             renderCompaniesTable();
-        }
-
-        function addVisitActionListeners(tableBody) {
-            tableBody.querySelectorAll('.view-visit').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
-                    openVisitModal(id, true);
-                });
-            });
             
-            tableBody.querySelectorAll('.edit-visit').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
-                    openVisitModal(id, false);
-                });
-            });
+            // Atualizar badge
+            document.getElementById('companiesBadge').textContent = companies.length;
             
-            tableBody.querySelectorAll('.delete-visit').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
-                    const name = e.currentTarget.getAttribute('data-name');
-                    openDeleteModal('visit', id, name);
-                });
-            });
+            showToast('Empresa excluída com sucesso!', 'success');
         }
-
-        // Funções utilitárias
-        function formatDateTime(dateTimeStr) {
-            const date = new Date(dateTimeStr);
-            return date.toLocaleString('pt-BR');
-        }
-
-        function getDestinationLabel(destination) {
+        
+        // Funções auxiliares
+        function getDestinationName(destination) {
             const destinations = {
                 'rh': 'Recursos Humanos',
                 'ti': 'Tecnologia da Informação',
@@ -3639,179 +2771,71 @@
             
             return destinations[destination] || destination;
         }
-
-        function getStatusLabel(status) {
-            const statusLabels = {
-                'scheduled': 'Agendada',
-                'in-progress': 'Em Andamento',
-                'completed': 'Concluída'
-            };
-            
-            return statusLabels[status] || status;
-        }
-
+        
         function updateCounters() {
-            const today = new Date().toISOString().split('T')[0];
-            const todayVisits = visits.filter(v => v.date.split('T')[0] === today).length;
-            const pendingVisits = visits.filter(v => v.status === 'scheduled').length;
-            const completedVisits = visits.filter(v => v.status === 'completed').length;
+            const today = new Date().toDateString();
+            const todayVisits = visits.filter(v => new Date(v.date).toDateString() === today);
+            const pendingVisits = visits.filter(v => v.status === 'scheduled');
+            const completedVisits = visits.filter(v => v.status === 'completed');
             
-            todayVisitsCount.textContent = todayVisits;
-            pendingVisitsCount.textContent = pendingVisits;
-            completedVisitsCount.textContent = completedVisits;
+            todayVisitsCount.textContent = todayVisits.length;
+            pendingVisitsCount.textContent = pendingVisits.length;
+            completedVisitsCount.textContent = completedVisits.length;
         }
-
-        function updateBadges() {
-            const visitorsBadge = document.getElementById('visitorsBadge');
-            const companiesBadge = document.getElementById('companiesBadge');
+        
+        function filterVisits() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
             
-            if (visitorsBadge) visitorsBadge.textContent = visitors.length;
-            if (companiesBadge) companiesBadge.textContent = companies.length;
+            let filteredVisits = visits;
+            
+            // Filtrar por status
+            if (statusFilter !== 'all') {
+                filteredVisits = filteredVisits.filter(v => v.status === statusFilter);
+            }
+            
+            // Filtrar por data
+            if (dateFilter) {
+                filteredVisits = filteredVisits.filter(v => {
+                    const visitDate = new Date(v.date).toDateString();
+                    const filterDate = new Date(dateFilter).toDateString();
+                    return visitDate === filterDate;
+                });
+            }
+            
+            // Filtrar por busca
+            if (searchFilter) {
+                filteredVisits = filteredVisits.filter(v => {
+                    return v.name.toLowerCase().includes(searchFilter) || 
+                           v.company.toLowerCase().includes(searchFilter);
+                });
+            }
+            
+            return filteredVisits;
         }
-
+        
+        function applyFilters() {
+            renderVisitsTable();
+        }
+        
+        // Função para mostrar notificação
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toastMessage');
-            const toastIcon = toast.querySelector('i');
             
             toastMessage.textContent = message;
-            toast.className = `toast ${type}`;
+            toast.className = 'toast';
+            toast.classList.add(type);
             
-            if (type === 'success') {
-                toastIcon.className = 'fas fa-check-circle';
-            } else {
-                toastIcon.className = 'fas fa-exclamation-circle';
-            }
-            
-            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
             
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
         }
-
-        // Funções para salvar e carregar dados
-        function saveAllData() {
-            const data = {
-                visits,
-                visitors,
-                companies,
-                settings,
-                userTokens
-            };
-            
-            localStorage.setItem('visitControl_data', JSON.stringify(data));
-        }
-
-        function loadAllData() {
-            const dataStr = localStorage.getItem('visitControl_data');
-            
-            if (dataStr) {
-                try {
-                    const data = JSON.parse(dataStr);
-                    
-                    if (data.visits) visits = data.visits;
-                    if (data.visitors) visitors = data.visitors;
-                    if (data.companies) companies = data.companies;
-                    if (data.settings) settings = data.settings;
-                    if (data.userTokens) userTokens = data.userTokens;
-                    
-                    // Carregar configurações
-                    loadSettings();
-                    
-                    // Carregar token ativo se existir
-                    const activeToken = userTokens.find(t => t.active);
-                    if (activeToken) {
-                        displayToken(activeToken.token);
-                    }
-                } catch (error) {
-                    console.error('Erro ao carregar dados:', error);
-                }
-            }
-        }
-
-        function loadSettings() {
-            if (settings.companyName) {
-                document.getElementById('companyName').value = settings.companyName;
-            }
-            if (settings.companyAddress) {
-                document.getElementById('companyAddress').value = settings.companyAddress;
-            }
-            if (settings.adminEmail) {
-                document.getElementById('adminEmail').value = settings.adminEmail;
-            }
-            if (settings.maxVisits) {
-                document.getElementById('maxVisits').value = settings.maxVisits;
-            }
-            if (settings.emailNotifications !== undefined) {
-                document.getElementById('emailNotifications').checked = settings.emailNotifications;
-            }
-            if (settings.browserNotifications !== undefined) {
-                document.getElementById('browserNotifications').checked = settings.browserNotifications;
-            }
-            if (settings.notificationTime) {
-                document.getElementById('notificationTime').value = settings.notificationTime;
-            }
-        }
-
-        function saveSettings() {
-            settings = {
-                companyName: document.getElementById('companyName').value,
-                companyAddress: document.getElementById('companyAddress').value,
-                adminEmail: document.getElementById('adminEmail').value,
-                maxVisits: parseInt(document.getElementById('maxVisits').value) || 50,
-                emailNotifications: document.getElementById('emailNotifications').checked,
-                browserNotifications: document.getElementById('browserNotifications').checked,
-                notificationTime: document.getElementById('notificationTime').value
-            };
-            
-            saveAllData();
-            showToast('Configurações salvas com sucesso!', 'success');
-        }
-
-        // Configurar botão de confirmação de exclusão
-        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-            if (deleteType === 'visit') {
-                deleteVisit();
-            } else if (deleteType === 'visitor') {
-                deleteVisitor();
-            } else if (deleteType === 'company') {
-                deleteCompany();
-            }
-        });
-
-        function deleteVisit() {
-            visits = visits.filter(v => v.id !== currentVisitId);
-            saveAllData();
-            renderAllTables();
-            updateCounters();
-            closeDeleteModal();
-            
-            showToast('Visita excluída com sucesso!', 'success');
-        }
-
-        function deleteVisitor() {
-            visitors = visitors.filter(v => v.id !== currentVisitorId);
-            saveAllData();
-            renderVisitorsTable();
-            updateBadges();
-            closeDeleteModal();
-            
-            showToast('Visitante excluído com sucesso!', 'success');
-        }
-
-        function deleteCompany() {
-            companies = companies.filter(c => c.id !== currentCompanyId);
-            saveAllData();
-            renderCompaniesTable();
-            updateBadges();
-            closeDeleteModal();
-            
-            showToast('Empresa excluída com sucesso!', 'success');
-        }
-
-        // Inicializar QR Code
-        generateQRCode();
     </script>
 </body>
 </html>
