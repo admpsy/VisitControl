@@ -2695,68 +2695,191 @@
             showToast('Visitante excluído com sucesso!', 'success');
         }
         
-        function saveCompany() {
-            const name = document.getElementById('companyNameInput').value.trim();
-            const cnpj = document.getElementById('companyCnpj').value.trim();
-            const responsible = document.getElementById('companyResponsible').value.trim();
-            const phone = document.getElementById('companyPhone').value.trim();
-            const email = document.getElementById('companyEmail').value.trim();
-            
-            if (!name || !cnpj) {
-                showToast('Preencha todos os campos obrigatórios', 'error');
-                return;
-            }
-            
-            if (currentCompanyId) {
-                // Editar empresa existente
-                const companyIndex = companies.findIndex(c => c.id == currentCompanyId);
-                if (companyIndex === -1) return;
-                
-                companies[companyIndex] = {
-                    ...companies[companyIndex],
-                    name,
-                    cnpj,
-                    responsible,
-                    phone,
-                    email
-                };
-                
-                showToast('Empresa atualizada com sucesso!', 'success');
-            } else {
-                // Nova empresa
-                const newCompany = {
-                    id: Date.now(),
-                    name,
-                    cnpj,
-                    responsible,
-                    phone,
-                    email,
-                    totalVisits: 0,
-                    lastVisit: null
-                };
-                
-                companies.push(newCompany);
-                showToast('Empresa cadastrada com sucesso!', 'success');
-            }
-            
-            saveAllData();
-            renderCompaniesTable();
-            closeCompanyModal();
-            
-            // Atualizar badge
-            document.getElementById('companiesBadge').textContent = companies.length;
+// Funções CRUD - CORRIGIDAS
+function saveVisit() {
+    const name = document.getElementById('visitorName').value.trim();
+    const company = document.getElementById('company').value.trim();
+    const document = document.getElementById('document').value.trim();
+    const destination = document.getElementById('destination').value;
+    const date = document.getElementById('date').value;
+    const notes = document.getElementById('notes').value.trim();
+    
+    // Validação de campos obrigatórios
+    if (!name || !company || !destination || !date) {
+        showToast('Preencha todos os campos obrigatórios', 'error');
+        
+        // Destacar campos obrigatórios não preenchidos
+        if (!name) {
+            document.getElementById('visitorName').style.borderColor = 'var(--danger)';
+        }
+        if (!company) {
+            document.getElementById('company').style.borderColor = 'var(--danger)';
+        }
+        if (!destination) {
+            document.getElementById('destination').style.borderColor = 'var(--danger)';
+        }
+        if (!date) {
+            document.getElementById('date').style.borderColor = 'var(--danger)';
         }
         
-        function deleteCompany(id) {
-            companies = companies.filter(c => c.id != id);
-            saveAllData();
-            renderCompaniesTable();
-            
-            // Atualizar badge
-            document.getElementById('companiesBadge').textContent = companies.length;
-            
-            showToast('Empresa excluída com sucesso!', 'success');
+        return;
+    }
+    
+    // Reset das bordas dos campos
+    document.getElementById('visitorName').style.borderColor = '';
+    document.getElementById('company').style.borderColor = '';
+    document.getElementById('destination').style.borderColor = '';
+    document.getElementById('date').style.borderColor = '';
+    
+    // Gerar ID único baseado em timestamp e um número aleatório
+    const newId = Date.now() + Math.floor(Math.random() * 1000);
+    
+    const newVisit = {
+        id: newId,
+        name,
+        company,
+        document,
+        destination,
+        date,
+        status: 'scheduled',
+        notes
+    };
+    
+    visits.push(newVisit);
+    saveAllData();
+    
+    updateCounters();
+    renderAllTables();
+    closeVisitModal();
+    
+    showToast('Visita registrada com sucesso!', 'success');
+    
+    // Verificar se o visitante já existe e adicionar se necessário
+    addVisitorIfNotExists(name, document, company);
+}
+
+function updateVisit() {
+    const id = document.getElementById('visitId').value;
+    const name = document.getElementById('visitorName').value.trim();
+    const company = document.getElementById('company').value.trim();
+    const document = document.getElementById('document').value.trim();
+    const destination = document.getElementById('destination').value;
+    const date = document.getElementById('date').value;
+    const notes = document.getElementById('notes').value.trim();
+    
+    // Validação de campos obrigatórios
+    if (!name || !company || !destination || !date) {
+        showToast('Preencha todos os campos obrigatórios', 'error');
+        
+        // Destacar campos obrigatórios não preenchidos
+        if (!name) {
+            document.getElementById('visitorName').style.borderColor = 'var(--danger)';
         }
+        if (!company) {
+            document.getElementById('company').style.borderColor = 'var(--danger)';
+        }
+        if (!destination) {
+            document.getElementById('destination').style.borderColor = 'var(--danger)';
+        }
+        if (!date) {
+            document.getElementById('date').style.borderColor = 'var(--danger)';
+        }
+        
+        return;
+    }
+    
+    // Reset das bordas dos campos
+    document.getElementById('visitorName').style.borderColor = '';
+    document.getElementById('company').style.borderColor = '';
+    document.getElementById('destination').style.borderColor = '';
+    document.getElementById('date').style.borderColor = '';
+    
+    const visitIndex = visits.findIndex(v => v.id == id);
+    if (visitIndex === -1) {
+        showToast('Visita não encontrada', 'error');
+        return;
+    }
+    
+    visits[visitIndex] = {
+        ...visits[visitIndex],
+        name,
+        company,
+        document,
+        destination,
+        date,
+        notes
+    };
+    
+    saveAllData();
+    updateCounters();
+    renderAllTables();
+    closeVisitModal();
+    
+    showToast('Visita atualizada com sucesso!', 'success');
+    
+    // Verificar se o visitante já existe e adicionar se necessário
+    addVisitorIfNotExists(name, document, company);
+}
+
+// Função auxiliar para adicionar visitante se não existir
+function addVisitorIfNotExists(name, document, company) {
+    const existingVisitor = visitors.find(v => 
+        v.name.toLowerCase() === name.toLowerCase() && 
+        v.document === document
+    );
+    
+    if (!existingVisitor) {
+        const newVisitor = {
+            id: Date.now() + Math.floor(Math.random() * 1000),
+            name,
+            document,
+            company,
+            phone: '',
+            email: '',
+            lastVisit: new Date().toISOString().slice(0, 16),
+            totalVisits: 1
+        };
+        
+        visitors.push(newVisitor);
+        saveAllData();
+        
+        // Atualizar badge
+        document.getElementById('visitorsBadge').textContent = visitors.length;
+        
+        // Atualizar tabela de visitantes se estiver na página
+        if (currentPage === 'visitors') {
+            renderVisitorsTable();
+        }
+    } else {
+        // Atualizar última visita e contador
+        existingVisitor.lastVisit = new Date().toISOString().slice(0, 16);
+        existingVisitor.totalVisits = (existingVisitor.totalVisits || 0) + 1;
+        saveAllData();
+        
+        // Atualizar tabela de visitantes se estiver na página
+        if (currentPage === 'visitors') {
+            renderVisitorsTable();
+        }
+    }
+}
+
+// Adicionar event listeners para resetar a borda quando o usuário começar a digitar
+document.addEventListener('DOMContentLoaded', function() {
+    // ... código existente ...
+    
+    // Adicionar event listeners para campos obrigatórios
+    const requiredFields = ['visitorName', 'company', 'destination', 'date'];
+    requiredFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', function() {
+                if (this.value.trim()) {
+                    this.style.borderColor = '';
+                }
+            });
+        }
+    });
+});
         
         // Funções auxiliares
         function getDestinationName(destination) {
