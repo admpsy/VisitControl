@@ -815,72 +815,6 @@
             border-width: 0 3px 3px 0;
             transform: rotate(45deg);
         }
-
-        /* Invitation Styles */
-        .invitation-section {
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(255, 204, 0, 0.05);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-        }
-
-        .invitation-list {
-            margin-top: 15px;
-        }
-
-        .invitation-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: var(--card-bg);
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border: 1px solid var(--border);
-        }
-
-        .invitation-info h4 {
-            margin-bottom: 5px;
-            color: var(--text);
-        }
-
-        .invitation-info p {
-            color: var(--text-light);
-            font-size: 14px;
-            margin: 2px 0;
-        }
-
-        .invitation-status {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .status-active {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success);
-        }
-
-        .status-used {
-            background: rgba(107, 114, 128, 0.2);
-            color: var(--text-light);
-        }
-
-        .status-expired {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #0da371;
-        }
     </style>
 </head>
 <body>
@@ -909,11 +843,6 @@
             <div class="nav-item" data-page="companies">
                 <i class="fas fa-building"></i>
                 <span>Empresas</span>
-            </div>
-            <div class="nav-item" data-page="invitations">
-                <i class="fas fa-link"></i>
-                <span>Convites</span>
-                <span class="badge" id="invitationsBadge">0</span>
             </div>
             <div class="nav-item" data-page="settings">
                 <i class="fas fa-cog"></i>
@@ -1011,16 +940,10 @@
                 <div class="card">
                     <div class="section-header">
                         <h2 class="section-title">Visitas Recentes</h2>
-                        <div>
-                            <button class="btn btn-primary" id="newVisitBtn">
-                                <i class="fas fa-plus"></i>
-                                Nova Visita
-                            </button>
-                            <button class="btn btn-success" id="generateInvitationBtn">
-                                <i class="fas fa-link"></i>
-                                Gerar Convite
-                            </button>
-                        </div>
+                        <button class="btn btn-primary" id="newVisitBtn">
+                            <i class="fas fa-plus"></i>
+                            Nova Visita
+                        </button>
                     </div>
                     
                     <div class="table-container">
@@ -1071,16 +994,10 @@
                 <div class="card">
                     <div class="section-header">
                         <h2 class="section-title">Todas as Visitas</h2>
-                        <div>
-                            <button class="btn btn-primary" id="newVisitBtn2">
-                                <i class="fas fa-plus"></i>
-                                Nova Visita
-                            </button>
-                            <button class="btn btn-success" id="generateInvitationBtn2">
-                                <i class="fas fa-link"></i>
-                                Gerar Convite
-                            </button>
-                        </div>
+                        <button class="btn btn-primary" id="newVisitBtn2">
+                            <i class="fas fa-plus"></i>
+                            Nova Visita
+                        </button>
                     </div>
                     
                     <div class="table-container">
@@ -1106,13 +1023,7 @@
             <!-- Scheduling Page -->
             <div class="page-content" id="scheduling-page">
                 <div class="card">
-                    <div class="section-header">
-                        <h2 class="section-title">Agendamentos Futuros</h2>
-                        <button class="btn btn-success" id="generateInvitationBtn3">
-                            <i class="fas fa-link"></i>
-                            Gerar Convite
-                        </button>
-                    </div>
+                    <h2 class="section-title">Agendamentos Futuros</h2>
                     <p>Esta página gerencia os agendamentos futuros de visitas.</p>
                     
                     <div class="table-container">
@@ -1183,23 +1094,6 @@
                                 <!-- Empresas serão carregadas aqui via JavaScript -->
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Invitations Page -->
-            <div class="page-content" id="invitations-page">
-                <div class="card">
-                    <div class="section-header">
-                        <h2 class="section-title">Links de Convite</h2>
-                        <button class="btn btn-success" id="newInvitationBtn">
-                            <i class="fas fa-plus"></i>
-                            Novo Convite
-                        </button>
-                    </div>
-                    
-                    <div class="invitation-list" id="invitationsList">
-                        <!-- Lista de convites será carregada aqui -->
                     </div>
                 </div>
             </div>
@@ -1298,31 +1192,15 @@
                                 <li><strong>Agendamentos:</strong> Visualize e gerencie visitas futuras</li>
                                 <li><strong>Visitantes:</strong> Mantenha um cadastro de visitantes frequentes</li>
                                 <li><strong>Empresas:</strong> Cadastre empresas visitantes</li>
-                                <li><strong>Convites:</strong> Gere links para agendamento externo</li>
                                 <li><strong>Configurações:</strong> Personalize o sistema conforme suas necessidades</li>
                             </ul>
                         </div>
                     </div>
                     
                     <div class="help-section">
-                        <h3>Sistema de Convites</h3>
-                        <div class="help-content">
-                            <p>O sistema agora permite gerar links de convite para visitantes externos:</p>
-                            <ol style="margin-left: 20px; margin-top: 10px;">
-                                <li>Acesse a página "Convites" ou clique em "Gerar Convite"</li>
-                                <li>Preencha os dados básicos do visitante</li>
-                                <li>Gere o link de convite</li>
-                                <li>Compartilhe o link com o visitante</li>
-                                <li>O visitante poderá agendar uma visita através do link</li>
-                                <li>O link expira automaticamente após o período selecionado</li>
-                            </ol>
-                        </div>
-                    </div>
-                    
-                    <div class="help-section">
                         <h3>Armazenamento Online</h3>
                         <div class="help-content">
-                            <p>O sistema oferece armazenamento online gratuito usando Firebase:</p>
+                            <p>O sistema agora oferece armazenamento online gratuito usando Firebase:</p>
                             <ol style="margin-left: 20px; margin-top: 10px;">
                                 <li>Crie uma conta no <a href="https://firebase.google.com/" style="color: var(--primary);">Firebase</a></li>
                                 <li>Crie um novo projeto</li>
@@ -1344,7 +1222,7 @@
                                 </div>
                                 <div class="contact-item">
                                     <i class="fas fa-envelope"></i>
-                                    <span>admpsy@hotmail.com</span>
+                                    <span>admpsy@hotmail..com</span>
                                 </div>
                                 <div class="contact-item">
                                     <i class="fas fa-phone"></i>
@@ -1398,7 +1276,7 @@
                             <option value="comercial">Comercial</option>
                             <option value="diretoria">Diretoria</option>
                             <option value="operacional">Operacional</option>
-                            <option value="outros">Outros</option>
+                              <option value="outros">Outros</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -1478,78 +1356,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Invitation Modal -->
-    <div class="modal-backdrop" id="invitationModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Gerar Link de Convite</h3>
-                <button class="action-btn close-invitation-modal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="invitationForm">
-                    <div class="form-group">
-                        <label for="inviteVisitorName">Nome do Visitante</label>
-                        <input type="text" id="inviteVisitorName" class="form-control" placeholder="Digite o nome do visitante">
-                    </div>
-                    <div class="form-group">
-                        <label for="inviteCompany">Empresa</label>
-                        <input type="text" id="inviteCompany" class="form-control" placeholder="Nome da empresa">
-                    </div>
-                    <div class="form-group">
-                        <label for="inviteDestination">Destino</label>
-                        <select id="inviteDestination" class="form-control">
-                            <option value="">Selecione um departamento</option>
-                            <option value="rh">Recursos Humanos</option>
-                            <option value="ti">Tecnologia da Informação</option>
-                            <option value="financeiro">Financeiro</option>
-                            <option value="comercial">Comercial</option>
-                            <option value="diretoria">Diretoria</option>
-                            <option value="operacional">Operacional</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="inviteExpires">Expira em (dias)</label>
-                        <select id="inviteExpires" class="form-control">
-                            <option value="1">1 dia</option>
-                            <option value="3" selected>3 dias</option>
-                            <option value="7">7 dias</option>
-                            <option value="30">30 dias</option>
-                        </select>
-                    </div>
-                </form>
-                
-                <div id="invitationResult" style="display: none; margin-top: 20px;">
-                    <div class="form-group">
-                        <label>Link de Convite Gerado:</label>
-                        <div style="display: flex; gap: 10px; margin-top: 10px;">
-                            <input type="text" id="generatedLink" class="form-control" readonly>
-                            <button class="btn btn-primary" id="copyLinkBtn">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                        </div>
-                        <small style="color: var(--text-light);">Compartilhe este link com o visitante</small>
-                    </div>
-                    
-                    <div style="margin-top: 15px; padding: 15px; background: rgba(255, 204, 0, 0.1); border-radius: 8px;">
-                        <h4 style="color: var(--primary); margin-bottom: 10px;">Instruções:</h4>
-                        <ol style="margin-left: 20px; color: var(--text-light);">
-                            <li>Compartilhe o link com o visitante</li>
-                            <li>O visitante poderá agendar uma visita</li>
-                            <li>Alguns dados serão preenchidos automaticamente</li>
-                            <li>O link expira após o período selecionado</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline close-invitation-modal">Cancelar</button>
-                <button class="btn btn-primary" id="generateInviteBtn">Gerar Link</button>
-            </div>
-        </div>
-    </div>
     
     <!-- Toast Notification -->
     <div class="toast" id="toast">
@@ -1560,21 +1366,20 @@
     <script>
         // Configuração do Firebase (será substituída pelo usuário)
         const defaultFirebaseConfig = {
-            "apiKey": "AIzaSyCj-5Hsw29I_v3CiiMCXvlSgDETQLUgCHI",
-            "authDomain": "visitcontrol-f5b15.firebaseapp.com",
-            "databaseURL": "https://visitcontrol-f5b15-default-rtdb.firebaseio.com",
-            "projectId": "visitcontrol-f5b15",
-            "storageBucket": "visitcontrol-f5b15.firebasestorage.app",
-            "messagingSenderId": "235940758723",
-            "appId": "1:235940758723:web:2339829df8368d5f07ce76",
-            "measurementId": "G-L06GX4E190"
-        };
+  "apiKey": "AIzaSyCj-5Hsw29I_v3CiiMCXvlSgDETQLUgCHI",
+  "authDomain": "visitcontrol-f5b15.firebaseapp.com",
+  "databaseURL": "https://visitcontrol-f5b15-default-rtdb.firebaseio.com",
+  "projectId": "visitcontrol-f5b15",
+  "storageBucket": "visitcontrol-f5b15.firebasestorage.app",
+  "messagingSenderId": "235940758723",
+  "appId": "1:235940758723:web:2339829df8368d5f07ce76",
+  "measurementId": "G-L06GX4E190"
+};
         
         // Dados de exemplo (inicialmente vazios)
         let visits = [];
         let visitors = [];
         let companies = [];
-        let invitations = [];
         
         // Elementos DOM
         const sidebar = document.getElementById('sidebar');
@@ -1582,14 +1387,12 @@
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const visitModal = document.getElementById('visitModal');
         const deleteModal = document.getElementById('deleteModal');
-        const invitationModal = document.getElementById('invitationModal');
         const toast = document.getElementById('toast');
         const visitsTableBody = document.getElementById('visitsTableBody');
         const allVisitsTableBody = document.getElementById('allVisitsTableBody');
         const schedulingTableBody = document.getElementById('schedulingTableBody');
         const visitorsTableBody = document.getElementById('visitorsTableBody');
         const companiesTableBody = document.getElementById('companiesTableBody');
-        const invitationsList = document.getElementById('invitationsList');
         const firebaseStatus = document.getElementById('firebaseStatus');
         const statusIndicator = document.getElementById('statusIndicator');
         const statusText = document.getElementById('statusText');
@@ -1598,7 +1401,6 @@
         const todayVisitsCount = document.getElementById('todayVisitsCount');
         const pendingVisitsCount = document.getElementById('pendingVisitsCount');
         const completedVisitsCount = document.getElementById('completedVisitsCount');
-        const invitationsBadge = document.getElementById('invitationsBadge');
         
         // Estado da aplicação
         let currentVisitId = null;
@@ -1625,10 +1427,6 @@
             loadVisitsFromStorage();
             loadVisitorsFromStorage();
             loadCompaniesFromStorage();
-            loadInvitationsFromStorage();
-            
-            // Processar convite da URL (se houver)
-            processInvitationFromURL();
             
             // Adicionar dados de exemplo apenas se não houver dados salvos
             if (visits.length === 0) {
@@ -1650,18 +1448,6 @@
             });
             document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
             document.getElementById('onlineStorage').addEventListener('change', toggleOnlineStorage);
-            
-            // Sistema de Convites - Event Listeners
-            document.getElementById('generateInvitationBtn').addEventListener('click', openInvitationModal);
-            document.getElementById('generateInvitationBtn2').addEventListener('click', openInvitationModal);
-            document.getElementById('generateInvitationBtn3').addEventListener('click', openInvitationModal);
-            document.getElementById('newInvitationBtn').addEventListener('click', openInvitationModal);
-            document.getElementById('generateInviteBtn').addEventListener('click', generateInvitation);
-            document.getElementById('copyLinkBtn').addEventListener('click', copyInvitationLink);
-            
-            document.querySelectorAll('.close-invitation-modal').forEach(btn => {
-                btn.addEventListener('click', closeInvitationModal);
-            });
             
             // Configurar navegação
             document.querySelectorAll('.nav-item').forEach(item => {
@@ -1813,190 +1599,6 @@
             renderAllTables();
         });
         
-        // =============================================
-        // SISTEMA DE CONVITES
-        // =============================================
-        
-        function openInvitationModal() {
-            document.getElementById('invitationForm').reset();
-            document.getElementById('invitationResult').style.display = 'none';
-            document.getElementById('invitationModal').classList.add('active');
-        }
-        
-        function closeInvitationModal() {
-            document.getElementById('invitationModal').classList.remove('active');
-        }
-        
-        function generateInvitation() {
-            const name = document.getElementById('inviteVisitorName').value;
-            const company = document.getElementById('inviteCompany').value;
-            const destination = document.getElementById('inviteDestination').value;
-            const expiresDays = parseInt(document.getElementById('inviteExpires').value);
-
-            if (!name || !company || !destination) {
-                showToast('Preencha todos os campos obrigatórios!', 'error');
-                return;
-            }
-
-            const visitData = {
-                name: name,
-                company: company,
-                destination: destination
-            };
-
-            const invitationLink = generateInvitationLink(visitData, expiresDays);
-            
-            // Mostrar resultado
-            document.getElementById('generatedLink').value = invitationLink;
-            document.getElementById('invitationResult').style.display = 'block';
-            
-            showToast('Link de convite gerado com sucesso!', 'success');
-            renderInvitationsList();
-        }
-        
-        function generateInvitationLink(visitData, expiresDays = 3) {
-            const invitationId = 'inv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            const invitation = {
-                id: invitationId,
-                visitData: visitData,
-                created: new Date().toISOString(),
-                expires: new Date(Date.now() + expiresDays * 24 * 60 * 60 * 1000).toISOString(),
-                used: false,
-                usedBy: null,
-                usedAt: null
-            };
-            
-            invitations.push(invitation);
-            saveInvitationsToStorage();
-            updateInvitationsBadge();
-            
-            // Retorna o link completo
-            return window.location.origin + window.location.pathname + '?invitation=' + invitationId;
-        }
-        
-        function copyInvitationLink() {
-            const linkInput = document.getElementById('generatedLink');
-            linkInput.select();
-            linkInput.setSelectionRange(0, 99999); // Para mobile
-            
-            navigator.clipboard.writeText(linkInput.value).then(() => {
-                showToast('Link copiado para a área de transferência!', 'success');
-            }).catch(err => {
-                // Fallback para navegadores mais antigos
-                document.execCommand('copy');
-                showToast('Link copiado para a área de transferência!', 'success');
-            });
-        }
-        
-        function processInvitationFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const invitationId = urlParams.get('invitation');
-            
-            if (invitationId) {
-                const invitation = invitations.find(inv => 
-                    inv.id === invitationId && 
-                    !inv.used && 
-                    new Date(inv.expires) > new Date()
-                );
-                
-                if (invitation) {
-                    // Preencher formulário automaticamente
-                    document.getElementById('visitorName').value = invitation.visitData.name || '';
-                    document.getElementById('company').value = invitation.visitData.company || '';
-                    document.getElementById('destination').value = invitation.visitData.destination || '';
-                    
-                    // Marcar como usado
-                    invitation.used = true;
-                    invitation.usedBy = invitation.visitData.name;
-                    invitation.usedAt = new Date().toISOString();
-                    saveInvitationsToStorage();
-                    updateInvitationsBadge();
-                    
-                    showToast('Convite aplicado com sucesso! Preencha os dados restantes.', 'success');
-                    
-                    // Abrir modal de agendamento
-                    setTimeout(() => {
-                        openVisitModal('new');
-                    }, 1000);
-                    
-                    // Limpar parâmetro da URL
-                    const newUrl = window.location.origin + window.location.pathname;
-                    window.history.replaceState({}, document.title, newUrl);
-                } else {
-                    showToast('Convite inválido ou expirado.', 'error');
-                }
-            }
-        }
-        
-        function renderInvitationsList() {
-            invitationsList.innerHTML = '';
-            
-            if (invitations.length === 0) {
-                invitationsList.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-link" style="font-size: 50px; margin-bottom: 15px;"></i>
-                        <p>Nenhum convite gerado</p>
-                        <p style="font-size: 14px; margin-top: 10px;">Clique em "Novo Convite" para gerar seu primeiro link</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Ordenar por data de criação (mais recente primeiro)
-            const sortedInvitations = [...invitations].sort((a, b) => new Date(b.created) - new Date(a.created));
-            
-            sortedInvitations.forEach(invitation => {
-                const invitationElement = document.createElement('div');
-                invitationElement.className = 'invitation-item';
-                
-                const isExpired = new Date(invitation.expires) < new Date();
-                const status = invitation.used ? 'used' : isExpired ? 'expired' : 'active';
-                const statusText = invitation.used ? 'Utilizado' : isExpired ? 'Expirado' : 'Ativo';
-                const statusClass = `status-${status}`;
-                
-                invitationElement.innerHTML = `
-                    <div class="invitation-info">
-                        <h4>${invitation.visitData.name} - ${invitation.visitData.company}</h4>
-                        <p><strong>Destino:</strong> ${getDestinationName(invitation.visitData.destination)}</p>
-                        <p><strong>Criado em:</strong> ${formatDateTime(invitation.created)}</p>
-                        <p><strong>Expira em:</strong> ${formatDateTime(invitation.expires)}</p>
-                        ${invitation.used ? `<p><strong>Utilizado por:</strong> ${invitation.usedBy} em ${formatDateTime(invitation.usedAt)}</p>` : ''}
-                    </div>
-                    <div>
-                        <span class="invitation-status ${statusClass}">${statusText}</span>
-                    </div>
-                `;
-                
-                invitationsList.appendChild(invitationElement);
-            });
-        }
-        
-        function saveInvitationsToStorage() {
-            localStorage.setItem('visitControl_invitations', JSON.stringify(invitations));
-            if (isFirebaseConnected) {
-                saveDataToFirebase();
-            }
-        }
-        
-        function loadInvitationsFromStorage() {
-            const storedInvitations = localStorage.getItem('visitControl_invitations');
-            if (storedInvitations) {
-                invitations = JSON.parse(storedInvitations);
-                updateInvitationsBadge();
-            }
-        }
-        
-        function updateInvitationsBadge() {
-            const activeInvitations = invitations.filter(inv => 
-                !inv.used && new Date(inv.expires) > new Date()
-            ).length;
-            invitationsBadge.textContent = activeInvitations;
-        }
-        
-        // =============================================
-        // FUNÇÕES EXISTENTES (mantidas do código original)
-        // =============================================
-        
         // Funções do Firebase
         function initializeFirebase() {
             try {
@@ -2077,17 +1679,6 @@
                     localStorage.setItem('visitControl_companies', JSON.stringify(companies));
                 }
             });
-            
-            // Sincronizar convites
-            const invitationsRef = firebaseDatabase.ref('invitations');
-            invitationsRef.on('value', (snapshot) => {
-                const firebaseInvitations = snapshot.val();
-                if (firebaseInvitations) {
-                    invitations = Object.values(firebaseInvitations);
-                    localStorage.setItem('visitControl_invitations', JSON.stringify(invitations));
-                    updateInvitationsBadge();
-                }
-            });
         }
         
         function saveDataToFirebase() {
@@ -2097,7 +1688,6 @@
                 firebaseDatabase.ref('visits').set(visits);
                 firebaseDatabase.ref('visitors').set(visitors);
                 firebaseDatabase.ref('companies').set(companies);
-                firebaseDatabase.ref('invitations').set(invitations);
             } catch (error) {
                 console.error("Erro ao salvar no Firebase:", error);
             }
@@ -2139,6 +1729,7 @@
             if (storedVisitors) {
                 visitors = JSON.parse(storedVisitors);
                 document.getElementById('visitorsBadge').textContent = visitors.length;
+                document.querySelector('.nav-item[data-page="visitors"] .badge').textContent = visitors.length;
             }
         }
         
@@ -2209,8 +1800,6 @@
                 renderVisitorsTable();
             } else if (page === 'companies') {
                 renderCompaniesTable();
-            } else if (page === 'invitations') {
-                renderInvitationsList();
             }
             
             showToast(`Navegando para ${document.querySelector(`.nav-item[data-page="${page}"]`).querySelector('span').textContent}`);
@@ -2367,7 +1956,6 @@
             renderSchedulingTable();
             renderVisitorsTable();
             renderCompaniesTable();
-            renderInvitationsList();
         }
         
         function renderVisitsTable() {
@@ -2705,13 +2293,10 @@
                 visits = [];
                 visitors = [];
                 companies = [];
-                invitations = [];
                 saveVisitsToStorage();
                 localStorage.setItem('visitControl_visitors', JSON.stringify(visitors));
                 localStorage.setItem('visitControl_companies', JSON.stringify(companies));
-                localStorage.setItem('visitControl_invitations', JSON.stringify(invitations));
                 updateCounters();
-                updateInvitationsBadge();
                 renderAllTables();
                 showToast('Todos os dados foram removidos.', 'success');
             }
@@ -2823,8 +2408,7 @@
                 'financeiro': 'Financeiro',
                 'comercial': 'Comercial',
                 'diretoria': 'Diretoria',
-                'operacional': 'Operacional',
-                'outros': 'Outros'
+                'operacional': 'Operacional'
             };
             
             return destinations[destination] || destination;
