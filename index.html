@@ -815,460 +815,227 @@
             border-width: 0 3px 3px 0;
             transform: rotate(45deg);
         }
+
+        /* Invitation Styles */
+        .invitation-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 204, 0, 0.05);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .invitation-list {
+            margin-top: 15px;
+        }
+
+        .invitation-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .invitation-info h4 {
+            margin-bottom: 5px;
+            color: var(--text);
+        }
+
+        .invitation-info p {
+            color: var(--text-light);
+            font-size: 14px;
+            margin: 2px 0;
+        }
+
+        .invitation-status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .status-used {
+            background: rgba(107, 114, 128, 0.2);
+            color: var(--text-light);
+        }
+
+        .status-expired {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #0da371;
+        }
+
+        /* External Invitation Styles */
+        .external-invitation-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .external-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .external-logo-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            font-size: 36px;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+
+        .external-logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .invitation-info-card {
+            background: rgba(255, 204, 0, 0.05);
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .invitation-info-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .invitation-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .invitation-detail {
+            text-align: center;
+        }
+
+        .invitation-detail-label {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .invitation-detail-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .external-form-container {
+            margin-top: 25px;
+        }
+
+        .external-form-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text);
+            font-size: 20px;
+        }
+
+        .form-note {
+            font-size: 14px;
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .back-to-admin {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--primary-dark);
+        }
     </style>
 </head>
 <body>
-    <div class="overlay" id="overlay"></div>
-    
-    <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="nav-item active" data-page="dashboard">
-                <i class="fas fa-home"></i>
-                <span>Dashboard</span>
-            </div>
-            <div class="nav-item" data-page="visits">
-                <i class="fas fa-list"></i>
-                <span>Visitas</span>
-            </div>
-            <div class="nav-item" data-page="scheduling">
-                <i class="fas fa-calendar-alt"></i>
-                <span>Agendamentos</span>
-            </div>
-            <div class="nav-item" data-page="visitors">
-                <i class="fas fa-users"></i>
-                <span>Visitantes</span>
-                <span class="badge" id="visitorsBadge">0</span>
-            </div>
-            <div class="nav-item" data-page="companies">
-                <i class="fas fa-building"></i>
-                <span>Empresas</span>
-            </div>
-            <div class="nav-item" data-page="settings">
-                <i class="fas fa-cog"></i>
-                <span>Configurações</span>
-            </div>
-            <div class="nav-item" data-page="help">
-                <i class="fas fa-question-circle"></i>
-                <span>Ajuda</span>
-            </div>
-        </aside>
-        
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Header -->
-            <header class="header">
-                <div class="logo">
-                    <button class="mobile-menu-btn" id="mobileMenuBtn">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <div class="logo-icon">
-                        <i class="fas fa-paw"></i>
-                    </div>
-                    <div class="logo-text">Tiger Rentank</div>
+    <!-- External Invitation View (hidden by default) -->
+    <div id="externalInvitationView" style="display: none;">
+        <div class="external-invitation-container">
+            <div class="external-logo">
+                <div class="external-logo-icon">
+                    <i class="fas fa-paw"></i>
                 </div>
-                <div class="user-menu">
-                    <div class="firebase-status" id="firebaseStatus">
-                        <span class="status-indicator status-disconnected" id="statusIndicator"></span>
-                        <span id="statusText">Conectando...</span>
-                    </div>
-                    <div class="user-avatar" id="userMenuBtn">TR</div>
-                </div>
-            </header>
-            
-            <!-- Dashboard Page -->
-            <div class="page-content active" id="dashboard-page">
-                <!-- Dashboard Stats -->
-                <div class="dashboard">
-                    <div class="card stat-card" id="todayVisitsCard">
-                        <div class="stat-icon visits-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3 id="todayVisitsCount">0</h3>
-                            <p>Visitas Hoje</p>
-                        </div>
-                    </div>
-                    
-                    <div class="card stat-card" id="pendingVisitsCard">
-                        <div class="stat-icon pending-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3 id="pendingVisitsCount">0</h3>
-                            <p>Pendentes</p>
-                        </div>
-                    </div>
-                    
-                    <div class="card stat-card" id="completedVisitsCard">
-                        <div class="stat-icon completed-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3 id="completedVisitsCount">0</h3>
-                            <p>Concluídas</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Filters -->
-                <div class="filters">
-                    <div class="filter-group">
-                        <label for="statusFilter">Status:</label>
-                        <select id="statusFilter" class="filter-select">
-                            <option value="all">Todos</option>
-                            <option value="scheduled">Agendadas</option>
-                            <option value="in-progress">Em Andamento</option>
-                            <option value="completed">Concluídas</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="dateFilter">Data:</label>
-                        <input type="date" id="dateFilter" class="filter-select">
-                    </div>
-                    <div class="filter-group">
-                        <label for="searchFilter">Buscar:</label>
-                        <input type="text" id="searchFilter" class="filter-select" placeholder="Nome ou empresa...">
-                    </div>
-                    <button class="btn btn-outline" id="clearFiltersBtn">
-                        <i class="fas fa-times"></i>
-                        Limpar Filtros
-                    </button>
-                </div>
-                
-                <!-- Visits Section -->
-                <div class="card">
-                    <div class="section-header">
-                        <h2 class="section-title">Visitas Recentes</h2>
-                        <button class="btn btn-primary" id="newVisitBtn">
-                            <i class="fas fa-plus"></i>
-                            Nova Visita
-                        </button>
-                    </div>
-                    
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Visitante</th>
-                                    <th>Empresa</th>
-                                    <th>Data/Hora</th>
-                                    <th>Destino</th>
-                                    <th>Status</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="visitsTableBody">
-                                <!-- As visitas serão carregadas aqui via JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="external-logo-text">Tiger Rentank</div>
+            </div>
 
-                    <!-- Data Management -->
-                    <div class="data-management">
-                        <button class="btn btn-outline" id="clearDataBtn">
-                            <i class="fas fa-trash"></i>
-                            Limpar Todos os Dados
-                        </button>
-                        <button class="btn btn-outline" id="addSampleDataBtn">
-                            <i class="fas fa-plus-circle"></i>
-                            Adicionar Dados de Exemplo
-                        </button>
-                        <button class="btn btn-outline" id="exportDataBtn">
-                            <i class="fas fa-download"></i>
-                            Exportar Dados
-                        </button>
-                    </div>
+            <div class="invitation-info-card">
+                <h3><i class="fas fa-calendar-alt"></i> Agendamento de Visita</h3>
+                <div class="invitation-details" id="externalInvitationDetails">
+                    <!-- Details will be populated by JavaScript -->
+                </div>
+            </div>
 
-                    <!-- About Section -->
-                    <div class="about-section">
-                        <p>Sistema desenvolvido por <span class="developer-name">Aldemir Garbino</span></p>
-                        <p>Tiger Rentank - Solução completa para gestão de visitas</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Outras páginas -->
-            <!-- Visits Page -->
-            <div class="page-content" id="visits-page">
-                <div class="card">
-                    <div class="section-header">
-                        <h2 class="section-title">Todas as Visitas</h2>
-                        <button class="btn btn-primary" id="newVisitBtn2">
-                            <i class="fas fa-plus"></i>
-                            Nova Visita
-                        </button>
-                    </div>
-                    
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Visitante</th>
-                                    <th>Empresa</th>
-                                    <th>Data/Hora</th>
-                                    <th>Destino</th>
-                                    <th>Status</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="allVisitsTableBody">
-                                <!-- Todas as visitas serão carregadas aqui via JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Scheduling Page -->
-            <div class="page-content" id="scheduling-page">
-                <div class="card">
-                    <h2 class="section-title">Agendamentos Futuros</h2>
-                    <p>Esta página gerencia os agendamentos futuros de visitas.</p>
-                    
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Visitante</th>
-                                    <th>Empresa</th>
-                                    <th>Data/Hora</th>
-                                    <th>Destino</th>
-                                    <th>Status</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="schedulingTableBody">
-                                <!-- Agendamentos serão carregados aqui via JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Visitors Page -->
-            <div class="page-content" id="visitors-page">
-                <div class="card">
-                    <h2 class="section-title">Visitantes Cadastrados</h2>
-                    <p>Esta página gerencia o cadastro de visitantes.</p>
-                    
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Documento</th>
-                                    <th>Empresa</th>
-                                    <th>Última Visita</th>
-                                    <th>Total de Visitas</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="visitorsTableBody">
-                                <!-- Visitantes serão carregados aqui via JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Companies Page -->
-            <div class="page-content" id="companies-page">
-                <div class="card">
-                    <h2 class="section-title">Empresas Cadastradas</h2>
-                    <p>Esta página gerencia o cadastro de empresas.</p>
-                    
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>CNPJ</th>
-                                    <th>Responsável</th>
-                                    <th>Total de Visitas</th>
-                                    <th>Última Visita</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="companiesTableBody">
-                                <!-- Empresas serão carregadas aqui via JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Settings Page -->
-            <div class="page-content" id="settings-page">
-                <div class="card">
-                    <h2 class="section-title">Configurações do Sistema</h2>
-                    
-                    <div class="settings-group">
-                        <h3>Preferências Gerais</h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="companyName">Nome da Empresa</label>
-                                <input type="text" id="companyName" class="form-control" placeholder="Digite o nome da sua empresa">
-                            </div>
-                            <div class="form-group">
-                                <label for="companyAddress">Endereço</label>
-                                <input type="text" id="companyAddress" class="form-control" placeholder="Digite o endereço">
-                            </div>
-                            <div class="form-group">
-                                <label for="adminEmail">E-mail do Administrador</label>
-                                <input type="email" id="adminEmail" class="form-control" placeholder="admin@exemplo.com">
-                            </div>
-                            <div class="form-group">
-                                <label for="maxVisits">Máximo de Visitas Diárias</label>
-                                <input type="number" id="maxVisits" class="form-control" placeholder="Ex: 50" min="1">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="settings-group">
-                        <h3>Configurações de Armazenamento</h3>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="onlineStorage" checked>
-                                    <span class="checkmark"></span>
-                                    Armazenamento Online (Firebase)
-                                </label>
-                            </div>
-                            <div class="form-group">
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="localStorage" checked>
-                                    <span class="checkmark"></span>
-                                    Backup Local
-                                </label>
-                            </div>
-                            <div class="form-group full-width">
-                                <label for="firebaseConfig">Configuração do Firebase (JSON)</label>
-                                <textarea id="firebaseConfig" class="form-control" rows="5" placeholder='Cole aqui a configuração do Firebase'></textarea>
-                                <small style="color: var(--text-light);">Para obter a configuração: Firebase Console > Projeto > Configurações do Projeto > Configuração</small>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="settings-group">
-                        <h3>Backup de Dados</h3>
-                        <div class="data-management">
-                            <button class="btn btn-outline" id="exportSettingsBtn">
-                                <i class="fas fa-download"></i>
-                                Exportar Dados
-                            </button>
-                            <button class="btn btn-outline" id="importSettingsBtn">
-                                <i class="fas fa-upload"></i>
-                                Importar Dados
-                            </button>
-                            <button class="btn btn-outline" id="resetSettingsBtn">
-                                <i class="fas fa-undo"></i>
-                                Restaurar Padrões
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="settings-group">
-                        <button class="btn btn-primary" id="saveSettingsBtn">
-                            <i class="fas fa-save"></i>
-                            Salvar Configurações
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Help Page -->
-            <div class="page-content" id="help-page">
-                <div class="card">
-                    <h2 class="section-title">Ajuda e Suporte</h2>
-                    
-                    <div class="help-section">
-                        <h3>Como Usar o Sistema</h3>
-                        <div class="help-content">
-                            <p>O <strong>Tiger Rentank</strong> é um sistema completo para gestão de visitas. Abaixo estão os principais recursos:</p>
-                            <ul style="margin-left: 20px; margin-top: 10px;">
-                                <li><strong>Dashboard:</strong> Visualize estatísticas e visitas recentes</li>
-                                <li><strong>Visitas:</strong> Gerencie todas as visitas registradas</li>
-                                <li><strong>Agendamentos:</strong> Visualize e gerencie visitas futuras</li>
-                                <li><strong>Visitantes:</strong> Mantenha um cadastro de visitantes frequentes</li>
-                                <li><strong>Empresas:</strong> Cadastre empresas visitantes</li>
-                                <li><strong>Configurações:</strong> Personalize o sistema conforme suas necessidades</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="help-section">
-                        <h3>Armazenamento Online</h3>
-                        <div class="help-content">
-                            <p>O sistema agora oferece armazenamento online gratuito usando Firebase:</p>
-                            <ol style="margin-left: 20px; margin-top: 10px;">
-                                <li>Crie uma conta no <a href="https://firebase.google.com/" style="color: var(--primary);">Firebase</a></li>
-                                <li>Crie um novo projeto</li>
-                                <li>Ative o Realtime Database</li>
-                                <li>Copie a configuração e cole na página de Configurações</li>
-                                <li>Seus dados serão sincronizados automaticamente</li>
-                            </ol>
-                        </div>
-                    </div>
-                    
-                    <div class="help-section">
-                        <h3>Suporte Técnico</h3>
-                        <div class="help-content">
-                            <p>Para suporte técnico, entre em contato com nosso desenvolvedor:</p>
-                            <div class="contact-info">
-                                <div class="contact-item">
-                                    <i class="fas fa-user"></i>
-                                    <span><strong>Aldemir Garbino</strong></span>
-                                </div>
-                                <div class="contact-item">
-                                    <i class="fas fa-envelope"></i>
-                                    <span>admpsy@hotmail..com</span>
-                                </div>
-                                <div class="contact-item">
-                                    <i class="fas fa-phone"></i>
-                                    <span>(22) 99290-2507</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-    
-    <!-- Footer -->
-    <footer class="footer">
-        <p>Tiger Rentank - Sistema de Gestão de Visitas</p>
-        <p>Desenvolvido por <span class="footer-brand">Aldemir Garbino</span> &copy; 2025. Todos os direitos reservados.</p>
-    </footer>
-    
-    <!-- Modals -->
-    <div class="modal-backdrop" id="visitModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title" id="modalTitle">Registrar Nova Visita</h3>
-                <button class="action-btn" id="closeModalBtn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="visitForm">
-                    <input type="hidden" id="visitId">
+            <div class="external-form-container">
+                <h3 class="external-form-title">Preencha seus dados</h3>
+                <p class="form-note">Complete as informações abaixo para agendar sua visita</p>
+                
+                <form id="externalVisitForm">
                     <div class="form-group">
-                        <label for="visitorName">Nome do Visitante</label>
-                        <input type="text" id="visitorName" class="form-control" placeholder="Digite o nome completo" required>
+                        <label for="externalVisitorName">Nome Completo *</label>
+                        <input type="text" id="externalVisitorName" class="form-control" placeholder="Seu nome completo" required>
                     </div>
+                    
                     <div class="form-group">
-                        <label for="company">Empresa</label>
-                        <input type="text" id="company" class="form-control" placeholder="Nome da empresa" required>
+                        <label for="externalCompany">Empresa *</label>
+                        <input type="text" id="externalCompany" class="form-control" placeholder="Nome da sua empresa" required>
                     </div>
+                    
                     <div class="form-group">
-                        <label for="document">Documento</label>
-                        <input type="text" id="document" class="form-control" placeholder="CPF ou RG">
+                        <label for="externalDocument">Documento (CPF/RG)</label>
+                        <input type="text" id="externalDocument" class="form-control" placeholder="Seu documento de identificação">
                     </div>
+                    
                     <div class="form-group">
-                        <label for="destination">Destino</label>
-                        <select id="destination" class="form-control" required>
+                        <label for="externalDestination">Destino *</label>
+                        <select id="externalDestination" class="form-control" required>
                             <option value="">Selecione um departamento</option>
                             <option value="rh">Recursos Humanos</option>
                             <option value="ti">Tecnologia da Informação</option>
@@ -1276,110 +1043,832 @@
                             <option value="comercial">Comercial</option>
                             <option value="diretoria">Diretoria</option>
                             <option value="operacional">Operacional</option>
-                              <option value="outros">Outros</option>
+                            <option value="outros">Outros</option>
                         </select>
                     </div>
+                    
                     <div class="form-group">
-                        <label for="date">Data e Hora</label>
-                        <input type="datetime-local" id="date" class="form-control" required>
+                        <label for="externalDate">Data e Hora da Visita *</label>
+                        <input type="datetime-local" id="externalDate" class="form-control" required>
                     </div>
+                    
                     <div class="form-group">
-                        <label for="notes">Observações</label>
-                        <textarea id="notes" class="form-control" rows="3" placeholder="Informações adicionais..."></textarea>
+                        <label for="externalNotes">Observações</label>
+                        <textarea id="externalNotes" class="form-control" rows="3" placeholder="Informações adicionais sobre sua visita..."></textarea>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline" id="externalCancelBtn">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="externalSubmitBtn">
+                            <i class="fas fa-calendar-check"></i>
+                            Agendar Visita
+                        </button>
                     </div>
                 </form>
+            </div>
+
+            <div class="back-to-admin">
+                <a href="#" class="back-link" id="backToAdminLink">
+                    <i class="fas fa-arrow-left"></i>
+                    Voltar para o Sistema Administrativo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Admin System (hidden when viewing external invitation) -->
+    <div id="adminSystemView">
+        <div class="overlay" id="overlay"></div>
+        
+        <div class="app-container">
+            <!-- Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <div class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-page="visits">
+                    <i class="fas fa-list"></i>
+                    <span>Visitas</span>
+                </div>
+                <div class="nav-item" data-page="scheduling">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Agendamentos</span>
+                </div>
+                <div class="nav-item" data-page="visitors">
+                    <i class="fas fa-users"></i>
+                    <span>Visitantes</span>
+                    <span class="badge" id="visitorsBadge">0</span>
+                </div>
+                <div class="nav-item" data-page="companies">
+                    <i class="fas fa-building"></i>
+                    <span>Empresas</span>
+                </div>
+                <div class="nav-item" data-page="invitations">
+                    <i class="fas fa-link"></i>
+                    <span>Convites</span>
+                    <span class="badge" id="invitationsBadge">0</span>
+                </div>
+                <div class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Configurações</span>
+                </div>
+                <div class="nav-item" data-page="help">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Ajuda</span>
+                </div>
+            </aside>
+            
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Header -->
+                <header class="header">
+                    <div class="logo">
+                        <button class="mobile-menu-btn" id="mobileMenuBtn">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <div class="logo-icon">
+                            <i class="fas fa-paw"></i>
+                        </div>
+                        <div class="logo-text">Tiger Rentank</div>
+                    </div>
+                    <div class="user-menu">
+                        <div class="firebase-status" id="firebaseStatus">
+                            <span class="status-indicator status-disconnected" id="statusIndicator"></span>
+                            <span id="statusText">Conectando...</span>
+                        </div>
+                        <div class="user-avatar" id="userMenuBtn">TR</div>
+                    </div>
+                </header>
                 
-                <!-- Visit Details (hidden by default) -->
-                <div id="visitDetails" style="display: none;">
-                    <div class="visit-details">
-                        <div class="detail-group">
-                            <div class="detail-label">Visitante</div>
-                            <div class="detail-value" id="detailName">-</div>
+                <!-- Dashboard Page -->
+                <div class="page-content active" id="dashboard-page">
+                    <!-- Dashboard Stats -->
+                    <div class="dashboard">
+                        <div class="card stat-card" id="todayVisitsCard">
+                            <div class="stat-icon visits-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="todayVisitsCount">0</h3>
+                                <p>Visitas Hoje</p>
+                            </div>
                         </div>
-                        <div class="detail-group">
-                            <div class="detail-label">Empresa</div>
-                            <div class="detail-value" id="detailCompany">-</div>
+                        
+                        <div class="card stat-card" id="pendingVisitsCard">
+                            <div class="stat-icon pending-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="pendingVisitsCount">0</h3>
+                                <p>Pendentes</p>
+                            </div>
                         </div>
-                        <div class="detail-group">
-                            <div class="detail-label">Documento</div>
-                            <div class="detail-value" id="detailDocument">-</div>
-                        </div>
-                        <div class="detail-group">
-                            <div class="detail-label">Destino</div>
-                            <div class="detail-value" id="detailDestination">-</div>
-                        </div>
-                        <div class="detail-group">
-                            <div class="detail-label">Data e Hora</div>
-                            <div class="detail-value" id="detailDate">-</div>
-                        </div>
-                        <div class="detail-group">
-                            <div class="detail-label">Status</div>
-                            <div class="detail-value"><span class="status status-scheduled" id="detailStatus">-</span></div>
-                        </div>
-                        <div class="detail-group">
-                            <div class="detail-label">Observações</div>
-                            <div class="detail-value" id="detailNotes">-</div>
+                        
+                        <div class="card stat-card" id="completedVisitsCard">
+                            <div class="stat-icon completed-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="completedVisitsCount">0</h3>
+                                <p>Concluídas</p>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- Status Actions -->
-                    <div class="status-actions" id="statusActions">
-                        <button class="status-btn progress" id="markInProgressBtn">Marcar como Em Andamento</button>
-                        <button class="status-btn complete" id="markCompletedBtn">Marcar como Concluída</button>
+                    <!-- Filters -->
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="statusFilter">Status:</label>
+                            <select id="statusFilter" class="filter-select">
+                                <option value="all">Todos</option>
+                                <option value="scheduled">Agendadas</option>
+                                <option value="in-progress">Em Andamento</option>
+                                <option value="completed">Concluídas</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="dateFilter">Data:</label>
+                            <input type="date" id="dateFilter" class="filter-select">
+                        </div>
+                        <div class="filter-group">
+                            <label for="searchFilter">Buscar:</label>
+                            <input type="text" id="searchFilter" class="filter-select" placeholder="Nome ou empresa...">
+                        </div>
+                        <button class="btn btn-outline" id="clearFiltersBtn">
+                            <i class="fas fa-times"></i>
+                            Limpar Filtros
+                        </button>
+                    </div>
+                    
+                    <!-- Visits Section -->
+                    <div class="card">
+                        <div class="section-header">
+                            <h2 class="section-title">Visitas Recentes</h2>
+                            <div>
+                                <button class="btn btn-primary" id="newVisitBtn">
+                                    <i class="fas fa-plus"></i>
+                                    Nova Visita
+                                </button>
+                                <button class="btn btn-success" id="generateInvitationBtn">
+                                    <i class="fas fa-link"></i>
+                                    Gerar Convite
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Visitante</th>
+                                        <th>Empresa</th>
+                                        <th>Data/Hora</th>
+                                        <th>Destino</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="visitsTableBody">
+                                    <!-- As visitas serão carregadas aqui via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Data Management -->
+                        <div class="data-management">
+                            <button class="btn btn-outline" id="clearDataBtn">
+                                <i class="fas fa-trash"></i>
+                                Limpar Todos os Dados
+                            </button>
+                            <button class="btn btn-outline" id="addSampleDataBtn">
+                                <i class="fas fa-plus-circle"></i>
+                                Adicionar Dados de Exemplo
+                            </button>
+                            <button class="btn btn-outline" id="exportDataBtn">
+                                <i class="fas fa-download"></i>
+                                Exportar Dados
+                            </button>
+                            <button class="btn btn-outline" id="importDataBtn">
+                                <i class="fas fa-upload"></i>
+                                Importar Dados
+                            </button>
+                        </div>
+
+                        <!-- About Section -->
+                        <div class="about-section">
+                            <p>Sistema desenvolvido por <span class="developer-name">Aldemir Garbino</span></p>
+                            <p>Tiger Rentank - Solução completa para gestão de visitas</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" id="cancelBtn">Cancelar</button>
-                <button class="btn btn-primary" id="saveBtn" style="display: none;">Salvar Visita</button>
-                <button class="btn btn-primary" id="updateBtn" style="display: none;">Atualizar Visita</button>
+                
+                <!-- Outras páginas -->
+                <!-- Visits Page -->
+                <div class="page-content" id="visits-page">
+                    <div class="card">
+                        <div class="section-header">
+                            <h2 class="section-title">Todas as Visitas</h2>
+                            <div>
+                                <button class="btn btn-primary" id="newVisitBtn2">
+                                    <i class="fas fa-plus"></i>
+                                    Nova Visita
+                                </button>
+                                <button class="btn btn-success" id="generateInvitationBtn2">
+                                    <i class="fas fa-link"></i>
+                                    Gerar Convite
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Visitante</th>
+                                        <th>Empresa</th>
+                                        <th>Data/Hora</th>
+                                        <th>Destino</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allVisitsTableBody">
+                                    <!-- Todas as visitas serão carregadas aqui via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Scheduling Page -->
+                <div class="page-content" id="scheduling-page">
+                    <div class="card">
+                        <div class="section-header">
+                            <h2 class="section-title">Agendamentos Futuros</h2>
+                            <button class="btn btn-success" id="generateInvitationBtn3">
+                                <i class="fas fa-link"></i>
+                                Gerar Convite
+                            </button>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Visitante</th>
+                                        <th>Empresa</th>
+                                        <th>Data/Hora</th>
+                                        <th>Destino</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="schedulingTableBody">
+                                    <!-- Agendamentos serão carregados aqui via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Visitors Page -->
+                <div class="page-content" id="visitors-page">
+                    <div class="card">
+                        <div class="section-header">
+                            <h2 class="section-title">Visitantes Cadastrados</h2>
+                            <button class="btn btn-primary" id="newVisitorBtn">
+                                <i class="fas fa-plus"></i>
+                                Novo Visitante
+                            </button>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Documento</th>
+                                        <th>Empresa</th>
+                                        <th>Última Visita</th>
+                                        <th>Total de Visitas</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="visitorsTableBody">
+                                    <!-- Visitantes serão carregados aqui via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Companies Page -->
+                <div class="page-content" id="companies-page">
+                    <div class="card">
+                        <div class="section-header">
+                            <h2 class="section-title">Empresas Cadastradas</h2>
+                            <button class="btn btn-primary" id="newCompanyBtn">
+                                <i class="fas fa-plus"></i>
+                                Nova Empresa
+                            </button>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>CNPJ</th>
+                                        <th>Responsável</th>
+                                        <th>Total de Visitas</th>
+                                        <th>Última Visita</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="companiesTableBody">
+                                    <!-- Empresas serão carregadas aqui via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invitations Page -->
+                <div class="page-content" id="invitations-page">
+                    <div class="card">
+                        <div class="section-header">
+                            <h2 class="section-title">Links de Convite</h2>
+                            <button class="btn btn-success" id="newInvitationBtn">
+                                <i class="fas fa-plus"></i>
+                                Novo Convite
+                            </button>
+                        </div>
+                        
+                        <div class="invitation-list" id="invitationsList">
+                            <!-- Lista de convites será carregada aqui -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Settings Page -->
+                <div class="page-content" id="settings-page">
+                    <div class="card">
+                        <h2 class="section-title">Configurações do Sistema</h2>
+                        
+                        <div class="settings-group">
+                            <h3>Preferências Gerais</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="companyName">Nome da Empresa</label>
+                                    <input type="text" id="companyName" class="form-control" placeholder="Digite o nome da sua empresa">
+                                </div>
+                                <div class="form-group">
+                                    <label for="companyAddress">Endereço</label>
+                                    <input type="text" id="companyAddress" class="form-control" placeholder="Digite o endereço">
+                                </div>
+                                <div class="form-group">
+                                    <label for="adminEmail">E-mail do Administrador</label>
+                                    <input type="email" id="adminEmail" class="form-control" placeholder="admin@exemplo.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="maxVisits">Máximo de Visitas Diárias</label>
+                                    <input type="number" id="maxVisits" class="form-control" placeholder="Ex: 50" min="1">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-group">
+                            <h3>Configurações de Armazenamento</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" id="onlineStorage" checked>
+                                        <span class="checkmark"></span>
+                                        Armazenamento Online (Firebase)
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" id="localStorage" checked>
+                                        <span class="checkmark"></span>
+                                        Backup Local
+                                    </label>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="firebaseConfig">Configuração do Firebase (JSON)</label>
+                                    <textarea id="firebaseConfig" class="form-control" rows="5" placeholder='Cole aqui a configuração do Firebase'></textarea>
+                                    <small style="color: var(--text-light);">Para obter a configuração: Firebase Console > Projeto > Configurações do Projeto > Configuração</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-group">
+                            <h3>Backup de Dados</h3>
+                            <div class="data-management">
+                                <button class="btn btn-outline" id="exportSettingsBtn">
+                                    <i class="fas fa-download"></i>
+                                    Exportar Dados
+                                </button>
+                                <button class="btn btn-outline" id="importSettingsBtn">
+                                    <i class="fas fa-upload"></i>
+                                    Importar Dados
+                                </button>
+                                <button class="btn btn-outline" id="resetSettingsBtn">
+                                    <i class="fas fa-undo"></i>
+                                    Restaurar Padrões
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-group">
+                            <button class="btn btn-primary" id="saveSettingsBtn">
+                                <i class="fas fa-save"></i>
+                                Salvar Configurações
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Help Page -->
+                <div class="page-content" id="help-page">
+                    <div class="card">
+                        <h2 class="section-title">Ajuda e Suporte</h2>
+                        
+                        <div class="help-section">
+                            <h3>Como Usar o Sistema</h3>
+                            <div class="help-content">
+                                <p>O <strong>Tiger Rentank</strong> é um sistema completo para gestão de visitas. Abaixo estão os principais recursos:</p>
+                                <ul style="margin-left: 20px; margin-top: 10px;">
+                                    <li><strong>Dashboard:</strong> Visualize estatísticas e visitas recentes</li>
+                                    <li><strong>Visitas:</strong> Gerencie todas as visitas registradas</li>
+                                    <li><strong>Agendamentos:</strong> Visualize e gerencie visitas futuras</li>
+                                    <li><strong>Visitantes:</strong> Mantenha um cadastro de visitantes frequentes</li>
+                                    <li><strong>Empresas:</strong> Cadastre empresas visitantes</li>
+                                    <li><strong>Convites:</strong> Gere links para agendamento externo</li>
+                                    <li><strong>Configurações:</strong> Personalize o sistema conforme suas necessidades</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="help-section">
+                            <h3>Sistema de Convites</h3>
+                            <div class="help-content">
+                                <p>O sistema agora permite gerar links de convite para visitantes externos:</p>
+                                <ol style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Acesse a página "Convites" ou clique em "Gerar Convite"</li>
+                                    <li>Preencha os dados básicos do visitante</li>
+                                    <li>Gere o link de convite</li>
+                                    <li>Compartilhe o link com o visitante</li>
+                                    <li>O visitante poderá agendar uma visita através do link</li>
+                                    <li>O link expira automaticamente após o período selecionado</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="help-section">
+                            <h3>Armazenamento Online</h3>
+                            <div class="help-content">
+                                <p>O sistema oferece armazenamento online gratuito usando Firebase:</p>
+                                <ol style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Crie uma conta no <a href="https://firebase.google.com/" style="color: var(--primary);">Firebase</a></li>
+                                    <li>Crie um novo projeto</li>
+                                    <li>Ative o Realtime Database</li>
+                                    <li>Copie a configuração e cole na página de Configurações</li>
+                                    <li>Seus dados serão sincronizados automaticamente</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="help-section">
+                            <h3>Suporte Técnico</h3>
+                            <div class="help-content">
+                                <p>Para suporte técnico, entre em contato com nosso desenvolvedor:</p>
+                                <div class="contact-info">
+                                    <div class="contact-item">
+                                        <i class="fas fa-user"></i>
+                                        <span><strong>Aldemir Garbino</strong></span>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="fas fa-envelope"></i>
+                                        <span>admpsy@hotmail.com</span>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="fas fa-phone"></i>
+                                        <span>(22) 99290-2507</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Tiger Rentank - Sistema de Gestão de Visitas</p>
+            <p>Desenvolvido por <span class="footer-brand">Aldemir Garbino</span> &copy; 2025. Todos os direitos reservados.</p>
+        </footer>
+        
+        <!-- Modals -->
+        <div class="modal-backdrop" id="visitModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modalTitle">Registrar Nova Visita</h3>
+                    <button class="action-btn" id="closeModalBtn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="visitForm">
+                        <input type="hidden" id="visitId">
+                        <div class="form-group">
+                            <label for="visitorName">Nome do Visitante</label>
+                            <input type="text" id="visitorName" class="form-control" placeholder="Digite o nome completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Empresa</label>
+                            <input type="text" id="company" class="form-control" placeholder="Nome da empresa" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="document">Documento</label>
+                            <input type="text" id="document" class="form-control" placeholder="CPF ou RG">
+                        </div>
+                        <div class="form-group">
+                            <label for="destination">Destino</label>
+                            <select id="destination" class="form-control" required>
+                                <option value="">Selecione um departamento</option>
+                                <option value="rh">Recursos Humanos</option>
+                                <option value="ti">Tecnologia da Informação</option>
+                                <option value="financeiro">Financeiro</option>
+                                <option value="comercial">Comercial</option>
+                                <option value="diretoria">Diretoria</option>
+                                <option value="operacional">Operacional</option>
+                                <option value="outros">Outros</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Data e Hora</label>
+                            <input type="datetime-local" id="date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">Observações</label>
+                            <textarea id="notes" class="form-control" rows="3" placeholder="Informações adicionais..."></textarea>
+                        </div>
+                    </form>
+                    
+                    <!-- Visit Details (hidden by default) -->
+                    <div id="visitDetails" style="display: none;">
+                        <div class="visit-details">
+                            <div class="detail-group">
+                                <div class="detail-label">Visitante</div>
+                                <div class="detail-value" id="detailName">-</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="detail-label">Empresa</div>
+                                <div class="detail-value" id="detailCompany">-</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="detail-label">Documento</div>
+                                <div class="detail-value" id="detailDocument">-</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="detail-label">Destino</div>
+                                <div class="detail-value" id="detailDestination">-</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="detail-label">Data e Hora</div>
+                                <div class="detail-value" id="detailDate">-</div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="detail-label">Status</div>
+                                <div class="detail-value"><span class="status status-scheduled" id="detailStatus">-</span></div>
+                            </div>
+                            <div class="detail-group">
+                                <div class="detail-label">Observações</div>
+                                <div class="detail-value" id="detailNotes">-</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Status Actions -->
+                        <div class="status-actions" id="statusActions">
+                            <button class="status-btn progress" id="markInProgressBtn">Marcar como Em Andamento</button>
+                            <button class="status-btn complete" id="markCompletedBtn">Marcar como Concluída</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline" id="cancelBtn">Cancelar</button>
+                    <button class="btn btn-primary" id="saveBtn" style="display: none;">Salvar Visita</button>
+                    <button class="btn btn-primary" id="updateBtn" style="display: none;">Atualizar Visita</button>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Delete Confirmation Modal -->
-    <div class="modal-backdrop" id="deleteModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Confirmar Exclusão</h3>
-                <button class="action-btn close-delete-modal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Tem certeza que deseja excluir a visita de <span id="deleteVisitName">-</span>?</p>
-                <p>Esta ação não pode ser desfeita.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline close-delete-modal">Cancelar</button>
-                <button class="btn btn-primary" id="confirmDeleteBtn">Excluir</button>
+        
+        <!-- Delete Confirmation Modal -->
+        <div class="modal-backdrop" id="deleteModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="modal-title">Confirmar Exclusão</h3>
+                    <button class="action-btn close-delete-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja excluir a visita de <span id="deleteVisitName">-</span>?</p>
+                    <p>Esta ação não pode ser desfeita.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline close-delete-modal">Cancelar</button>
+                    <button class="btn btn-primary" id="confirmDeleteBtn">Excluir</button>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Operação realizada com sucesso!</span>
+
+        <!-- Invitation Modal -->
+        <div class="modal-backdrop" id="invitationModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="modal-title">Gerar Link de Convite</h3>
+                    <button class="action-btn close-invitation-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="invitationForm">
+                        <div class="form-group">
+                            <label for="inviteVisitorName">Nome do Visitante</label>
+                            <input type="text" id="inviteVisitorName" class="form-control" placeholder="Digite o nome do visitante">
+                        </div>
+                        <div class="form-group">
+                            <label for="inviteCompany">Empresa</label>
+                            <input type="text" id="inviteCompany" class="form-control" placeholder="Nome da empresa">
+                        </div>
+                        <div class="form-group">
+                            <label for="inviteDestination">Destino</label>
+                            <select id="inviteDestination" class="form-control">
+                                <option value="">Selecione um departamento</option>
+                                <option value="rh">Recursos Humanos</option>
+                                <option value="ti">Tecnologia da Informação</option>
+                                <option value="financeiro">Financeiro</option>
+                                <option value="comercial">Comercial</option>
+                                <option value="diretoria">Diretoria</option>
+                                <option value="operacional">Operacional</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inviteExpires">Expira em (dias)</label>
+                            <select id="inviteExpires" class="form-control">
+                                <option value="1">1 dia</option>
+                                <option value="3" selected>3 dias</option>
+                                <option value="7">7 dias</option>
+                                <option value="30">30 dias</option>
+                            </select>
+                        </div>
+                    </form>
+                    
+                    <div id="invitationResult" style="display: none; margin-top: 20px;">
+                        <div class="form-group">
+                            <label>Link de Convite Gerado:</label>
+                            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                <input type="text" id="generatedLink" class="form-control" readonly>
+                                <button class="btn btn-primary" id="copyLinkBtn">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                            <small style="color: var(--text-light);">Compartilhe este link com o visitante</small>
+                        </div>
+                        
+                        <div style="margin-top: 15px; padding: 15px; background: rgba(255, 204, 0, 0.1); border-radius: 8px;">
+                            <h4 style="color: var(--primary); margin-bottom: 10px;">Instruções:</h4>
+                            <ol style="margin-left: 20px; color: var(--text-light);">
+                                <li>Compartilhe o link com o visitante</li>
+                                <li>O visitante poderá agendar uma visita</li>
+                                <li>Alguns dados serão preenchidos automaticamente</li>
+                                <li>O link expira após o período selecionado</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline close-invitation-modal">Cancelar</button>
+                    <button class="btn btn-primary" id="generateInviteBtn">Gerar Link</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visitor Modal -->
+        <div class="modal-backdrop" id="visitorModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="visitorModalTitle">Novo Visitante</h3>
+                    <button class="action-btn close-visitor-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="visitorForm">
+                        <input type="hidden" id="visitorId">
+                        <div class="form-group">
+                            <label for="visitorName">Nome Completo</label>
+                            <input type="text" id="visitorName" class="form-control" placeholder="Digite o nome completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="visitorDocument">Documento</label>
+                            <input type="text" id="visitorDocument" class="form-control" placeholder="CPF ou RG">
+                        </div>
+                        <div class="form-group">
+                            <label for="visitorCompany">Empresa</label>
+                            <input type="text" id="visitorCompany" class="form-control" placeholder="Nome da empresa">
+                        </div>
+                        <div class="form-group">
+                            <label for="visitorEmail">E-mail</label>
+                            <input type="email" id="visitorEmail" class="form-control" placeholder="email@exemplo.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="visitorPhone">Telefone</label>
+                            <input type="text" id="visitorPhone" class="form-control" placeholder="(00) 00000-0000">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline close-visitor-modal">Cancelar</button>
+                    <button class="btn btn-primary" id="saveVisitorBtn">Salvar Visitante</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Company Modal -->
+        <div class="modal-backdrop" id="companyModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="companyModalTitle">Nova Empresa</h3>
+                    <button class="action-btn close-company-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="companyForm">
+                        <input type="hidden" id="companyId">
+                        <div class="form-group">
+                            <label for="companyName">Nome da Empresa</label>
+                            <input type="text" id="companyName" class="form-control" placeholder="Digite o nome da empresa" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="companyCnpj">CNPJ</label>
+                            <input type="text" id="companyCnpj" class="form-control" placeholder="00.000.000/0000-00">
+                        </div>
+                        <div class="form-group">
+                            <label for="companyResponsible">Responsável</label>
+                            <input type="text" id="companyResponsible" class="form-control" placeholder="Nome do responsável">
+                        </div>
+                        <div class="form-group">
+                            <label for="companyEmail">E-mail</label>
+                            <input type="email" id="companyEmail" class="form-control" placeholder="empresa@exemplo.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="companyPhone">Telefone</label>
+                            <input type="text" id="companyPhone" class="form-control" placeholder="(00) 0000-0000">
+                        </div>
+                        <div class="form-group">
+                            <label for="companyAddress">Endereço</label>
+                            <textarea id="companyAddress" class="form-control" rows="2" placeholder="Endereço completo"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline close-company-modal">Cancelar</button>
+                    <button class="btn btn-primary" id="saveCompanyBtn">Salvar Empresa</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Toast Notification -->
+        <div class="toast" id="toast">
+            <i class="fas fa-check-circle"></i>
+            <span id="toastMessage">Operação realizada com sucesso!</span>
+        </div>
     </div>
 
     <script>
         // Configuração do Firebase (será substituída pelo usuário)
         const defaultFirebaseConfig = {
-  "apiKey": "AIzaSyCj-5Hsw29I_v3CiiMCXvlSgDETQLUgCHI",
-  "authDomain": "visitcontrol-f5b15.firebaseapp.com",
-  "databaseURL": "https://visitcontrol-f5b15-default-rtdb.firebaseio.com",
-  "projectId": "visitcontrol-f5b15",
-  "storageBucket": "visitcontrol-f5b15.firebasestorage.app",
-  "messagingSenderId": "235940758723",
-  "appId": "1:235940758723:web:2339829df8368d5f07ce76",
-  "measurementId": "G-L06GX4E190"
-};
+            "apiKey": "AIzaSyCj-5Hsw29I_v3CiiMCXvlSgDETQLUgCHI",
+            "authDomain": "visitcontrol-f5b15.firebaseapp.com",
+            "databaseURL": "https://visitcontrol-f5b15-default-rtdb.firebaseio.com",
+            "projectId": "visitcontrol-f5b15",
+            "storageBucket": "visitcontrol-f5b15.firebasestorage.app",
+            "messagingSenderId": "235940758723",
+            "appId": "1:235940758723:web:2339829df8368d5f07ce76",
+            "measurementId": "G-L06GX4E190"
+        };
         
         // Dados de exemplo (inicialmente vazios)
         let visits = [];
         let visitors = [];
         let companies = [];
+        let invitations = [];
         
         // Elementos DOM
         const sidebar = document.getElementById('sidebar');
@@ -1387,31 +1876,51 @@
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const visitModal = document.getElementById('visitModal');
         const deleteModal = document.getElementById('deleteModal');
+        const invitationModal = document.getElementById('invitationModal');
+        const visitorModal = document.getElementById('visitorModal');
+        const companyModal = document.getElementById('companyModal');
         const toast = document.getElementById('toast');
         const visitsTableBody = document.getElementById('visitsTableBody');
         const allVisitsTableBody = document.getElementById('allVisitsTableBody');
         const schedulingTableBody = document.getElementById('schedulingTableBody');
         const visitorsTableBody = document.getElementById('visitorsTableBody');
         const companiesTableBody = document.getElementById('companiesTableBody');
+        const invitationsList = document.getElementById('invitationsList');
         const firebaseStatus = document.getElementById('firebaseStatus');
         const statusIndicator = document.getElementById('statusIndicator');
         const statusText = document.getElementById('statusText');
+        const externalInvitationView = document.getElementById('externalInvitationView');
+        const adminSystemView = document.getElementById('adminSystemView');
         
         // Contadores
         const todayVisitsCount = document.getElementById('todayVisitsCount');
         const pendingVisitsCount = document.getElementById('pendingVisitsCount');
         const completedVisitsCount = document.getElementById('completedVisitsCount');
+        const invitationsBadge = document.getElementById('invitationsBadge');
         
         // Estado da aplicação
         let currentVisitId = null;
+        let currentVisitorId = null;
+        let currentCompanyId = null;
         let isViewMode = false;
         let currentPage = 'dashboard';
         let firebaseApp = null;
         let firebaseDatabase = null;
         let isFirebaseConnected = false;
+        let currentInvitation = null;
         
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
+            // Verificar se é uma visualização de convite externo
+            const urlParams = new URLSearchParams(window.location.search);
+            const invitationId = urlParams.get('invitation');
+            
+            if (invitationId) {
+                showExternalInvitationView(invitationId);
+            } else {
+                showAdminSystemView();
+            }
+            
             // Carregar configurações
             loadSettings();
             
@@ -1427,29 +1936,66 @@
             loadVisitsFromStorage();
             loadVisitorsFromStorage();
             loadCompaniesFromStorage();
+            loadInvitationsFromStorage();
             
             // Adicionar dados de exemplo apenas se não houver dados salvos
-            if (visits.length === 0) {
+            if (visits.length === 0 && visitors.length === 0 && companies.length === 0) {
                 addSampleData();
             }
             
             updateCounters();
             applyFilters();
             document.getElementById('date').min = new Date().toISOString().slice(0, 16);
+            document.getElementById('externalDate').min = new Date().toISOString().slice(0, 16);
             
             // Configurar event listeners para os botões
+            setupEventListeners();
+            
+            // Renderizar todas as tabelas
+            renderAllTables();
+        });
+
+        // =============================================
+        // CONFIGURAÇÃO DE EVENT LISTENERS
+        // =============================================
+
+        function setupEventListeners() {
+            // Botões de dados
             document.getElementById('clearDataBtn').addEventListener('click', clearAllData);
             document.getElementById('addSampleDataBtn').addEventListener('click', addSampleData);
-            document.getElementById('newVisitBtn').addEventListener('click', () => {
-                openVisitModal('new');
+            document.getElementById('exportDataBtn').addEventListener('click', exportData);
+            document.getElementById('importDataBtn').addEventListener('click', () => {
+                document.getElementById('importDataInput').click();
             });
-            document.getElementById('newVisitBtn2').addEventListener('click', () => {
-                openVisitModal('new');
-            });
+
+            // Botões de visitas
+            document.getElementById('newVisitBtn').addEventListener('click', () => openVisitModal('new'));
+            document.getElementById('newVisitBtn2').addEventListener('click', () => openVisitModal('new'));
+
+            // Botões de configurações
             document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
             document.getElementById('onlineStorage').addEventListener('change', toggleOnlineStorage);
-            
-            // Configurar navegação
+            document.getElementById('exportSettingsBtn').addEventListener('click', exportSettings);
+            document.getElementById('importSettingsBtn').addEventListener('click', () => {
+                document.getElementById('importSettingsInput').click();
+            });
+            document.getElementById('resetSettingsBtn').addEventListener('click', resetSettings);
+
+            // Sistema de Convites
+            document.getElementById('generateInvitationBtn').addEventListener('click', openInvitationModal);
+            document.getElementById('generateInvitationBtn2').addEventListener('click', openInvitationModal);
+            document.getElementById('generateInvitationBtn3').addEventListener('click', openInvitationModal);
+            document.getElementById('newInvitationBtn').addEventListener('click', openInvitationModal);
+            document.getElementById('generateInviteBtn').addEventListener('click', generateInvitation);
+            document.getElementById('copyLinkBtn').addEventListener('click', copyInvitationLink);
+
+            // Botões de visitantes
+            document.getElementById('newVisitorBtn').addEventListener('click', () => openVisitorModal('new'));
+
+            // Botões de empresas
+            document.getElementById('newCompanyBtn').addEventListener('click', () => openCompanyModal('new'));
+
+            // Navegação
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', () => {
                     const page = item.getAttribute('data-page');
@@ -1461,120 +2007,55 @@
                     }
                 });
             });
-            
-            // Configurar menu mobile
+
+            // Menu mobile
             mobileMenuBtn.addEventListener('click', () => {
                 sidebar.classList.add('active');
                 overlay.classList.add('active');
             });
-            
-            // Fechar menu ao clicar no overlay
+
             overlay.addEventListener('click', () => {
                 sidebar.classList.remove('active');
                 overlay.classList.remove('active');
             });
-            
-            // Fechar modal
+
+            // Fechar modais
             document.getElementById('closeModalBtn').addEventListener('click', closeVisitModal);
             document.getElementById('cancelBtn').addEventListener('click', closeVisitModal);
             
-            // Fechar modal de exclusão
             document.querySelectorAll('.close-delete-modal').forEach(btn => {
                 btn.addEventListener('click', closeDeleteModal);
             });
             
+            document.querySelectorAll('.close-invitation-modal').forEach(btn => {
+                btn.addEventListener('click', closeInvitationModal);
+            });
+
+            document.querySelectorAll('.close-visitor-modal').forEach(btn => {
+                btn.addEventListener('click', closeVisitorModal);
+            });
+
+            document.querySelectorAll('.close-company-modal').forEach(btn => {
+                btn.addEventListener('click', closeCompanyModal);
+            });
+
             // Confirmar exclusão
-            document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
-                const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
-                if (visitIndex !== -1) {
-                    visits.splice(visitIndex, 1);
-                    // Salvar no localStorage após exclusão
-                    saveVisitsToStorage();
-                    showToast('Visita excluída com sucesso!', 'success');
-                    updateCounters();
-                    renderAllTables();
-                }
-                closeDeleteModal();
-            });
-            
-            // Salvar nova visita
-            document.getElementById('saveBtn').addEventListener('click', () => {
-                // Validar formulário
-                if (!validateForm()) return;
-                
-                // Criar nova visita
-                const newVisit = {
-                    id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 1 : 1,
-                    name: document.getElementById('visitorName').value,
-                    company: document.getElementById('company').value,
-                    document: document.getElementById('document').value,
-                    destination: document.getElementById('destination').value,
-                    date: document.getElementById('date').value,
-                    status: "scheduled",
-                    notes: document.getElementById('notes').value
-                };
-                
-                // Adicionar à lista
-                visits.push(newVisit);
-                
-                // Salvar no localStorage
-                saveVisitsToStorage();
-                
-                // Feedback e fechar modal
-                showToast('Visita registrada com sucesso!', 'success');
-                closeVisitModal();
-                
-                // Atualizar interface
-                updateCounters();
-                renderAllTables();
-            });
-            
-            // Atualizar visita
-            document.getElementById('updateBtn').addEventListener('click', () => {
-                // Validar formulário
-                if (!validateForm()) return;
-                
-                // Encontrar e atualizar visita
-                const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
-                if (visitIndex !== -1) {
-                    visits[visitIndex].name = document.getElementById('visitorName').value;
-                    visits[visitIndex].company = document.getElementById('company').value;
-                    visits[visitIndex].document = document.getElementById('document').value;
-                    visits[visitIndex].destination = document.getElementById('destination').value;
-                    visits[visitIndex].date = document.getElementById('date').value;
-                    visits[visitIndex].notes = document.getElementById('notes').value;
-                    
-                    // Salvar no localStorage após atualização
-                    saveVisitsToStorage();
-                    
-                    showToast('Visita atualizada com sucesso!', 'success');
-                    closeVisitModal();
-                    renderAllTables();
-                }
-            });
-            
+            document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDeleteVisit);
+
+            // Salvar visitas
+            document.getElementById('saveBtn').addEventListener('click', saveVisit);
+            document.getElementById('updateBtn').addEventListener('click', updateVisit);
+
             // Alterar status da visita
-            document.getElementById('markInProgressBtn').addEventListener('click', () => {
-                updateVisitStatus('in-progress');
-            });
-            
-            document.getElementById('markCompletedBtn').addEventListener('click', () => {
-                updateVisitStatus('completed');
-            });
-            
+            document.getElementById('markInProgressBtn').addEventListener('click', () => updateVisitStatus('in-progress'));
+            document.getElementById('markCompletedBtn').addEventListener('click', () => updateVisitStatus('completed'));
+
             // Filtros
             document.getElementById('statusFilter').addEventListener('change', applyFilters);
             document.getElementById('dateFilter').addEventListener('change', applyFilters);
             document.getElementById('searchFilter').addEventListener('input', applyFilters);
-            
-            // Limpar filtros
-            document.getElementById('clearFiltersBtn').addEventListener('click', () => {
-                document.getElementById('statusFilter').value = 'all';
-                document.getElementById('dateFilter').value = '';
-                document.getElementById('searchFilter').value = '';
-                applyFilters();
-            });
-            
+            document.getElementById('clearFiltersBtn').addEventListener('click', clearFilters);
+
             // Cartões de estatísticas
             document.getElementById('todayVisitsCard').addEventListener('click', () => {
                 document.getElementById('statusFilter').value = 'all';
@@ -1594,189 +2075,46 @@
                 applyFilters();
                 showToast('Filtro aplicado: Visitas concluídas');
             });
-            
-            // Renderizar todas as tabelas
-            renderAllTables();
-        });
-        
-        // Funções do Firebase
-        function initializeFirebase() {
-            try {
-                // Tentar carregar configuração do usuário
-                const userConfig = localStorage.getItem('firebaseConfig');
-                const firebaseConfig = userConfig ? JSON.parse(userConfig) : defaultFirebaseConfig;
-                
-                // Verificar se a configuração é válida
-                if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'sua-api-key-aqui') {
-                    updateFirebaseStatus(false, 'Configuração necessária');
-                    return;
-                }
-                
-                // Inicializar Firebase
-                firebaseApp = firebase.initializeApp(firebaseConfig);
-                firebaseDatabase = firebase.database();
-                
-                // Configurar listener de conexão
-                const connectedRef = firebaseDatabase.ref(".info/connected");
-                connectedRef.on("value", function(snap) {
-                    if (snap.val() === true) {
-                        updateFirebaseStatus(true, 'Conectado');
-                        syncDataWithFirebase();
-                    } else {
-                        updateFirebaseStatus(false, 'Desconectado');
-                    }
-                });
-                
-            } catch (error) {
-                console.error("Erro ao inicializar Firebase:", error);
-                updateFirebaseStatus(false, 'Erro de conexão');
-            }
+
+            // Formulário externo
+            document.getElementById('externalVisitForm').addEventListener('submit', handleExternalVisitSubmission);
+            document.getElementById('externalCancelBtn').addEventListener('click', handleExternalCancel);
+            document.getElementById('backToAdminLink').addEventListener('click', showAdminSystemView);
+
+            // Visitantes
+            document.getElementById('saveVisitorBtn').addEventListener('click', saveVisitor);
+
+            // Empresas
+            document.getElementById('saveCompanyBtn').addEventListener('click', saveCompany);
+
+            // Inputs de importação
+            setupImportInputs();
         }
-        
-        function updateFirebaseStatus(connected, message) {
-            isFirebaseConnected = connected;
-            statusIndicator.className = 'status-indicator ' + (connected ? 'status-connected' : 'status-disconnected');
-            statusText.textContent = message;
+
+        function setupImportInputs() {
+            // Criar input oculto para importação de dados
+            const importDataInput = document.createElement('input');
+            importDataInput.type = 'file';
+            importDataInput.id = 'importDataInput';
+            importDataInput.accept = '.json';
+            importDataInput.style.display = 'none';
+            importDataInput.addEventListener('change', handleDataImport);
+            document.body.appendChild(importDataInput);
+
+            // Criar input oculto para importação de configurações
+            const importSettingsInput = document.createElement('input');
+            importSettingsInput.type = 'file';
+            importSettingsInput.id = 'importSettingsInput';
+            importSettingsInput.accept = '.json';
+            importSettingsInput.style.display = 'none';
+            importSettingsInput.addEventListener('change', handleSettingsImport);
+            document.body.appendChild(importSettingsInput);
         }
-        
-        function syncDataWithFirebase() {
-            if (!isFirebaseConnected || !firebaseDatabase) return;
-            
-            // Sincronizar visitas
-            const visitsRef = firebaseDatabase.ref('visits');
-            visitsRef.on('value', (snapshot) => {
-                const firebaseVisits = snapshot.val();
-                if (firebaseVisits) {
-                    // Converter objeto em array
-                    const visitsArray = Object.values(firebaseVisits);
-                    if (JSON.stringify(visitsArray) !== JSON.stringify(visits)) {
-                        visits = visitsArray;
-                        saveVisitsToStorage();
-                        updateCounters();
-                        renderAllTables();
-                        showToast('Dados sincronizados do Firebase', 'success');
-                    }
-                }
-            });
-            
-            // Sincronizar visitantes
-            const visitorsRef = firebaseDatabase.ref('visitors');
-            visitorsRef.on('value', (snapshot) => {
-                const firebaseVisitors = snapshot.val();
-                if (firebaseVisitors) {
-                    visitors = Object.values(firebaseVisitors);
-                    localStorage.setItem('visitControl_visitors', JSON.stringify(visitors));
-                    document.getElementById('visitorsBadge').textContent = visitors.length;
-                }
-            });
-            
-            // Sincronizar empresas
-            const companiesRef = firebaseDatabase.ref('companies');
-            companiesRef.on('value', (snapshot) => {
-                const firebaseCompanies = snapshot.val();
-                if (firebaseCompanies) {
-                    companies = Object.values(firebaseCompanies);
-                    localStorage.setItem('visitControl_companies', JSON.stringify(companies));
-                }
-            });
-        }
-        
-        function saveDataToFirebase() {
-            if (!isFirebaseConnected || !firebaseDatabase) return;
-            
-            try {
-                firebaseDatabase.ref('visits').set(visits);
-                firebaseDatabase.ref('visitors').set(visitors);
-                firebaseDatabase.ref('companies').set(companies);
-            } catch (error) {
-                console.error("Erro ao salvar no Firebase:", error);
-            }
-        }
-        
-        function toggleOnlineStorage() {
-            const onlineStorageEnabled = document.getElementById('onlineStorage').checked;
-            localStorage.setItem('onlineStorage', onlineStorageEnabled);
-            
-            if (onlineStorageEnabled) {
-                initializeFirebase();
-            } else {
-                if (firebaseApp) {
-                    firebaseApp.delete();
-                    firebaseApp = null;
-                    firebaseDatabase = null;
-                }
-                updateFirebaseStatus(false, 'Armazenamento local');
-            }
-        }
-        
-        // Funções de persistência de dados
-        function saveVisitsToStorage() {
-            localStorage.setItem('visitControl_visits', JSON.stringify(visits));
-            if (isFirebaseConnected) {
-                saveDataToFirebase();
-            }
-        }
-        
-        function loadVisitsFromStorage() {
-            const storedVisits = localStorage.getItem('visitControl_visits');
-            if (storedVisits) {
-                visits = JSON.parse(storedVisits);
-            }
-        }
-        
-        function loadVisitorsFromStorage() {
-            const storedVisitors = localStorage.getItem('visitControl_visitors');
-            if (storedVisitors) {
-                visitors = JSON.parse(storedVisitors);
-                document.getElementById('visitorsBadge').textContent = visitors.length;
-                document.querySelector('.nav-item[data-page="visitors"] .badge').textContent = visitors.length;
-            }
-        }
-        
-        function loadCompaniesFromStorage() {
-            const storedCompanies = localStorage.getItem('visitControl_companies');
-            if (storedCompanies) {
-                companies = JSON.parse(storedCompanies);
-            }
-        }
-        
-        function loadSettings() {
-            const onlineStorage = localStorage.getItem('onlineStorage');
-            if (onlineStorage !== null) {
-                document.getElementById('onlineStorage').checked = onlineStorage === 'true';
-            }
-            
-            const firebaseConfig = localStorage.getItem('firebaseConfig');
-            if (firebaseConfig) {
-                document.getElementById('firebaseConfig').value = firebaseConfig;
-            }
-        }
-        
-        function saveSettings() {
-            const firebaseConfig = document.getElementById('firebaseConfig').value;
-            if (firebaseConfig) {
-                try {
-                    JSON.parse(firebaseConfig);
-                    localStorage.setItem('firebaseConfig', firebaseConfig);
-                    
-                    // Reinicializar Firebase se a configuração mudou
-                    if (document.getElementById('onlineStorage').checked) {
-                        if (firebaseApp) {
-                            firebaseApp.delete();
-                        }
-                        initializeFirebase();
-                    }
-                } catch (e) {
-                    showToast('Configuração do Firebase inválida', 'error');
-                    return;
-                }
-            }
-            
-            localStorage.setItem('onlineStorage', document.getElementById('onlineStorage').checked);
-            showToast('Configurações salvas com sucesso!', 'success');
-        }
-        
-        // Funções auxiliares
+
+        // =============================================
+        // FUNÇÕES PRINCIPAIS
+        // =============================================
+
         function navigateToPage(page) {
             // Atualizar menu
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -1800,11 +2138,17 @@
                 renderVisitorsTable();
             } else if (page === 'companies') {
                 renderCompaniesTable();
+            } else if (page === 'invitations') {
+                renderInvitationsList();
             }
             
             showToast(`Navegando para ${document.querySelector(`.nav-item[data-page="${page}"]`).querySelector('span').textContent}`);
         }
-        
+
+        // =============================================
+        // FUNÇÕES DE VISITAS
+        // =============================================
+
         function openVisitModal(mode, id = null) {
             const modalTitle = document.getElementById('modalTitle');
             const visitForm = document.getElementById('visitForm');
@@ -1812,8 +2156,6 @@
             const saveBtn = document.getElementById('saveBtn');
             const updateBtn = document.getElementById('updateBtn');
             const statusActions = document.getElementById('statusActions');
-            const markInProgressBtn = document.getElementById('markInProgressBtn');
-            const markCompletedBtn = document.getElementById('markCompletedBtn');
             
             // Resetar formulário
             visitForm.reset();
@@ -1827,6 +2169,9 @@
                 updateBtn.style.display = 'none';
                 statusActions.style.display = 'none';
                 isViewMode = false;
+                
+                // Definir data mínima como agora
+                document.getElementById('date').min = new Date().toISOString().slice(0, 16);
             } else if (mode === 'view' && id) {
                 const visit = visits.find(v => v.id === parseInt(id));
                 if (visit) {
@@ -1839,11 +2184,11 @@
                     // Mostrar/ocultar ações de status conforme o status atual
                     statusActions.style.display = 'flex';
                     if (visit.status === 'scheduled') {
-                        markInProgressBtn.style.display = 'block';
-                        markCompletedBtn.style.display = 'block';
+                        document.getElementById('markInProgressBtn').style.display = 'block';
+                        document.getElementById('markCompletedBtn').style.display = 'block';
                     } else if (visit.status === 'in-progress') {
-                        markInProgressBtn.style.display = 'none';
-                        markCompletedBtn.style.display = 'block';
+                        document.getElementById('markInProgressBtn').style.display = 'none';
+                        document.getElementById('markCompletedBtn').style.display = 'block';
                     } else {
                         statusActions.style.display = 'none';
                     }
@@ -1897,11 +2242,11 @@
             
             visitModal.classList.add('active');
         }
-        
+
         function closeVisitModal() {
             visitModal.classList.remove('active');
         }
-        
+
         function openDeleteModal(id) {
             const visit = visits.find(v => v.id === parseInt(id));
             if (visit) {
@@ -1910,29 +2255,65 @@
                 deleteModal.classList.add('active');
             }
         }
-        
+
         function closeDeleteModal() {
             deleteModal.classList.remove('active');
         }
-        
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            
-            toastMessage.textContent = message;
-            toast.className = 'toast';
-            toast.classList.add(type);
-            
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 100);
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+
+        function confirmDeleteVisit() {
+            const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
+            if (visitIndex !== -1) {
+                visits.splice(visitIndex, 1);
+                saveVisitsToStorage();
+                showToast('Visita excluída com sucesso!', 'success');
+                updateCounters();
+                renderAllTables();
+            }
+            closeDeleteModal();
         }
-        
-        function validateForm() {
+
+        function saveVisit() {
+            if (!validateVisitForm()) return;
+            
+            const newVisit = {
+                id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 1 : 1,
+                name: document.getElementById('visitorName').value,
+                company: document.getElementById('company').value,
+                document: document.getElementById('document').value,
+                destination: document.getElementById('destination').value,
+                date: document.getElementById('date').value,
+                status: "scheduled",
+                notes: document.getElementById('notes').value
+            };
+            
+            visits.push(newVisit);
+            saveVisitsToStorage();
+            showToast('Visita registrada com sucesso!', 'success');
+            closeVisitModal();
+            updateCounters();
+            renderAllTables();
+        }
+
+        function updateVisit() {
+            if (!validateVisitForm()) return;
+            
+            const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
+            if (visitIndex !== -1) {
+                visits[visitIndex].name = document.getElementById('visitorName').value;
+                visits[visitIndex].company = document.getElementById('company').value;
+                visits[visitIndex].document = document.getElementById('document').value;
+                visits[visitIndex].destination = document.getElementById('destination').value;
+                visits[visitIndex].date = document.getElementById('date').value;
+                visits[visitIndex].notes = document.getElementById('notes').value;
+                
+                saveVisitsToStorage();
+                showToast('Visita atualizada com sucesso!', 'success');
+                closeVisitModal();
+                renderAllTables();
+            }
+        }
+
+        function validateVisitForm() {
             const name = document.getElementById('visitorName').value;
             const company = document.getElementById('company').value;
             const destination = document.getElementById('destination').value;
@@ -1945,28 +2326,577 @@
             
             return true;
         }
-        
-        function applyFilters() {
-            renderVisitsTable();
+
+        function updateVisitStatus(status) {
+            const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
+            if (visitIndex !== -1) {
+                visits[visitIndex].status = status;
+                saveVisitsToStorage();
+                
+                const statusElement = document.getElementById('detailStatus');
+                statusElement.className = 'status';
+                
+                if (status === 'in-progress') {
+                    statusElement.classList.add('status-in-progress');
+                    statusElement.textContent = 'Em Andamento';
+                } else if (status === 'completed') {
+                    statusElement.classList.add('status-completed');
+                    statusElement.textContent = 'Concluída';
+                }
+                
+                showToast(`Status atualizado para ${status === 'in-progress' ? 'Em Andamento' : 'Concluída'}!`, 'success');
+                updateCounters();
+                renderAllTables();
+                
+                setTimeout(() => {
+                    closeVisitModal();
+                }, 1500);
+            }
         }
-        
+
+        // =============================================
+        // FUNÇÕES DE VISITANTES
+        // =============================================
+
+        function openVisitorModal(mode, id = null) {
+            const modalTitle = document.getElementById('visitorModalTitle');
+            const visitorForm = document.getElementById('visitorForm');
+            
+            visitorForm.reset();
+            currentVisitorId = id;
+            
+            if (mode === 'new') {
+                modalTitle.textContent = 'Novo Visitante';
+            } else if (mode === 'edit' && id) {
+                const visitor = visitors.find(v => v.id === parseInt(id));
+                if (visitor) {
+                    modalTitle.textContent = 'Editar Visitante';
+                    document.getElementById('visitorId').value = visitor.id;
+                    document.getElementById('visitorName').value = visitor.name;
+                    document.getElementById('visitorDocument').value = visitor.document;
+                    document.getElementById('visitorCompany').value = visitor.company;
+                    document.getElementById('visitorEmail').value = visitor.email || '';
+                    document.getElementById('visitorPhone').value = visitor.phone || '';
+                }
+            }
+            
+            visitorModal.classList.add('active');
+        }
+
+        function closeVisitorModal() {
+            visitorModal.classList.remove('active');
+        }
+
+        function saveVisitor() {
+            const name = document.getElementById('visitorName').value;
+            const document = document.getElementById('visitorDocument').value;
+            const company = document.getElementById('visitorCompany').value;
+            
+            if (!name) {
+                showToast('Preencha o nome do visitante!', 'error');
+                return;
+            }
+            
+            if (currentVisitorId) {
+                // Editar visitante existente
+                const visitorIndex = visitors.findIndex(v => v.id === parseInt(currentVisitorId));
+                if (visitorIndex !== -1) {
+                    visitors[visitorIndex].name = name;
+                    visitors[visitorIndex].document = document;
+                    visitors[visitorIndex].company = company;
+                    visitors[visitorIndex].email = document.getElementById('visitorEmail').value;
+                    visitors[visitorIndex].phone = document.getElementById('visitorPhone').value;
+                }
+            } else {
+                // Novo visitante
+                const newVisitor = {
+                    id: visitors.length > 0 ? Math.max(...visitors.map(v => v.id)) + 1 : 1,
+                    name: name,
+                    document: document,
+                    company: company,
+                    email: document.getElementById('visitorEmail').value,
+                    phone: document.getElementById('visitorPhone').value,
+                    totalVisits: 0,
+                    lastVisit: null
+                };
+                visitors.push(newVisitor);
+            }
+            
+            saveVisitorsToStorage();
+            showToast('Visitante salvo com sucesso!', 'success');
+            closeVisitorModal();
+            renderVisitorsTable();
+            updateCounters();
+        }
+
+        // =============================================
+        // FUNÇÕES DE EMPRESAS
+        // =============================================
+
+        function openCompanyModal(mode, id = null) {
+            const modalTitle = document.getElementById('companyModalTitle');
+            const companyForm = document.getElementById('companyForm');
+            
+            companyForm.reset();
+            currentCompanyId = id;
+            
+            if (mode === 'new') {
+                modalTitle.textContent = 'Nova Empresa';
+            } else if (mode === 'edit' && id) {
+                const company = companies.find(c => c.id === parseInt(id));
+                if (company) {
+                    modalTitle.textContent = 'Editar Empresa';
+                    document.getElementById('companyId').value = company.id;
+                    document.getElementById('companyName').value = company.name;
+                    document.getElementById('companyCnpj').value = company.cnpj;
+                    document.getElementById('companyResponsible').value = company.responsible;
+                    document.getElementById('companyEmail').value = company.email || '';
+                    document.getElementById('companyPhone').value = company.phone || '';
+                    document.getElementById('companyAddress').value = company.address || '';
+                }
+            }
+            
+            companyModal.classList.add('active');
+        }
+
+        function closeCompanyModal() {
+            companyModal.classList.remove('active');
+        }
+
+        function saveCompany() {
+            const name = document.getElementById('companyName').value;
+            const cnpj = document.getElementById('companyCnpj').value;
+            const responsible = document.getElementById('companyResponsible').value;
+            
+            if (!name) {
+                showToast('Preencha o nome da empresa!', 'error');
+                return;
+            }
+            
+            if (currentCompanyId) {
+                // Editar empresa existente
+                const companyIndex = companies.findIndex(c => c.id === parseInt(currentCompanyId));
+                if (companyIndex !== -1) {
+                    companies[companyIndex].name = name;
+                    companies[companyIndex].cnpj = cnpj;
+                    companies[companyIndex].responsible = responsible;
+                    companies[companyIndex].email = document.getElementById('companyEmail').value;
+                    companies[companyIndex].phone = document.getElementById('companyPhone').value;
+                    companies[companyIndex].address = document.getElementById('companyAddress').value;
+                }
+            } else {
+                // Nova empresa
+                const newCompany = {
+                    id: companies.length > 0 ? Math.max(...companies.map(c => c.id)) + 1 : 1,
+                    name: name,
+                    cnpj: cnpj,
+                    responsible: responsible,
+                    email: document.getElementById('companyEmail').value,
+                    phone: document.getElementById('companyPhone').value,
+                    address: document.getElementById('companyAddress').value,
+                    totalVisits: 0,
+                    lastVisit: null
+                };
+                companies.push(newCompany);
+            }
+            
+            saveCompaniesToStorage();
+            showToast('Empresa salva com sucesso!', 'success');
+            closeCompanyModal();
+            renderCompaniesTable();
+        }
+
+        // =============================================
+        // SISTEMA DE CONVITES EXTERNOS
+        // =============================================
+
+        function showExternalInvitationView(invitationId) {
+            externalInvitationView.style.display = 'block';
+            adminSystemView.style.display = 'none';
+            
+            const invitation = invitations.find(inv => 
+                inv.id === invitationId && 
+                !inv.used && 
+                new Date(inv.expires) > new Date()
+            );
+            
+            if (invitation) {
+                currentInvitation = invitation;
+                
+                // Preencher detalhes do convite
+                const detailsContainer = document.getElementById('externalInvitationDetails');
+                detailsContainer.innerHTML = `
+                    <div class="invitation-detail">
+                        <div class="invitation-detail-label">Visitante</div>
+                        <div class="invitation-detail-value">${invitation.visitData.name || 'A definir'}</div>
+                    </div>
+                    <div class="invitation-detail">
+                        <div class="invitation-detail-label">Empresa</div>
+                        <div class="invitation-detail-value">${invitation.visitData.company || 'A definir'}</div>
+                    </div>
+                    <div class="invitation-detail">
+                        <div class="invitation-detail-label">Destino</div>
+                        <div class="invitation-detail-value">${getDestinationName(invitation.visitData.destination) || 'A definir'}</div>
+                    </div>
+                    <div class="invitation-detail">
+                        <div class="invitation-detail-label">Expira em</div>
+                        <div class="invitation-detail-value">${formatDate(new Date(invitation.expires))}</div>
+                    </div>
+                `;
+                
+                // Preencher formulário com dados do convite
+                if (invitation.visitData.name) {
+                    document.getElementById('externalVisitorName').value = invitation.visitData.name;
+                }
+                if (invitation.visitData.company) {
+                    document.getElementById('externalCompany').value = invitation.visitData.company;
+                }
+                if (invitation.visitData.destination) {
+                    document.getElementById('externalDestination').value = invitation.visitData.destination;
+                }
+                
+                showToast('Convite válido! Preencha os dados restantes para agendar sua visita.', 'success');
+            } else {
+                // Convite inválido
+                const detailsContainer = document.getElementById('externalInvitationDetails');
+                detailsContainer.innerHTML = `
+                    <div style="text-align: center; color: var(--danger);">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 40px; margin-bottom: 15px;"></i>
+                        <h3>Convite Inválido ou Expirado</h3>
+                        <p>Este link de convite não é válido ou já expirou.</p>
+                        <p>Entre em contato com a empresa para obter um novo convite.</p>
+                    </div>
+                `;
+                
+                document.getElementById('externalFormContainer').style.display = 'none';
+            }
+        }
+
+        function showAdminSystemView() {
+            externalInvitationView.style.display = 'none';
+            adminSystemView.style.display = 'block';
+            
+            // Limpar parâmetros da URL
+            const newUrl = window.location.origin + window.location.pathname;
+            window.history.replaceState({}, document.title, newUrl);
+        }
+
+        function handleExternalVisitSubmission(e) {
+            e.preventDefault();
+            
+            if (!currentInvitation) {
+                showToast('Convite inválido. Não é possível agendar a visita.', 'error');
+                return;
+            }
+            
+            // Validar formulário
+            const name = document.getElementById('externalVisitorName').value;
+            const company = document.getElementById('externalCompany').value;
+            const destination = document.getElementById('externalDestination').value;
+            const date = document.getElementById('externalDate').value;
+            
+            if (!name || !company || !destination || !date) {
+                showToast('Preencha todos os campos obrigatórios!', 'error');
+                return;
+            }
+            
+            // Criar nova visita
+            const newVisit = {
+                id: visits.length > 0 ? Math.max(...visits.map(v => v.id)) + 1 : 1,
+                name: name,
+                company: company,
+                document: document.getElementById('externalDocument').value,
+                destination: destination,
+                date: date,
+                status: "scheduled",
+                notes: document.getElementById('externalNotes').value,
+                createdViaInvitation: currentInvitation.id
+            };
+            
+            // Adicionar à lista
+            visits.push(newVisit);
+            
+            // Marcar convite como usado
+            currentInvitation.used = true;
+            currentInvitation.usedBy = name;
+            currentInvitation.usedAt = new Date().toISOString();
+            
+            // Salvar no localStorage
+            saveVisitsToStorage();
+            saveInvitationsToStorage();
+            
+            // Feedback
+            showToast('Visita agendada com sucesso! Entraremos em contato em breve.', 'success');
+            
+            // Limpar formulário
+            document.getElementById('externalVisitForm').reset();
+            
+            // Mostrar mensagem de confirmação
+            const detailsContainer = document.getElementById('externalInvitationDetails');
+            detailsContainer.innerHTML = `
+                <div style="text-align: center; color: var(--success);">
+                    <i class="fas fa-check-circle" style="font-size: 40px; margin-bottom: 15px;"></i>
+                    <h3>Visita Agendada com Sucesso!</h3>
+                    <p>Obrigado por agendar sua visita.</p>
+                    <p>Entraremos em contato para confirmar os detalhes.</p>
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                        <p><strong>Resumo do Agendamento:</strong></p>
+                        <p>Visitante: ${name}</p>
+                        <p>Empresa: ${company}</p>
+                        <p>Data: ${formatDateTime(date)}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('externalFormContainer').style.display = 'none';
+        }
+
+        function handleExternalCancel() {
+            if (confirm('Tem certeza que deseja cancelar? Os dados preenchidos serão perdidos.')) {
+                document.getElementById('externalVisitForm').reset();
+                showAdminSystemView();
+            }
+        }
+
+        // =============================================
+        // SISTEMA DE CONVITES (ADMIN)
+        // =============================================
+
+        function openInvitationModal() {
+            document.getElementById('invitationForm').reset();
+            document.getElementById('invitationResult').style.display = 'none';
+            document.getElementById('invitationModal').classList.add('active');
+        }
+
+        function closeInvitationModal() {
+            document.getElementById('invitationModal').classList.remove('active');
+        }
+
+        function generateInvitation() {
+            const name = document.getElementById('inviteVisitorName').value;
+            const company = document.getElementById('inviteCompany').value;
+            const destination = document.getElementById('inviteDestination').value;
+            const expiresDays = parseInt(document.getElementById('inviteExpires').value);
+
+            if (!name || !company || !destination) {
+                showToast('Preencha todos os campos obrigatórios!', 'error');
+                return;
+            }
+
+            const visitData = {
+                name: name,
+                company: company,
+                destination: destination
+            };
+
+            const invitationLink = generateInvitationLink(visitData, expiresDays);
+            
+            // Mostrar resultado
+            document.getElementById('generatedLink').value = invitationLink;
+            document.getElementById('invitationResult').style.display = 'block';
+            
+            showToast('Link de convite gerado com sucesso!', 'success');
+            renderInvitationsList();
+        }
+
+        function generateInvitationLink(visitData, expiresDays = 3) {
+            const invitationId = 'inv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            const invitation = {
+                id: invitationId,
+                visitData: visitData,
+                created: new Date().toISOString(),
+                expires: new Date(Date.now() + expiresDays * 24 * 60 * 60 * 1000).toISOString(),
+                used: false,
+                usedBy: null,
+                usedAt: null
+            };
+            
+            invitations.push(invitation);
+            saveInvitationsToStorage();
+            updateInvitationsBadge();
+            
+            // Retorna o link completo
+            return window.location.origin + window.location.pathname + '?invitation=' + invitationId;
+        }
+
+        function copyInvitationLink() {
+            const linkInput = document.getElementById('generatedLink');
+            linkInput.select();
+            linkInput.setSelectionRange(0, 99999);
+            
+            navigator.clipboard.writeText(linkInput.value).then(() => {
+                showToast('Link copiado para a área de transferência!', 'success');
+            }).catch(err => {
+                document.execCommand('copy');
+                showToast('Link copiado para a área de transferência!', 'success');
+            });
+        }
+
+        function copyInvitationLinkFromList(invitationId) {
+            const invitationLink = window.location.origin + window.location.pathname + '?invitation=' + invitationId;
+            
+            navigator.clipboard.writeText(invitationLink).then(() => {
+                showToast('Link copiado para a área de transferência!', 'success');
+            }).catch(err => {
+                const tempInput = document.createElement('input');
+                tempInput.value = invitationLink;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                showToast('Link copiado para a área de transferência!', 'success');
+            });
+        }
+
+        // =============================================
+        // FUNÇÕES DE EXPORTAÇÃO/IMPORTAÇÃO
+        // =============================================
+
+        function exportData() {
+            const data = {
+                visits: visits,
+                visitors: visitors,
+                companies: companies,
+                invitations: invitations,
+                exportedAt: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `tiger-rentank-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showToast('Dados exportados com sucesso!', 'success');
+        }
+
+        function handleDataImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (data.visits) visits = data.visits;
+                    if (data.visitors) visitors = data.visitors;
+                    if (data.companies) companies = data.companies;
+                    if (data.invitations) invitations = data.invitations;
+                    
+                    saveVisitsToStorage();
+                    saveVisitorsToStorage();
+                    saveCompaniesToStorage();
+                    saveInvitationsToStorage();
+                    
+                    updateCounters();
+                    renderAllTables();
+                    showToast('Dados importados com sucesso!', 'success');
+                } catch (error) {
+                    showToast('Erro ao importar dados. Arquivo inválido.', 'error');
+                }
+            };
+            reader.readAsText(file);
+            
+            // Reset input
+            event.target.value = '';
+        }
+
+        function exportSettings() {
+            const settings = {
+                companyName: document.getElementById('companyName').value,
+                companyAddress: document.getElementById('companyAddress').value,
+                adminEmail: document.getElementById('adminEmail').value,
+                maxVisits: document.getElementById('maxVisits').value,
+                firebaseConfig: document.getElementById('firebaseConfig').value,
+                onlineStorage: document.getElementById('onlineStorage').checked,
+                localStorage: document.getElementById('localStorage').checked,
+                exportedAt: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(settings, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `tiger-rentank-settings-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showToast('Configurações exportadas com sucesso!', 'success');
+        }
+
+        function handleSettingsImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const settings = JSON.parse(e.target.result);
+                    
+                    if (settings.companyName) document.getElementById('companyName').value = settings.companyName;
+                    if (settings.companyAddress) document.getElementById('companyAddress').value = settings.companyAddress;
+                    if (settings.adminEmail) document.getElementById('adminEmail').value = settings.adminEmail;
+                    if (settings.maxVisits) document.getElementById('maxVisits').value = settings.maxVisits;
+                    if (settings.firebaseConfig) document.getElementById('firebaseConfig').value = settings.firebaseConfig;
+                    if (settings.onlineStorage !== undefined) document.getElementById('onlineStorage').checked = settings.onlineStorage;
+                    if (settings.localStorage !== undefined) document.getElementById('localStorage').checked = settings.localStorage;
+                    
+                    showToast('Configurações importadas com sucesso!', 'success');
+                } catch (error) {
+                    showToast('Erro ao importar configurações. Arquivo inválido.', 'error');
+                }
+            };
+            reader.readAsText(file);
+            
+            // Reset input
+            event.target.value = '';
+        }
+
+        function resetSettings() {
+            if (confirm('Tem certeza que deseja restaurar as configurações padrão?')) {
+                document.getElementById('companyName').value = '';
+                document.getElementById('companyAddress').value = '';
+                document.getElementById('adminEmail').value = '';
+                document.getElementById('maxVisits').value = '';
+                document.getElementById('firebaseConfig').value = '';
+                document.getElementById('onlineStorage').checked = true;
+                document.getElementById('localStorage').checked = true;
+                
+                showToast('Configurações restauradas para os padrões!', 'success');
+            }
+        }
+
+        // =============================================
+        // FUNÇÕES DE RENDERIZAÇÃO
+        // =============================================
+
         function renderAllTables() {
             renderVisitsTable();
             renderAllVisitsTable();
             renderSchedulingTable();
             renderVisitorsTable();
             renderCompaniesTable();
+            renderInvitationsList();
         }
-        
+
         function renderVisitsTable() {
             const statusFilter = document.getElementById('statusFilter').value;
             const dateFilter = document.getElementById('dateFilter').value;
             const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
             
-            // Limpar tabela
             visitsTableBody.innerHTML = '';
             
-            // Filtrar visitas
             const filteredVisits = visits.filter(visit => {
                 const statusMatch = statusFilter === 'all' || 
                                  (statusFilter === 'scheduled' && visit.status === 'scheduled') ||
@@ -1981,13 +2911,9 @@
                 return statusMatch && dateMatch && searchMatch;
             });
             
-            // Ordenar por data (mais recente primeiro)
             filteredVisits.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            // Limitar a 5 visitas para o dashboard
             const limitedVisits = filteredVisits.slice(0, 5);
             
-            // Renderizar visitas
             if (limitedVisits.length === 0) {
                 visitsTableBody.innerHTML = `
                     <tr>
@@ -2001,7 +2927,6 @@
                 limitedVisits.forEach(visit => {
                     const row = document.createElement('tr');
                     
-                    // Determinar classe de status
                     let statusClass = 'status-scheduled';
                     let statusText = 'Agendada';
                     
@@ -2026,7 +2951,6 @@
                         </td>
                     `;
                     
-                    // Adicionar event listeners
                     row.querySelector('.view-btn').addEventListener('click', () => {
                         openVisitModal('view', visit.id);
                     });
@@ -2043,15 +2967,12 @@
                 });
             }
         }
-        
+
         function renderAllVisitsTable() {
-            // Limpar tabela
             allVisitsTableBody.innerHTML = '';
             
-            // Ordenar por data (mais recente primeiro)
             const sortedVisits = [...visits].sort((a, b) => new Date(b.date) - new Date(a.date));
             
-            // Renderizar todas as visitas
             if (sortedVisits.length === 0) {
                 allVisitsTableBody.innerHTML = `
                     <tr>
@@ -2065,7 +2986,6 @@
                 sortedVisits.forEach(visit => {
                     const row = document.createElement('tr');
                     
-                    // Determinar classe de status
                     let statusClass = 'status-scheduled';
                     let statusText = 'Agendada';
                     
@@ -2090,7 +3010,6 @@
                         </td>
                     `;
                     
-                    // Adicionar event listeners
                     row.querySelector('.view-btn').addEventListener('click', () => {
                         openVisitModal('view', visit.id);
                     });
@@ -2107,19 +3026,14 @@
                 });
             }
         }
-        
+
         function renderSchedulingTable() {
-            // Limpar tabela
             schedulingTableBody.innerHTML = '';
             
-            // Filtrar apenas agendamentos futuros
             const today = new Date().toISOString().slice(0, 16);
             const futureVisits = visits.filter(visit => visit.date >= today && visit.status === 'scheduled');
-            
-            // Ordenar por data (mais recente primeiro)
             futureVisits.sort((a, b) => new Date(a.date) - new Date(b.date));
             
-            // Renderizar agendamentos
             if (futureVisits.length === 0) {
                 schedulingTableBody.innerHTML = `
                     <tr>
@@ -2146,7 +3060,6 @@
                         </td>
                     `;
                     
-                    // Adicionar event listeners
                     row.querySelector('.view-btn').addEventListener('click', () => {
                         openVisitModal('view', visit.id);
                     });
@@ -2163,12 +3076,10 @@
                 });
             }
         }
-        
+
         function renderVisitorsTable() {
-            // Limpar tabela
             visitorsTableBody.innerHTML = '';
             
-            // Renderizar visitantes
             if (visitors.length === 0) {
                 visitorsTableBody.innerHTML = `
                     <tr>
@@ -2189,21 +3100,22 @@
                         <td>${visitor.lastVisit ? formatDateTime(visitor.lastVisit) : 'N/A'}</td>
                         <td>${visitor.totalVisits}</td>
                         <td>
-                            <button class="action-btn view-btn" data-id="${visitor.id}"><i class="fas fa-eye"></i></button>
                             <button class="action-btn edit-btn" data-id="${visitor.id}"><i class="fas fa-edit"></i></button>
                         </td>
                     `;
+                    
+                    row.querySelector('.edit-btn').addEventListener('click', () => {
+                        openVisitorModal('edit', visitor.id);
+                    });
                     
                     visitorsTableBody.appendChild(row);
                 });
             }
         }
-        
+
         function renderCompaniesTable() {
-            // Limpar tabela
             companiesTableBody.innerHTML = '';
             
-            // Renderizar empresas
             if (companies.length === 0) {
                 companiesTableBody.innerHTML = `
                     <tr>
@@ -2224,85 +3136,377 @@
                         <td>${company.totalVisits}</td>
                         <td>${company.lastVisit ? formatDateTime(company.lastVisit) : 'N/A'}</td>
                         <td>
-                            <button class="action-btn view-btn" data-id="${company.id}"><i class="fas fa-eye"></i></button>
                             <button class="action-btn edit-btn" data-id="${company.id}"><i class="fas fa-edit"></i></button>
                         </td>
                     `;
+                    
+                    row.querySelector('.edit-btn').addEventListener('click', () => {
+                        openCompanyModal('edit', company.id);
+                    });
                     
                     companiesTableBody.appendChild(row);
                 });
             }
         }
-        
+
+        function renderInvitationsList() {
+            invitationsList.innerHTML = '';
+            
+            if (invitations.length === 0) {
+                invitationsList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-link" style="font-size: 50px; margin-bottom: 15px;"></i>
+                        <p>Nenhum convite gerado</p>
+                        <p style="font-size: 14px; margin-top: 10px;">Clique em "Novo Convite" para gerar seu primeiro link</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const sortedInvitations = [...invitations].sort((a, b) => new Date(b.created) - new Date(a.created));
+            
+            sortedInvitations.forEach(invitation => {
+                const invitationElement = document.createElement('div');
+                invitationElement.className = 'invitation-item';
+                
+                const isExpired = new Date(invitation.expires) < new Date();
+                const status = invitation.used ? 'used' : isExpired ? 'expired' : 'active';
+                const statusText = invitation.used ? 'Utilizado' : isExpired ? 'Expirado' : 'Ativo';
+                const statusClass = `status-${status}`;
+                
+                invitationElement.innerHTML = `
+                    <div class="invitation-info">
+                        <h4>${invitation.visitData.name} - ${invitation.visitData.company}</h4>
+                        <p><strong>Destino:</strong> ${getDestinationName(invitation.visitData.destination)}</p>
+                        <p><strong>Criado em:</strong> ${formatDateTime(invitation.created)}</p>
+                        <p><strong>Expira em:</strong> ${formatDateTime(invitation.expires)}</p>
+                        ${invitation.used ? `<p><strong>Utilizado por:</strong> ${invitation.usedBy} em ${formatDateTime(invitation.usedAt)}</p>` : ''}
+                    </div>
+                    <div>
+                        <span class="invitation-status ${statusClass}">${statusText}</span>
+                        <button class="btn btn-outline" style="margin-top: 10px; width: 100%;" onclick="copyInvitationLinkFromList('${invitation.id}')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+                `;
+                
+                invitationsList.appendChild(invitationElement);
+            });
+        }
+
+        // =============================================
+        // FUNÇÕES AUXILIARES
+        // =============================================
+
+        function applyFilters() {
+            renderVisitsTable();
+        }
+
+        function clearFilters() {
+            document.getElementById('statusFilter').value = 'all';
+            document.getElementById('dateFilter').value = '';
+            document.getElementById('searchFilter').value = '';
+            applyFilters();
+            showToast('Filtros limpos!', 'success');
+        }
+
         function updateCounters() {
             const today = new Date().toISOString().split('T')[0];
-            
-            // Contar visitas de hoje
             const todayVisits = visits.filter(visit => visit.date.includes(today)).length;
-            
-            // Contar visitas pendentes
             const pendingVisits = visits.filter(visit => visit.status === 'scheduled').length;
-            
-            // Contar visitas concluídas
             const completedVisits = visits.filter(visit => visit.status === 'completed').length;
             
-            // Atualizar contadores
             todayVisitsCount.textContent = todayVisits;
             pendingVisitsCount.textContent = pendingVisits;
             completedVisitsCount.textContent = completedVisits;
             
-            // Atualizar badge de visitantes
-            document.querySelector('.nav-item[data-page="visitors"] .badge').textContent = visitors.length;
+            document.getElementById('visitorsBadge').textContent = visitors.length;
+            updateInvitationsBadge();
         }
-        
-        function updateVisitStatus(status) {
-            const visitIndex = visits.findIndex(v => v.id === parseInt(currentVisitId));
-            if (visitIndex !== -1) {
-                visits[visitIndex].status = status;
-                
-                // Salvar no localStorage após alteração de status
-                saveVisitsToStorage();
-                
-                // Atualizar detalhes no modal
-                const statusElement = document.getElementById('detailStatus');
-                statusElement.className = 'status';
-                
-                if (status === 'in-progress') {
-                    statusElement.classList.add('status-in-progress');
-                    statusElement.textContent = 'Em Andamento';
-                } else if (status === 'completed') {
-                    statusElement.classList.add('status-completed');
-                    statusElement.textContent = 'Concluída';
-                }
-                
-                showToast(`Status atualizado para ${status === 'in-progress' ? 'Em Andamento' : 'Concluída'}!`, 'success');
-                
-                // Atualizar contadores e tabela
-                updateCounters();
-                renderAllTables();
-                
-                // Fechar o modal após a atualização
-                setTimeout(() => {
-                    closeVisitModal();
-                }, 1500);
+
+        function updateInvitationsBadge() {
+            const activeInvitations = invitations.filter(inv => 
+                !inv.used && new Date(inv.expires) > new Date()
+            ).length;
+            invitationsBadge.textContent = activeInvitations;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            toast.className = 'toast';
+            toast.classList.add(type);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function getDestinationName(destination) {
+            const destinations = {
+                'rh': 'Recursos Humanos',
+                'ti': 'Tecnologia da Informação',
+                'financeiro': 'Financeiro',
+                'comercial': 'Comercial',
+                'diretoria': 'Diretoria',
+                'operacional': 'Operacional',
+                'outros': 'Outros'
+            };
+            
+            return destinations[destination] || destination;
+        }
+
+        function formatDateTime(dateTimeString) {
+            const date = new Date(dateTimeString);
+            return `${date.toLocaleDateString('pt-BR')} ${date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+        }
+
+        function formatDate(date) {
+            return date.toLocaleDateString('pt-BR');
+        }
+
+        // =============================================
+        // PERSISTÊNCIA DE DADOS
+        // =============================================
+
+        function saveVisitsToStorage() {
+            localStorage.setItem('visitControl_visits', JSON.stringify(visits));
+            if (isFirebaseConnected) {
+                saveDataToFirebase();
             }
         }
-        
+
+        function loadVisitsFromStorage() {
+            const storedVisits = localStorage.getItem('visitControl_visits');
+            if (storedVisits) {
+                visits = JSON.parse(storedVisits);
+            }
+        }
+
+        function saveVisitorsToStorage() {
+            localStorage.setItem('visitControl_visitors', JSON.stringify(visitors));
+            if (isFirebaseConnected) {
+                saveDataToFirebase();
+            }
+        }
+
+        function loadVisitorsFromStorage() {
+            const storedVisitors = localStorage.getItem('visitControl_visitors');
+            if (storedVisitors) {
+                visitors = JSON.parse(storedVisitors);
+            }
+        }
+
+        function saveCompaniesToStorage() {
+            localStorage.setItem('visitControl_companies', JSON.stringify(companies));
+            if (isFirebaseConnected) {
+                saveDataToFirebase();
+            }
+        }
+
+        function loadCompaniesFromStorage() {
+            const storedCompanies = localStorage.getItem('visitControl_companies');
+            if (storedCompanies) {
+                companies = JSON.parse(storedCompanies);
+            }
+        }
+
+        function saveInvitationsToStorage() {
+            localStorage.setItem('visitControl_invitations', JSON.stringify(invitations));
+            if (isFirebaseConnected) {
+                saveDataToFirebase();
+            }
+        }
+
+        function loadInvitationsFromStorage() {
+            const storedInvitations = localStorage.getItem('visitControl_invitations');
+            if (storedInvitations) {
+                invitations = JSON.parse(storedInvitations);
+                updateInvitationsBadge();
+            }
+        }
+
         function clearAllData() {
             if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
                 visits = [];
                 visitors = [];
                 companies = [];
+                invitations = [];
                 saveVisitsToStorage();
-                localStorage.setItem('visitControl_visitors', JSON.stringify(visitors));
-                localStorage.setItem('visitControl_companies', JSON.stringify(companies));
+                saveVisitorsToStorage();
+                saveCompaniesToStorage();
+                saveInvitationsToStorage();
                 updateCounters();
                 renderAllTables();
                 showToast('Todos os dados foram removidos.', 'success');
             }
         }
-        
-        // Adicionar dados de exemplo
+
+        // =============================================
+        // FIREBASE FUNCTIONS
+        // =============================================
+
+        function initializeFirebase() {
+            try {
+                const userConfig = localStorage.getItem('firebaseConfig');
+                const firebaseConfig = userConfig ? JSON.parse(userConfig) : defaultFirebaseConfig;
+                
+                if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'sua-api-key-aqui') {
+                    updateFirebaseStatus(false, 'Configuração necessária');
+                    return;
+                }
+                
+                firebaseApp = firebase.initializeApp(firebaseConfig);
+                firebaseDatabase = firebase.database();
+                
+                const connectedRef = firebaseDatabase.ref(".info/connected");
+                connectedRef.on("value", function(snap) {
+                    if (snap.val() === true) {
+                        updateFirebaseStatus(true, 'Conectado');
+                        syncDataWithFirebase();
+                    } else {
+                        updateFirebaseStatus(false, 'Desconectado');
+                    }
+                });
+                
+            } catch (error) {
+                console.error("Erro ao inicializar Firebase:", error);
+                updateFirebaseStatus(false, 'Erro de conexão');
+            }
+        }
+
+        function updateFirebaseStatus(connected, message) {
+            isFirebaseConnected = connected;
+            statusIndicator.className = 'status-indicator ' + (connected ? 'status-connected' : 'status-disconnected');
+            statusText.textContent = message;
+        }
+
+        function syncDataWithFirebase() {
+            if (!isFirebaseConnected || !firebaseDatabase) return;
+            
+            const visitsRef = firebaseDatabase.ref('visits');
+            visitsRef.on('value', (snapshot) => {
+                const firebaseVisits = snapshot.val();
+                if (firebaseVisits) {
+                    const visitsArray = Object.values(firebaseVisits);
+                    if (JSON.stringify(visitsArray) !== JSON.stringify(visits)) {
+                        visits = visitsArray;
+                        saveVisitsToStorage();
+                        updateCounters();
+                        renderAllTables();
+                        showToast('Dados sincronizados do Firebase', 'success');
+                    }
+                }
+            });
+            
+            const visitorsRef = firebaseDatabase.ref('visitors');
+            visitorsRef.on('value', (snapshot) => {
+                const firebaseVisitors = snapshot.val();
+                if (firebaseVisitors) {
+                    visitors = Object.values(firebaseVisitors);
+                    localStorage.setItem('visitControl_visitors', JSON.stringify(visitors));
+                    document.getElementById('visitorsBadge').textContent = visitors.length;
+                }
+            });
+            
+            const companiesRef = firebaseDatabase.ref('companies');
+            companiesRef.on('value', (snapshot) => {
+                const firebaseCompanies = snapshot.val();
+                if (firebaseCompanies) {
+                    companies = Object.values(firebaseCompanies);
+                    localStorage.setItem('visitControl_companies', JSON.stringify(companies));
+                }
+            });
+            
+            const invitationsRef = firebaseDatabase.ref('invitations');
+            invitationsRef.on('value', (snapshot) => {
+                const firebaseInvitations = snapshot.val();
+                if (firebaseInvitations) {
+                    invitations = Object.values(firebaseInvitations);
+                    localStorage.setItem('visitControl_invitations', JSON.stringify(invitations));
+                    updateInvitationsBadge();
+                }
+            });
+        }
+
+        function saveDataToFirebase() {
+            if (!isFirebaseConnected || !firebaseDatabase) return;
+            
+            try {
+                firebaseDatabase.ref('visits').set(visits);
+                firebaseDatabase.ref('visitors').set(visitors);
+                firebaseDatabase.ref('companies').set(companies);
+                firebaseDatabase.ref('invitations').set(invitations);
+            } catch (error) {
+                console.error("Erro ao salvar no Firebase:", error);
+            }
+        }
+
+        function toggleOnlineStorage() {
+            const onlineStorageEnabled = document.getElementById('onlineStorage').checked;
+            localStorage.setItem('onlineStorage', onlineStorageEnabled);
+            
+            if (onlineStorageEnabled) {
+                initializeFirebase();
+            } else {
+                if (firebaseApp) {
+                    firebaseApp.delete();
+                    firebaseApp = null;
+                    firebaseDatabase = null;
+                }
+                updateFirebaseStatus(false, 'Armazenamento local');
+            }
+        }
+
+        // =============================================
+        // CONFIGURAÇÕES
+        // =============================================
+
+        function loadSettings() {
+            const onlineStorage = localStorage.getItem('onlineStorage');
+            if (onlineStorage !== null) {
+                document.getElementById('onlineStorage').checked = onlineStorage === 'true';
+            }
+            
+            const firebaseConfig = localStorage.getItem('firebaseConfig');
+            if (firebaseConfig) {
+                document.getElementById('firebaseConfig').value = firebaseConfig;
+            }
+        }
+
+        function saveSettings() {
+            const firebaseConfig = document.getElementById('firebaseConfig').value;
+            if (firebaseConfig) {
+                try {
+                    JSON.parse(firebaseConfig);
+                    localStorage.setItem('firebaseConfig', firebaseConfig);
+                    
+                    if (document.getElementById('onlineStorage').checked) {
+                        if (firebaseApp) {
+                            firebaseApp.delete();
+                        }
+                        initializeFirebase();
+                    }
+                } catch (e) {
+                    showToast('Configuração do Firebase inválida', 'error');
+                    return;
+                }
+            }
+            
+            localStorage.setItem('onlineStorage', document.getElementById('onlineStorage').checked);
+            showToast('Configurações salvas com sucesso!', 'success');
+        }
+
+        // =============================================
+        // DADOS DE EXEMPLO
+        // =============================================
+
         function addSampleData() {
             const today = new Date();
             const tomorrow = new Date(today);
@@ -2366,20 +3570,20 @@
             
             // Dados de exemplo para visitantes
             visitors = [
-                { id: 1, name: "Carlos Silva", document: "123.456.789-00", company: "Tech Solutions Ltda", lastVisit: today.toISOString().slice(0, 16), totalVisits: 3 },
-                { id: 2, name: "Ana Oliveira", document: "987.654.321-00", company: "Consultoria Financeira SA", lastVisit: today.toISOString().slice(0, 16), totalVisits: 5 },
-                { id: 3, name: "Roberto Santos", document: "456.789.123-00", company: "Vendas Express", lastVisit: yesterday.toISOString().slice(0, 16), totalVisits: 2 },
-                { id: 4, name: "Mariana Costa", document: "789.123.456-00", company: "Recursos Humanos Brasil", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 },
-                { id: 5, name: "Paulo Mendes", document: "321.654.987-00", company: "Indústrias Pesadas", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 }
+                { id: 1, name: "Carlos Silva", document: "123.456.789-00", company: "Tech Solutions Ltda", email: "carlos@tech.com", phone: "(11) 99999-9999", lastVisit: today.toISOString().slice(0, 16), totalVisits: 3 },
+                { id: 2, name: "Ana Oliveira", document: "987.654.321-00", company: "Consultoria Financeira SA", email: "ana@consultoria.com", phone: "(11) 88888-8888", lastVisit: today.toISOString().slice(0, 16), totalVisits: 5 },
+                { id: 3, name: "Roberto Santos", document: "456.789.123-00", company: "Vendas Express", email: "roberto@vendas.com", phone: "(11) 77777-7777", lastVisit: yesterday.toISOString().slice(0, 16), totalVisits: 2 },
+                { id: 4, name: "Mariana Costa", document: "789.123.456-00", company: "Recursos Humanos Brasil", email: "mariana@rh.com", phone: "(11) 66666-6666", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 },
+                { id: 5, name: "Paulo Mendes", document: "321.654.987-00", company: "Indústrias Pesadas", email: "paulo@industrias.com", phone: "(11) 55555-5555", lastVisit: tomorrow.toISOString().slice(0, 16), totalVisits: 1 }
             ];
             
             // Dados de exemplo para empresas
             companies = [
-                { id: 1, name: "Tech Solutions Ltda", cnpj: "12.345.678/0001-90", responsible: "Carlos Silva", totalVisits: 3, lastVisit: today.toISOString().slice(0, 16) },
-                { id: 2, name: "Consultoria Financeira SA", cnpj: "98.765.432/0001-10", responsible: "Ana Oliveira", totalVisits: 5, lastVisit: today.toISOString().slice(0, 16) },
-                { id: 3, name: "Vendas Express", cnpj: "45.678.912/0001-30", responsible: "Roberto Santos", totalVisits: 2, lastVisit: yesterday.toISOString().slice(0, 16) },
-                { id: 4, name: "Recursos Humanos Brasil", cnpj: "78.912.345/0001-40", responsible: "Mariana Costa", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) },
-                { id: 5, name: "Indústrias Pesadas", cnpj: "32.165.498/0001-70", responsible: "Paulo Mendes", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) }
+                { id: 1, name: "Tech Solutions Ltda", cnpj: "12.345.678/0001-90", responsible: "Carlos Silva", email: "contato@tech.com", phone: "(11) 4444-4444", address: "Rua das Tecnologias, 123 - São Paulo/SP", totalVisits: 3, lastVisit: today.toISOString().slice(0, 16) },
+                { id: 2, name: "Consultoria Financeira SA", cnpj: "98.765.432/0001-10", responsible: "Ana Oliveira", email: "contato@consultoria.com", phone: "(11) 3333-3333", address: "Av. Financeira, 456 - São Paulo/SP", totalVisits: 5, lastVisit: today.toISOString().slice(0, 16) },
+                { id: 3, name: "Vendas Express", cnpj: "45.678.912/0001-30", responsible: "Roberto Santos", email: "contato@vendas.com", phone: "(11) 2222-2222", address: "Rua Comercial, 789 - São Paulo/SP", totalVisits: 2, lastVisit: yesterday.toISOString().slice(0, 16) },
+                { id: 4, name: "Recursos Humanos Brasil", cnpj: "78.912.345/0001-40", responsible: "Mariana Costa", email: "contato@rh.com", phone: "(11) 1111-1111", address: "Av. dos Recursos, 321 - São Paulo/SP", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) },
+                { id: 5, name: "Indústrias Pesadas", cnpj: "32.165.498/0001-70", responsible: "Paulo Mendes", email: "contato@industrias.com", phone: "(11) 0000-0000", address: "Rua Industrial, 654 - São Paulo/SP", totalVisits: 1, lastVisit: tomorrow.toISOString().slice(0, 16) }
             ];
             
             // Adicionar apenas se não houver visitas com os mesmos IDs
@@ -2391,32 +3595,14 @@
             
             // Salvar no localStorage
             saveVisitsToStorage();
-            localStorage.setItem('visitControl_visitors', JSON.stringify(visitors));
-            localStorage.setItem('visitControl_companies', JSON.stringify(companies));
+            saveVisitorsToStorage();
+            saveCompaniesToStorage();
             
             // Atualizar a interface
             updateCounters();
             renderAllTables();
             
             showToast('Dados de exemplo adicionados com sucesso!', 'success');
-        }
-        
-        function getDestinationName(destination) {
-            const destinations = {
-                'rh': 'Recursos Humanos',
-                'ti': 'Tecnologia da Informação',
-                'financeiro': 'Financeiro',
-                'comercial': 'Comercial',
-                'diretoria': 'Diretoria',
-                'operacional': 'Operacional'
-            };
-            
-            return destinations[destination] || destination;
-        }
-        
-        function formatDateTime(dateTimeString) {
-            const date = new Date(dateTimeString);
-            return `${date.toLocaleDateString('pt-BR')} ${date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
         }
     </script>
 </body>
